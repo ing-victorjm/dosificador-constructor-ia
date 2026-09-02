@@ -20,8 +20,11 @@ from dosificacion_concreto import modelo, baldes, mortero, estribos, geo3d, elem
 from dosificacion_concreto import exportar_excel
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-app.config["JSON_ENSURE_ASCII"] = False
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+try:
+    app.json.ensure_ascii = False          # Flask >= 2.3
+except AttributeError:
+    app.config["JSON_AS_ASCII"] = False    # Flask < 2.3
 
 
 # ── Pagina principal ────────────────────────────────────────────────────────

@@ -79,8 +79,12 @@ def dosificar_por_baldes(dos, req, vol_balde_m3, peso_bolsa):
     c, a, b = proporcion_volumen(req.fc)
     vol_balde_l = vol_balde_m3 * 1000.0
 
-    arena_m3_bolsa = a * PIE3_A_M3
-    piedra_m3_bolsa = b * PIE3_A_M3
+    # La proporcion 1:a:b asume 1 bolsa = 1 pie3 de cemento (bolsa de 42.5 kg).
+    # Con bolsas de otro peso (p. ej. 50 kg) el cemento por bolsa cambia, asi
+    # que los agregados por bolsa escalan en la misma relacion.
+    f_bolsa = peso_bolsa / 42.5
+    arena_m3_bolsa = a * PIE3_A_M3 * f_bolsa
+    piedra_m3_bolsa = b * PIE3_A_M3 * f_bolsa
     baldes_arena = arena_m3_bolsa / vol_balde_m3 if vol_balde_m3 else 0.0
     baldes_piedra = piedra_m3_bolsa / vol_balde_m3 if vol_balde_m3 else 0.0
 

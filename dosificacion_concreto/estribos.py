@@ -78,29 +78,26 @@ def longitud_estribo_cm(a_cm: float, b_cm: float, rec_cm: float, de_mm: float) -
     return perimetro + 2.0 * gancho
 
 
-def _posiciones(lo: float, s1: float, s2: float, h: float, l_central: float):
-    """Genera lista de posiciones (cm desde la base) de cada estribo."""
-    pos = []
-    # Zona confinada inferior: primer estribo a s1/2 del extremo, luego a s1
+def _posiciones_zonas(lo: float, s1: float, s2: float, h: float, l_central: float):
+    """Posiciones (cm desde la base) de cada estribo, separadas por zona.
+
+    Zona inferior: primer estribo a s1/2 de la base, luego cada s1 hasta Lo.
+    Zona superior: espejo de la inferior (primer estribo a s1/2 del tope).
+    Zona central: desde Lo + s2/2, cada s2, hasta h - Lo.
+    """
+    inf = []
     y = s1 / 2.0
     while y <= lo + 1e-3:
-        pos.append(round(y, 1))
+        inf.append(round(y, 1))
         y += s1
-    # Zona central
+    sup = [round(h - y, 1) for y in inf]
+    cent = []
     if l_central > 1e-3:
-        y_start = lo + s2 / 2.0
-        y_end = lo + l_central
-        yc = y_start
-        while yc <= y_end + 1e-3:
-            pos.append(round(yc, 1))
+        yc = lo + s2 / 2.0
+        while yc <= h - lo + 1e-3:
+            cent.append(round(yc, 1))
             yc += s2
-    # Zona confinada superior
-    y_sup_base = h - lo
-    y = y_sup_base + s1 / 2.0
-    while y <= h + 1e-3:
-        pos.append(round(y, 1))
-        y += s1
-    return sorted(set(pos))
+    return inf, cent, sorted(sup)
 
 
 def calcular(
@@ -121,17 +118,18 @@ def calcular(
 
     l_central = max(0.0, h_cm - 2.0 * lo)
 
-    # Conteo por zona
-    n_conf = math.ceil((lo - s1 / 2.0) / s1) + 1  # primer est a s1/2
-    n_cent = math.ceil((l_central - s2 / 2.0) / s2) + 1 if l_central > 1e-3 else 0
-    n_total = 2 * n_conf + n_cent
+    # Conteo por zona derivado de las posiciones reales (coincide con el diagrama)
+    pos_inf, pos_cent, pos_sup = _posiciones_zonas(lo, s1, s2, h_cm, l_central)
+    n_conf = len(pos_inf)
+    n_cent = len(pos_cent)
+    n_total = n_conf + n_cent + len(pos_sup)
 
     long_est = longitud_estribo_cm(a_cm, b_cm, rec_cm, de_mm)
     peso_unit = PESO_KG_M.get(de_mm, (math.pi * (de_mm / 2000.0) ** 2) * 7850.0)
     peso_total = n_total * long_est / 100.0 * peso_unit
     kg_ml = n_total * peso_unit * long_est / 100.0 / (h_cm / 100.0)
 
-    pos = _posiciones(lo, s1, s2, h_cm, l_central)
+    pos = sorted(set(pos_inf + pos_cent + pos_sup))
 
     detalle = (
         f"Lo = {lo:.0f} cm  ·  s1 = {s1:.1f} cm  ·  s2 = {s2:.1f} cm  ·  "

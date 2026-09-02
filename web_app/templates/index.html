@@ -387,7 +387,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 <aside class="sidebar" id="sidebar">
   <div class="brand">
     <img class="brand-logo" src="/static/brand/logo-full.png" alt="Constructor IA">
-    <p>Dosificador de Concreto · v2.0</p>
+    <p>Dosificador de Concreto · v2.1</p>
   </div>
   <nav id="nav">
     <div class="nav-g">Concreto</div>
@@ -407,7 +407,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
     <button data-tab="ren"><span class="ico">📈</span>Rendimientos</button>
     <button data-tab="ifc"><span class="ico">📐</span>Visor IFC</button>
   </nav>
-  <div class="sb-foot"><span class="led"></span>Sistema activo<br>Constructor IA &copy; 2024-2026 &middot; localhost:5050</div>
+  <div class="sb-foot"><span class="led"></span>Sistema activo<br>Constructor IA &copy; 2024-2026 &middot; <span id="sb-host">&mdash;</span></div>
 </aside>
 
 <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
@@ -1102,9 +1102,15 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 </div>
 <div id="toasts"></div>
 
-<!-- Three.js r128 UMD -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<!-- Three.js r128 UMD (local, con fallback a CDN) -->
+<script src="/static/vendor/three.min.js"></script>
+<script src="/static/vendor/OrbitControls.js"></script>
+<script>
+if(typeof THREE==='undefined'){
+  document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>'+
+                 '<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>');
+}
+</script>
 
 <!-- web-ifc ES module (deferred, errors caught) -->
 <script type="module">
@@ -1293,8 +1299,13 @@ function metBudget(){
 }
 /* ── Persistencia local ── */
 const STORE='cia_dosificador_v1';
+const DOSI_IDS=['fc','vol','desp','bolsa','p_cem','p_are','p_pie','p_agu','resp'];
 function saveState(){
-  try{localStorage.setItem(STORE,JSON.stringify({v:1,proj:$('proj-name')?.value||'',metItems,precios:getPrecios(),ts:Date.now()}))}catch(e){}
+  try{
+    const dosi={};DOSI_IDS.forEach(id=>{const el=$(id);if(el)dosi[id]=el.value});
+    localStorage.setItem(STORE,JSON.stringify({v:2,proj:$('proj-name')?.value||'',metItems,precios:getPrecios(),
+      aceRows,ace_des:$('ace-des')?.value||'5',dosi,ts:Date.now()}));
+  }catch(e){}
 }
 function loadState(){
   try{
@@ -1302,9 +1313,13 @@ function loadState(){
     if(d.proj&&$('proj-name'))$('proj-name').value=d.proj;
     if(d.precios){if($('pr-conc'))$('pr-conc').value=d.precios.conc||380;if($('pr-acero'))$('pr-acero').value=d.precios.acero||5.5;
       if($('pr-encof'))$('pr-encof').value=d.precios.encof||45;if($('pr-exc'))$('pr-exc').value=d.precios.exc||35;}
+    if(d.dosi){DOSI_IDS.forEach(id=>{const el=$(id);if(el&&d.dosi[id]!=null&&d.dosi[id]!=='')el.value=d.dosi[id]});
+      if($('ace-des')&&d.ace_des)$('ace-des').value=d.ace_des;dosificar();}
+    if(Array.isArray(d.aceRows)&&d.aceRows.length)aceRows=d.aceRows;
     if(Array.isArray(d.metItems)&&d.metItems.length){metItems=d.metItems;metRender();
       toast('Proyecto restaurado · '+metItems.length+' elementos');}
   }catch(e){}
+  DOSI_IDS.forEach(id=>{const el=$(id);if(el)el.addEventListener('input',saveState)});
 }
 function exportProyecto(){
   const proj=($('proj-name')?.value||'proyecto').replace(/[^\w\sáéíóúñ-]/gi,'').trim()||'proyecto';
@@ -1388,6 +1403,7 @@ function sectionThumb(clave,vals,W,H){
     ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
     ctx.lineJoin='round';ctx.lineCap='round';
     if(clave==='losa_aligerada_1d'||clave==='losa_aligerada_2d')drawAligerado(ctx,vals,clave,W,H,26);
+    else if(clave==='escalera')drawEscalera(ctx,vals,W,H,26);
     else drawSection(ctx,clave,vals,W,H,26);
     return cv.toDataURL('image/png');
   }catch(e){return null}
@@ -1492,7 +1508,7 @@ function aceRender(){
     const v=_varillas[r.dia]||_varillas[0],lt=r.n*r.L,kg=lt*v.kg_m;
     const opts=_varillas.map((vv,j)=>'<option value="'+j+'"'+(j===r.dia?' selected':'')+'>'+vv.nombre+'</option>').join('');
     return '<tr>'+
-      '<td><input type="text" value="'+r.desc.replace(/"/g,'&quot;')+'" placeholder="p. ej. Columna C-1 long." oninput="aceRows['+i+'].desc=this.value" style="min-width:150px"></td>'+
+      '<td><input type="text" value="'+r.desc.replace(/"/g,'&quot;')+'" placeholder="p. ej. Columna C-1 long." oninput="aceRows['+i+'].desc=this.value;saveState()" style="min-width:150px"></td>'+
       '<td><select onchange="aceRows['+i+'].dia=+this.value;aceRender()">'+opts+'</select></td>'+
       '<td><input type="number" value="'+r.n+'" min="1" step="1" style="width:64px;text-align:right" oninput="aceRows['+i+'].n=+this.value||0;calcAcero(1,'+i+')"></td>'+
       '<td><input type="number" value="'+r.L+'" min="0" step="0.1" style="width:72px;text-align:right" oninput="aceRows['+i+'].L=+this.value||0;calcAcero(1,'+i+')"></td>'+
@@ -1519,6 +1535,7 @@ function calcAcero(inline,idx){
   }).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--text3)">Agrega filas de barras arriba</td></tr>';
   const totD=tot*des;
   tween($('ace-kg'),totD,1);tween($('ace-ala'),totD*0.02,1);
+  saveState();
 }
 /* Instalaciones sanitarias */
 function calcSan(){
@@ -1616,6 +1633,7 @@ function initMetradosPro(){
   calcPintura();calcPisos();calcSan();calcEle();
   buildRendChips();renderRend();
   if(!aceRows.length){aceAdd('Columnas — longitudinal',4,16,3.2);aceAdd('Columnas — estribos',1,104,1.5);aceAdd('Vigas — longitudinal',4,12,5.6);}
+  else aceRender();
 }
 
 /* ═══ CATÁLOGO ═══ */
@@ -1624,7 +1642,7 @@ const CAT_GROUPS=[
   ['Columnas',['columna','columna_circular','columna_t','columna_l']],
   ['Vigas',['viga','viga_t','viga_acartelada','viga_voladizo','viga_amarre','dintel']],
   ['Muros y placas',['placa','muro_estructural','muro_contencion','cisterna']],
-  ['Losas',['losa_maciza','losa_aligerada_1d','losa_aligerada_2d','losa_piso']],
+  ['Losas',['losa_maciza','losa_aligerada_1d','losa_aligerada_2d','losa_piso','escalera']],
   ['Pisos y otros',['falso_piso','vereda','sardinel','rampa','personalizado']],
 ];
 function catThumb(cv,clave){
@@ -1635,6 +1653,7 @@ function catThumb(cv,clave){
   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.lineJoin='round';ctx.lineCap='round';
   try{
     if(clave==='losa_aligerada_1d'||clave==='losa_aligerada_2d')drawAligerado(ctx,v,clave,W,H,22);
+    else if(clave==='escalera')drawEscalera(ctx,v,W,H,22);
     else drawSection(ctx,clave,v,W,H,22);
   }catch(e){}
 }
@@ -2713,5 +2732,6 @@ function post(url,body,ok,err){
   .catch(()=>{toast('Error de conexión',false);if(err)err()});
 }
 </script>
+<script>{const h=document.getElementById("sb-host");if(h)h.textContent=location.host||"local";}</script>
 </body>
 </html>

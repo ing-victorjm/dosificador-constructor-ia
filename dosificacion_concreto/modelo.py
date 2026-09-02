@@ -97,6 +97,11 @@ def _interpolar(fc):
                     fc, f0[1], f0[2], f0[3], f0[4], f0[5], f0[6], f0[7], f0[8],
                     interpolado=False,
                 )
+            if fc == f1[0]:
+                return Dosificacion(
+                    fc, f1[1], f1[2], f1[3], f1[4], f1[5], f1[6], f1[7], f1[8],
+                    interpolado=False,
+                )
             t = (fc - f0[0]) / (f1[0] - f0[0])
 
             def interp(a, b):

@@ -278,6 +278,14 @@ TIPOS = [
         "Sardinel o bordillo: ancho x altura x longitud. Concreto simple.",
     ),
     TipoElemento(
+        "escalera", "Escalera",
+        [_c("area_planta", "Area en planta", 4.50, sufijo=" m2", paso=0.5),
+         _c("esp_equivalente", "Espesor equivalente", 0.18, paso=0.01)],
+        lambda d: d["area_planta"] * d["esp_equivalente"],
+        "Escalera de concreto: area en planta x espesor equivalente "
+        "(garganta + pasos, tipico 0.15-0.22 m).",
+    ),
+    TipoElemento(
         "rampa", "Rampa (losa inclinada)",
         [_c("area", "Area inclinada", 15.0, sufijo=" m2", paso=1.0),
          _c("espesor", "Espesor", 0.15)],
@@ -331,6 +339,7 @@ ACERO_KG_M3 = {
     "cisterna": 80,
     "dintel": 80,
     "sardinel": 5,
+    "escalera": 65,
     "rampa": 50,
     "viga_amarre": 75,
     "personalizado": 0,
@@ -373,6 +382,9 @@ def encofrado_m2(clave, d):
         return 2 * (g("lado_a", 0) + g("lado_b", 0)) * g("altura", 0)
     if clave in ("losa_maciza", "losa_aligerada_1d", "losa_aligerada_2d", "rampa"):
         return g("area", 0)
+    if clave == "escalera":
+        # fondo inclinado + contrapasos + costados (referencial)
+        return g("area_planta", 0) * 1.35
     if clave == "platea":
         return 4 * math.sqrt(max(0.01, g("area", 0))) * g("espesor", 0)
     if clave == "cisterna":
