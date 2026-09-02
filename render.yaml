@@ -4,5 +4,16 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --chdir web_app --bind 0.0.0.0:$PORT app:app
+    startCommand: gunicorn backend.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120
     autoDeploy: true
+    envVars:
+      # En un servidor público se exige cuenta. En local (METRA_MODO=local) se
+      # puede metrar sin registrarse.
+      - key: METRA_MODO
+        value: nube
+      # Solo este correo obtiene el rol de administrador al registrarse. Sin
+      # esto, en un servidor público el primero que llegue se queda con todo.
+      - key: METRA_ADMIN_EMAIL
+        value: acesinfoproductos@gmail.com
+      - key: PYTHON_VERSION
+        value: 3.12.10

@@ -1,8 +1,25 @@
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+.pytest_cache/
 .venv/
 venv/
-desktop.ini
+
+# Base de datos y archivos subidos: son datos, no código.
+datos/*.db
+datos/*.db-wal
+datos/*.db-shm
+datos/archivos/
+
+# Los PDF originales de las normas pesan más de 100 MB. El extractor
+# (docs/normas/_extraer_partidas.py) regenera el catálogo desde el PDF oficial.
+docs/normas/*.pdf
+docs/normas/*.xlsx
+docs/normas/*.bin
+
+# Los JSON de investigación están duplicados en datos/tablas/, que es de donde
+# los lee la app.
+docs/investigacion/*.json
+
 .DS_Store
-*.xlsx
+Thumbs.db
+desktop.ini

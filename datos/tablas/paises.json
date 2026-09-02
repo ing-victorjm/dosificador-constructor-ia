@@ -1,0 +1,1066 @@
+[
+  {
+    "pais": "Perú",
+    "codigo_iso": "PE",
+    "normas": [
+      {
+        "nombre": "Norma Técnica: Metrados para Obras de Edificación y Habilitaciones Urbanas (RD 073-2010/VIVIENDA/VMCS-DNC)",
+        "entidad": "Ministerio de Vivienda, Construcción y Saneamiento - Dirección Nacional de Construcción",
+        "anio": 2010,
+        "url": "https://spij.minjus.gob.pe/Graficos/Peru/2011/Mayo/18/RD-073-2010-VIVIENDA-VMCS-DNC.pdf",
+        "alcance": "Norma de metrados obligatoria para expedientes técnicos de edificación y habilitaciones urbanas. Define unidad de medida y forma de medición por partida.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Reglamento Nacional de Edificaciones (RNE), D.S. 011-2006-VIVIENDA",
+        "entidad": "Ministerio de Vivienda, Construcción y Saneamiento",
+        "anio": 2006,
+        "url": "https://www.gob.pe/institucion/vivienda/colecciones/1385-reglamento-nacional-de-edificaciones-rne",
+        "alcance": "Norma de diseño y construcción. NO contiene reglas de metrado.",
+        "es_de_pago": false,
+        "verificado": false
+      },
+      {
+        "nombre": "Ley 32069, Ley General de Contrataciones Públicas y su Reglamento D.S. 009-2025-EF",
+        "entidad": "Congreso de la República / MEF - OECE (ex OSCE)",
+        "anio": 2024,
+        "url": "https://leyes.congreso.gob.pe/Documentos/2021_2026/ADLP/Texto_Consolidado/32069-TXM.pdf",
+        "alcance": "Vigente desde 22-04-2025. Exige expediente técnico con estructura de costos definida y metodología BIM. Metrados y valorizaciones son materia conciliable.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Manual de Carreteras MC-01-13: Especificaciones Técnicas Generales para Construcción EG-2013 (RD 22-2013-MTC/14)",
+        "entidad": "Ministerio de Transportes y Comunicaciones",
+        "anio": 2013,
+        "url": "https://portal.mtc.gob.pe/transportes/caminos/normas_carreteras/manuales.html",
+        "alcance": "Obra vial. Cada sección incluye Medición y Pago. NO existe un manual de metrados viales específico.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "OE.n[.n[.n[.n]]] para edificación y HU.n[.n...] para habilitaciones urbanas",
+      "capitulos": ["OE.1 Obras provisionales, trabajos preliminares, seguridad y salud", "OE.2 Estructuras", "OE.3 Arquitectura", "OE.4 Instalaciones sanitarias", "OE.5 Instalaciones eléctricas y mecánicas", "OE.6 Instalaciones de comunicaciones", "OE.7 Instalaciones de gas", "HU.1 Obras provisionales", "HU.2 Pistas y veredas", "HU.3 Infraestructura sanitaria", "HU.4 Infraestructura eléctrica", "HU.5 Infraestructura de comunicaciones", "HU.6 Infraestructura de gas"],
+      "niveles_normados": 4,
+      "nombres_niveles": ["Partida de primer orden (título)", "Partida de segundo orden (subtítulo o básica)", "Partida de tercer orden (específica)", "Partida de cuarto orden (excepcional)"],
+      "implementacion_presupuesto": "01.01.01 (S10 y presupuestos de obra pública)",
+      "ejemplo": "OE.3.4.2.21",
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "PEN",
+      "simbolo": "S/",
+      "decimales": 2,
+      "sep_decimal": ".",
+      "sep_miles": ",",
+      "nota": "Formato según Unicode CLDR es-PE y práctica de presupuestos S10. La Norma Técnica de Metrados usa coma decimal en su texto ('0,25 m2'), por lo que el separador queda como convención de presupuesto, no como norma.",
+      "verificado": false
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "m",
+      "unidad": "und",
+      "global": "glb",
+      "otras": ["jgo", "mll", "pza"],
+      "abreviaturas_norma": ["m2", "m3", "kg", "m", "Und.", "Glb."],
+      "catalogo_cerrado": true
+    },
+    "impuesto": {
+      "nombre": "IGV (Impuesto General a las Ventas)",
+      "tasa": 0.18,
+      "aplica_a_obra": true,
+      "modelo": "linea_al_final",
+      "base": "costo_directo + gastos_generales + utilidad",
+      "notas": "Grava expresamente los contratos de construcción y la primera venta de inmuebles por el constructor. El 18% se descompone internamente en IGV + IPM; la proporción la fija SUNAT y ha sido modificada, pero el total aplicable es 18%.",
+      "fuente": "https://orientacion.sunat.gob.pe/3053-concepto-tasa-y-operaciones-gravadas-igv-empresas",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": 0.0,
+      "descuento_vanos_modo": "deducir_todo",
+      "umbrales_vanos_m2_por_familia": {
+        "muros_albanileria": 0.0,
+        "tarrajeos_revoques": 0.0,
+        "cielorrasos": 0.25,
+        "pisos_contrapisos_acabados": 0.25,
+        "recubrimientos": 0.5,
+        "coberturas": 1.0
+      },
+      "muros_medidos": "cara",
+      "encofrado_separado": true,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "acero_incluye_ganchos_dobleces_traslapes": true,
+      "metrado_neto": true,
+      "esponjamiento_en_metrado": false,
+      "esponjamiento_en_eliminacion_excedente": true,
+      "factores_esponjamiento": {
+        "roca_dura_volada": [1.5, 2.0],
+        "roca_mediana_volada": [1.4, 1.8],
+        "roca_blanda_volada": [1.25, 1.4],
+        "grava_compacta": [1.35, 1.35],
+        "grava_suelta": [1.1, 1.1],
+        "arena_compacta": [1.25, 1.35],
+        "arena_mediana_dura": [1.15, 1.25],
+        "arena_blanda": [1.05, 1.15],
+        "limos_recien_depositados": [1.1, 1.4],
+        "arcillas_muy_duras": [1.15, 1.25]
+      },
+      "estado_volumen_movimiento_tierras": "banco",
+      "derrames_como_partida_ml": true,
+      "encofrado_losa_aligerada_area_total": true,
+      "notas": "Regla general de la norma: 'el cómputo de metrado de las partidas será neto, sin tener en cuenta el volumen de esponjamiento ni desperdicios, los mismos que irán como parte integrante del Análisis de Precios'. El umbral de cielorrasos aparece como '0,25 cm2' en el texto oficial: errata evidente, debe leerse m2."
+    },
+    "campos_no_verificados": ["moneda.sep_decimal", "composicion interna IGV/IPM 2026", "reglas_por_defecto.desperdicio_acero_pct"],
+    "verificado": true
+  },
+  {
+    "pais": "Colombia",
+    "codigo_iso": "CO",
+    "normas": [
+      {
+        "nombre": "NSR-10, Reglamento Colombiano de Construcción Sismo Resistente (Decreto 926 de 2010)",
+        "entidad": "Presidencia de la República / Min. Ambiente, Vivienda y Desarrollo Territorial",
+        "anio": 2010,
+        "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=39255",
+        "alcance": "Reglamento de diseño y construcción sismo resistente. NO es norma de medición; se cita en pliegos sólo para determinar pesos de acero.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Especificaciones Generales de Construcción de Carreteras 2022 (Resolución 4561 de 2022)",
+        "entidad": "INVÍAS - Instituto Nacional de Vías / Ministerio de Transporte",
+        "anio": 2022,
+        "url": "https://www.invias.gov.co/index.php/archivo-y-documentos/documentos-tecnicos/12865-especificaciones-generales-de-construccion-de-carreteras-2022",
+        "alcance": "Cada artículo contiene numerales de Medida y Forma de pago.",
+        "es_de_pago": false,
+        "verificado": false
+      },
+      {
+        "nombre": "ET-IC-01 v4.0, Especificaciones técnicas generales de materiales y construcción para proyectos de infraestructura vial y espacio público de Bogotá D.C. (Resolución 010910 de 2019)",
+        "entidad": "IDU - Instituto de Desarrollo Urbano",
+        "anio": 2019,
+        "url": "https://www.idu.gov.co/page/especificaciones-tecnicas-generales-de-materiales",
+        "alcance": "12 capítulos con especificaciones codificadas.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Anexo No. 2 - Especificaciones técnicas de obra",
+        "entidad": "ICBF - Instituto Colombiano de Bienestar Familiar",
+        "anio": null,
+        "url": "https://www.icbf.gov.co/sites/default/files/anexo_no.2_-_especificaciones_tecnicas_de_obra.pdf",
+        "alcance": "Formato de especificación por ítem con 15 numerales, incluidos 'DESPERDICIOS (Incluidos Sí/No)' y 'MEDIDA Y FORMA DE PAGO'. Es la fuente colombiana con reglas de medición literales verificadas.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Documentos Tipo de licitación de obra pública de infraestructura de transporte, Versión 4 (Resolución 465 de 2024)",
+        "entidad": "Colombia Compra Eficiente (ANCP)",
+        "anio": 2024,
+        "url": "https://www.colombiacompra.gov.co/archivos/tema/obra-publica",
+        "alcance": "Documentos tipo obligatorios para obra pública de transporte.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "INVÍAS: artículo de 3 dígitos + sufijo de año. IDU: 3-4 dígitos + sufijo -18. Presupuesto: CAP n.0 -> ITEM n.nn",
+      "ejemplo": "201-22 (INVÍAS), 800-18 (IDU), CAP 1.0 / ITEM 1.01 (APU DNP)",
+      "capitulos_idu": ["1 Aspectos generales (100-103)", "2 Materiales básicos (200-242)", "3 Excavaciones, rellenos y subdrenes (300-330)", "4 Subrasante (400-421)", "5 Subbases y bases granulares (500-533)", "6 Riegos y mezclas asfálticas (600-629)", "7 Conservación de pavimentos asfálticos (700-750)", "8 Concreto hidráulico (800-811)", "9 Conservación de pavimentos en concreto (900-910)", "10 Espacio público (1000-1050)", "11 CicloRutas (1100)", "12 Obras varias para estructuras de puentes (1200-1250)"],
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "COP",
+      "simbolo": "$",
+      "decimales": 0,
+      "sep_decimal": ",",
+      "sep_miles": ".",
+      "nota": "0 decimales verificado en el APU oficial del DNP ('PRECIO UNITARIO APROXIMADO AL PESO'). Separadores según Unicode CLDR es-CO; no hay norma oficial de formato.",
+      "verificado": false
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "ml",
+      "unidad": "und",
+      "global": "glb",
+      "abreviaturas_locales": ["M2", "M3", "KG", "ML", "UN", "UND", "GLB", "GL"],
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "IVA",
+      "tasa": 0.19,
+      "aplica_a_obra": true,
+      "modelo": "base_gravable_especial",
+      "base": "En contratos de construcción de bien inmueble el IVA se genera sobre los honorarios del constructor o, a falta de pacto, sobre su utilidad (Decreto 1372 de 1992 art. 3, compilado en DUR 1625 de 2016 art. 1.3.1.7.9). NO se aplica sobre el valor total del contrato.",
+      "notas": "La base gravable especial AIU del art. 462-1 ET NO aplica a contratos de construcción (DIAN Oficio 901006 (165) de 2021). El AIU es, en cambio, un factor de mayoración del costo directo: el APU oficial del DNP usa A 22% / I 3% / U 5%.",
+      "aiu_referencia": {"administracion": 0.22, "imprevistos": 0.03, "utilidad": 0.05, "fuente": "APU DNP", "verificado": true},
+      "fuente": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=6533 ; https://normograma.dian.gov.co/dian/compilacion/docs/oficio_dian_901006_2021.htm",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": "no_deducir",
+      "muros_medidos": null,
+      "encofrado_separado": false,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": null,
+      "notas": "Vanos: 'No se medirán y por tanto no se pagarán las aberturas y/o vanos para puertas y ventanas' (ICBF) - criterio vacío por lleno. Encofrado/formaleta va INCLUIDO en el APU del concreto (m3), verificado en la especificación de columnas en concreto a la vista. Acero: 'La medida se efectuará sobre los Planos Estructurales y los pesos se determinarán de acuerdo con la norma NSR'; el desperdicio se declara en el numeral 10 del APU. El replanteo se hace sobre ejes estructurales y 'no se contabilizarán sobreanchos adicionales', pero no hay regla explícita eje vs cara para mampostería."
+    },
+    "campos_no_verificados": ["reglas_por_defecto.muros_medidos", "reglas_por_defecto.desperdicio_acero_pct", "reglas_por_defecto.estado_volumen_movimiento_tierras", "texto literal de Medida y Forma de pago de INVÍAS 2022 e IDU", "moneda.sep_decimal", "moneda.sep_miles"],
+    "verificado": false
+  },
+  {
+    "pais": "Chile",
+    "codigo_iso": "CL",
+    "normas": [
+      {
+        "nombre": "NCh353:2018 - Construcción. Cubicación de obras de edificación. Metodología de cálculo. Requisitos",
+        "entidad": "INN - Instituto Nacional de Normalización",
+        "anio": 2018,
+        "url": "https://ecommerce.inn.cl/nch353201870066",
+        "alcance": "ES la norma chilena de medición. Establece procedimientos para cubicar y determinar cantidades por partida en obras de edificación. Excluye el sobredimensionamiento y el rechazo de materiales; considera las pérdidas mínimas posibles. Reemplaza a NCh353.Of2000.",
+        "es_de_pago": true,
+        "verificado": true
+      },
+      {
+        "nombre": "OGUC - Ordenanza General de Urbanismo y Construcciones (D.S. 47 de 1992), texto actualizado marzo 2026",
+        "entidad": "MINVU - Ministerio de Vivienda y Urbanismo",
+        "anio": 1992,
+        "url": "https://www.minvu.gob.cl/wp-content/uploads/2019/05/OGUC-Marzo-2026-D.S.-N%C2%B02-D.O.-16-03-2026.pdf",
+        "alcance": "NO contiene reglas de cubicación de partidas. Sí define superficie edificada (hasta la cara exterior de muros perimetrales), superficie útil y superficie común (hasta el eje de los muros), art. 1.1.2.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Itemizado Técnico de Construcción para proyectos del Fondo Solidario de Elección de Vivienda D.S. 49 (Res. Ex. 7713 de 2017)",
+        "entidad": "MINVU",
+        "anio": 2017,
+        "url": "https://www.minvu.gob.cl/wp-content/uploads/2019/05/Res_7713-16062017_Itemizado-Tecnico.pdf",
+        "alcance": "Itemizado de exigencias técnicas mínimas obligatorias en 9 capítulos. NO es una tabla de unidades de pago.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Manual de Carreteras, Volumen N°5: Especificaciones Técnicas Generales de Construcción",
+        "entidad": "MOP - Dirección de Vialidad",
+        "anio": 2026,
+        "url": "https://www.mop.gob.cl/serviciosmop/manual-de-carreteras/",
+        "alcance": "Nueva edición vigente desde el 01-01-2026. Cada sección tiene el numeral .4 'PARTIDAS DEL PRESUPUESTO Y BASES DE MEDICIÓN' con su código de ítem de pago.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "MOP: Sección n.nnn -> numerales n.nnn.n -> ítem de pago nnn-n. MINVU: capítulo.subcapítulo decimal.",
+      "ejemplo": "5.514.4 -> ítem de pago 514-1 (MOP); 2.4 Muros de albañilería confinada o armada (MINVU)",
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "CLP",
+      "simbolo": "$",
+      "decimales": 0,
+      "sep_decimal": ",",
+      "sep_miles": ".",
+      "nota": "0 decimales por ISO 4217 y CLDR (el CLP no tiene subdivisión en circulación). Separadores verificados de hecho en el formato que publica el SII.",
+      "unidad_cuenta_paralela": {
+        "codigo": "UF",
+        "nombre": "Unidad de Fomento",
+        "decimales": 2,
+        "sep_decimal": ",",
+        "sep_miles": ".",
+        "ejemplo": "40.875,09",
+        "fuente": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
+        "nota": "Reajustable diariamente por IPC. Los topes de subsidio y del crédito de constructoras se fijan en UF.",
+        "verificado": true
+      },
+      "verificado": true
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "ml",
+      "unidad": "und",
+      "global": "glb",
+      "abreviaturas_locales": ["m2", "m3", "kg", "ml", "N°", "gl"],
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "IVA",
+      "tasa": 0.19,
+      "aplica_a_obra": true,
+      "modelo": "linea_al_final",
+      "base": "valor de la venta o del servicio",
+      "notas": "Art. 14 de la Ley sobre Impuesto a las Ventas y Servicios. El CEEC (Crédito Especial de Empresas Constructoras, art. 21 DL 910) NO cambia el IVA facturado: es un crédito del constructor contra PPM. Para contratos generales de construcción celebrados entre 01-01-2025 y 31-12-2026 la deducción es 0,1625 del débito fiscal (0,030875 del valor del contrato en viviendas exentas por subsidio, tope 2.200 UF); tope 225 UF por vivienda. Se elimina el 01-01-2027.",
+      "fuente": "https://www.sii.cl/preguntas_frecuentes/impuestos_mensuales/001_130_0572.htm ; https://www.sii.cl/normativa_legislacion/circulares/2023/circu37.pdf",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": null,
+      "muros_medidos": null,
+      "encofrado_separado": null,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": null,
+      "notas": "El metrado neto está confirmado por el alcance publicado de NCh353:2018, que excluye el sobredimensionamiento y el rechazo de materiales. Los umbrales concretos de descuento de vanos, el criterio eje/cara para cubicación y el tratamiento del moldaje están dentro de NCh353:2018, que es norma de pago y no se descargó. La tabla que circula (0% <1,5 m2; 25% 1,5-3,0; 75% >3,0) NO está verificada: no usarla como default duro."
+    },
+    "campos_no_verificados": ["reglas_por_defecto.descuento_vanos_min_m2", "reglas_por_defecto.descuento_vanos_modo", "reglas_por_defecto.muros_medidos", "reglas_por_defecto.encofrado_separado", "reglas_por_defecto.desperdicio_acero_pct", "unidades_tipicas.abreviaturas_locales", "itemizado oficial del DS19"],
+    "verificado": false
+  },
+  {
+    "pais": "México",
+    "codigo_iso": "MX",
+    "normas": [
+      {
+        "nombre": "Ley de Obras Públicas y Servicios Relacionados con las Mismas (LOPSRM), reformada por decreto DOF 16-04-2025",
+        "entidad": "Congreso de la Unión / DOF",
+        "anio": 2025,
+        "url": "https://sidof.segob.gob.mx/notas/5755218",
+        "alcance": "NO fue sustituida por una ley nueva: fue reformada. Art. 45 fr. I define el contrato a precios unitarios; art. 59 exige conciliar conceptos fuera de catálogo. Mientras no opere la Plataforma Digital de Contrataciones Públicas sigue usándose CompraNet.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Reglamento de la LOPSRM (arts. 185, 188, 189, 211)",
+        "entidad": "Poder Ejecutivo Federal",
+        "anio": null,
+        "url": "https://www.diputados.gob.mx/LeyesBiblio/regley/Reg_LOPSRM.pdf",
+        "alcance": "Art. 185: el precio unitario integra costos directos, indirectos, financiamiento, utilidad y cargos adicionales. Art. 188: las unidades de medida corresponderán al Sistema General de Unidades de Medida.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Normativa para la Infraestructura del Transporte (NIT): N-LEG-3/24, N-INT-1/24, N-INT-4/26, N-CTR-CAR-*",
+        "entidad": "SICT / IMT",
+        "anio": 2024,
+        "url": "https://normas.imt.mx/libros",
+        "alcance": "Cada norma CTR incluye cláusulas 'I. MEDICIÓN' y 'J. BASE DE PAGO'. N-LEG-3/24 cl. E fija reglas generales de medición y redondeo. N-INT-4/26 tabla 7 fija los símbolos de unidad.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Catálogo General de Precios Unitarios para la Construcción de Sistemas de Agua Potable y Alcantarillado 2025",
+        "entidad": "CONAGUA - Subdirección General de Agua Potable, Drenaje y Saneamiento",
+        "anio": 2025,
+        "url": "https://www.gob.mx/cms/uploads/attachment/file/985551/CATALOGO_GENERAL_DE_AGUA_POTABLE_DE_PRECIOS_UNITARIOS_PARA_LA_CONSTRUCCI_N_DE_SISTEMAS_DE_AGUA_POTABLE_Y_ALCANTARILLADO_2025.pdf",
+        "alcance": "Precios ya afectados por indirectos, financiamiento, utilidad y cargos adicionales. Codificación de familia de 4 dígitos + variante de 2. Vigente desde enero 2025.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Normas de Construcción de la Administración Pública de la Ciudad de México, Libro 3 'Construcción e Instalaciones'",
+        "entidad": "Gobierno de la Ciudad de México - Secretaría de Obras y Servicios",
+        "anio": null,
+        "url": "https://infocdmx.org.mx/escuela/curso_capacitadores/procesos_contratacion/normas_tecnicas_VII.pdf",
+        "alcance": "Cada capítulo tiene el apartado 'F. SUBCONCEPTOS DE OBRA, ALCANCES, UNIDADES DE MEDIDA, CRITERIOS PARA CUANTIFICAR Y BASE DE PAGO'. Cap. 007 Cimbra, 011 Acero de refuerzo, 017 Muros.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "NOM-008-SE-2021, Sistema general de unidades de medida",
+        "entidad": "Secretaría de Economía / DOF",
+        "anio": 2023,
+        "url": "https://www.dof.gob.mx/nota_detalle.php?codigo=5713228&fecha=29/12/2023",
+        "alcance": "Referencia obligatoria de unidades citada por el RLOPSRM art. 188.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "SICT: N-LIBRO-TEMA-Parte-Título-Capítulo/año. CDMX: Libro.Parte.Sección.Capítulo. CONAGUA: familia (4 dígitos) + variante (2 dígitos).",
+      "ejemplo": "N-CTR-CAR-1-02-006/01 ; 3.01.02.007 ; 4080 01",
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "MXN",
+      "simbolo": "$",
+      "decimales": 2,
+      "sep_decimal": ".",
+      "sep_miles": ",",
+      "nota": "Formato verificado en el Catálogo CONAGUA 2025 ($ 16,767.66). La norma SICT N-INT-4/26 cl. D.2 fija el punto como signo decimal; D.1 recomienda espacio como separador de grupos (regla SI), pero los catálogos usan coma.",
+      "verificado": true
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "m",
+      "unidad": "pza",
+      "global": "glb",
+      "abreviaturas_locales": ["m", "km", "m2", "ha", "m3", "L", "kg", "t", "pza", "elem", "estr", "epo", "jgo", "conj", "sist", "lote", "pda", "salida"],
+      "nota": "La unidad de conteo mexicana es 'pza' (pieza), NUNCA 'und'. El acero en CDMX se paga en tonelada.",
+      "catalogo_cerrado": true
+    },
+    "impuesto": {
+      "nombre": "IVA",
+      "tasa": 0.16,
+      "aplica_a_obra": true,
+      "modelo": "linea_al_final",
+      "base": "valor de los actos o actividades",
+      "tasa_alternativa": {
+        "valor": 0.08,
+        "nombre": "Estímulo fiscal región fronteriza norte y sur",
+        "condiciones": "Requiere inscripción en el padrón de beneficiarios del SAT. Excluye la enajenación de bienes inmuebles; la ejecución de obra como servicio no está en la lista de exclusiones.",
+        "verificado": true
+      },
+      "fuente": "https://www.sat.gob.mx/minisitio/EstimulosFiscalesFronteraNorteSur/documentos/PreguntasFrecuentes.pdf",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": null,
+      "muros_medidos": null,
+      "encofrado_separado": true,
+      "encofrado_separado_por_sector": {"edificacion": true, "obra_hidraulica": true, "carreteras": false},
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": null,
+      "redondeo_aproximacion": {"concreto_y_acero_carreteras": 0.1, "cimbra_y_acero_cdmx": 0.01},
+      "notas": "Cimbra: en edificación y obra hidráulica es concepto separado en m2 de superficie de contacto con el concreto fresco (CDMX cap. 007; CONAGUA familia 4080); en carreteras va INCLUIDA en el m3 de concreto (SICT N-CTR-CAR-1-02-003/04 base de pago). Acero: 'kilogramo de acero habilitado y colocado', masa calculada de las dimensiones de planos, y la base de pago incluye 'mermas y desperdicios'. Los umbrales de vano y el criterio eje/cara NO están normados: se fijan en las especificaciones particulares (N-LEG-3/24 cl. E.5)."
+    },
+    "campos_no_verificados": ["reglas_por_defecto.descuento_vanos_min_m2", "reglas_por_defecto.descuento_vanos_modo", "reglas_por_defecto.muros_medidos", "reglas_por_defecto.desperdicio_acero_pct", "catálogo de conceptos del IMSS", "fecha de la última reforma al RLOPSRM"],
+    "verificado": false
+  },
+  {
+    "pais": "Ecuador",
+    "codigo_iso": "EC",
+    "normas": [
+      {
+        "nombre": "NEC - Norma Ecuatoriana de la Construcción",
+        "entidad": "Ministerio de Infraestructura y Transporte (rectoría desde D.E. 102 de 2025; antes MIDUVI)",
+        "anio": 2025,
+        "url": "https://www.mit.gob.ec/norma-ecuatoriana-de-la-construccion/",
+        "alcance": "Ejes NEC-SE (seguridad estructural), NEC-HS (habitabilidad y salud) y NEC-SB (servicios básicos). Verificado: NO contiene ningún capítulo de medición de cantidades, metrados ni presupuestos.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "NEVI-12, Norma Ecuatoriana Vial, Volumen 3: Especificaciones Generales para la Construcción de Caminos y Puentes",
+        "entidad": "MTOP - Ministerio de Transporte y Obras Públicas",
+        "anio": 2013,
+        "url": "https://www.mit.gob.ec/wp-content/uploads/downloads/2013/12/01-12-2013_Manual_NEVI-12_VOLUMEN_3.pdf",
+        "alcance": "Cada rubro cierra con 'Partidas del Presupuesto y Bases de Medición'. Es la única normativa ecuatoriana con reglas de medición explícitas.",
+        "es_de_pago": false,
+        "verificado": false
+      },
+      {
+        "nombre": "LOSNCP - Ley Orgánica del Sistema Nacional de Contratación Pública (RO 395 de 2008, reformada 07-10-2025)",
+        "entidad": "Asamblea Nacional / SERCOP",
+        "anio": 2025,
+        "url": "https://institutodemocracia.gob.ec/wp-content/uploads/2025/10/Ley_organica_del_sistema_nacional_de_contratacion_public_LOSNCP.pdf-07102025.pdf",
+        "alcance": "Art. 23 exige APU y presupuesto referencial. Arts. 96-97 regulan el reajuste con índices IPCO del INEC. El SERCOP NO emite norma de medición: obliga a la entidad contratante a definir la forma de pago rubro por rubro.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "IPCO - Índice de Precios de la Construcción (base abril 2000 = 100)",
+        "entidad": "INEC",
+        "anio": 2022,
+        "url": "https://www.ecuadorencifras.gob.ec/indice-de-precios-de-la-construccion/",
+        "alcance": "Insumo legal de las fórmulas polinómicas de reajuste de precios de obra pública.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "Edificación: correlativa plana (No. | Rubro/Descripción | Unidad | Cantidad | Precio Unitario | Precio Total). Vialidad: decimal jerárquica por secciones.",
+      "ejemplo": "6.103.6.3 (1) (NEVI-12)",
+      "verificado": false
+    },
+    "moneda": {
+      "iso": "USD",
+      "simbolo": "$",
+      "decimales": 2,
+      "sep_decimal": ".",
+      "sep_miles": ",",
+      "nota": "País dolarizado. Se adopta la convención de punto decimal por la práctica de facturación dolarizada, PERO Unicode CLDR asigna coma decimal y punto de miles al locale es-EC. Dato en conflicto: confirmar antes de codificar.",
+      "verificado": false
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "m",
+      "unidad": "und",
+      "global": "glb",
+      "abreviaturas_locales": ["m2", "m3", "kg", "m", "Km"],
+      "nota": "En el pliego SERCOP la columna 'Unidad' es texto libre definido por la entidad contratante: no hay catálogo cerrado obligatorio. Las abreviaturas 'u' y 'glb' que usan las plantillas de mercado NO están verificadas en documento oficial.",
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "IVA",
+      "tasa": 0.15,
+      "aplica_a_obra": true,
+      "modelo": "linea_al_final",
+      "base": "El presupuesto referencial SERCOP se expresa SIN IVA; el impuesto se aplica después, sobre las planillas.",
+      "tasa_alternativa": {
+        "valor": 0.05,
+        "nombre": "Tarifa reducida de construcción",
+        "condiciones": "Vigente desde 01-04-2024 por la Ley Orgánica para Enfrentar el Conflicto Armado Interno (RO 516). El SRI la precisa en un punto como 'la transferencia de materiales de construcción'. NO SE PUDO CONFIRMAR si cubre también los contratos y servicios de construcción.",
+        "verificado": false
+      },
+      "notas": "La tarifa general de 15% rige desde el 01-04-2024 por Decreto Ejecutivo 198 (la tarifa estatutaria del art. 65 LRTI es 13%).",
+      "fuente": "https://www.sri.gob.ec/impuesto-al-valor-agregado-iva",
+      "verificado": false
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": null,
+      "muros_medidos": null,
+      "encofrado_separado": null,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": "banco",
+      "notas": "En edificación no hay reglas nacionales: cada entidad contratante define la forma de medida y pago por rubro. En vialidad (NEVI-12) la excavación se cuantifica 'por metro cúbico (m3) excavado determinado con secciones geométricas de perfiles normales al eje del camino', es decir volumen en banco. Parámetro obligatorio adicional para Ecuador: reajuste de precios con fórmulas polinómicas e índices IPCO."
+    },
+    "campos_no_verificados": ["impuesto.tasa_alternativa (alcance del 5% de construcción)", "moneda.sep_decimal", "moneda.sep_miles", "unidades_tipicas.abreviaturas_locales", "reglas_por_defecto.descuento_vanos_min_m2", "reglas_por_defecto.muros_medidos", "reglas_por_defecto.encofrado_separado", "reglas_por_defecto.desperdicio_acero_pct"],
+    "verificado": false
+  },
+  {
+    "pais": "Bolivia",
+    "codigo_iso": "BO",
+    "normas": [
+      {
+        "nombre": "Guía Boliviana para Diseño y Presentación de Proyectos",
+        "entidad": "MOPSV - Ministerio de Obras Públicas, Servicios y Vivienda / Viceministerio de Vivienda y Urbanismo",
+        "anio": 2017,
+        "url": "https://www.oopp.gob.bo/wp-content/uploads/2020/antiguos/Guia-Boliviana-para-diseno.pdf",
+        "alcance": "Reconoce oficialmente que NO existe normativa específica de medición en Bolivia. Normaliza el contenedor: planilla de cómputos métricos obligatoria, croquis por ítem, listado de 8 rubros, formulario B-2 de APU y uso obligatorio del SI.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Modelo de Documento Base de Contratación de Obras - Licitación Pública (Resolución Ministerial 021 de 02-02-2022)",
+        "entidad": "Ministerio de Economía y Finanzas Públicas, en el marco del D.S. 0181 (NB-SABS)",
+        "anio": 2022,
+        "url": "https://www.economiayfinanzas.gob.bo/sites/default/files/2023-01/DBC_LP_OBRAS_02022022.pdf",
+        "alcance": "Define los formularios B-1 (presupuesto por ítems) y B-2 (APU), la moneda de pago, los decimales y la exigencia de importes en numeral y literal.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "Correlativa plana (1, 2, 3...). El DBC admite además un código libre de ítem. La Guía normaliza 8 rubros de agrupación (no limitativos).",
+      "rubros": ["Trabajos preliminares", "Cimentación y estructura", "Obra gruesa", "Obra fina", "Instalaciones eléctricas", "Instalaciones hidro-sanitarias", "Instalaciones complementarias", "Trabajos finales"],
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "BOB",
+      "simbolo": "Bs",
+      "decimales": 2,
+      "sep_decimal": ",",
+      "sep_miles": ".",
+      "nota": "Coma decimal verificada en los formularios oficiales del DBC. El precio unitario se adopta 'con dos (2) decimales'; el APU trabaja internamente con 3. Los importes van en numeral Y en literal, y ante discrepancia prevalece el literal.",
+      "verificado": true
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "m",
+      "unidad": "und",
+      "global": "glb",
+      "nota": "La Guía adopta el SI y declara obligatorio el uso de sus unidades y símbolos, pero en el DBC y en la planilla de cómputos el campo 'Unidad' es TEXTO LIBRE definido por el proyectista. El motor debe permitir unidad libre con catálogo sugerido, no cerrado.",
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "IVA + IT",
+      "tasa": 0.13,
+      "aplica_a_obra": true,
+      "modelo": "dentro_del_precio_unitario",
+      "base": "Precio neto de venta. Grava servicios en general y contratos de obra.",
+      "notas": "CRÍTICO: en Bolivia NO se añade una línea de IVA al final del presupuesto. Los impuestos se incorporan dentro de cada precio unitario mediante el Formulario B-2: cargas sociales 55-71,18% de la mano de obra, IVA mano de obra 14,94% (=13/(1-0,13)), herramientas 5%, gastos generales 12%, utilidad 10%, IT 3,09% (=3/(1-0,03)).",
+      "componentes_apu": {
+        "cargas_sociales_pct_min": 0.55,
+        "cargas_sociales_pct_max": 0.7118,
+        "iva_mano_obra_pct": 0.1494,
+        "herramientas_pct": 0.05,
+        "gastos_generales_pct": 0.12,
+        "utilidad_pct": 0.10,
+        "it_pct": 0.0309
+      },
+      "impuesto_transacciones": {"nombre": "IT - Impuesto a las Transacciones", "tasa": 0.03, "base": "ingreso bruto devengado"},
+      "fuente": "https://www.impuestos.gob.bo/wp-content/uploads/2025/10/8580c1ef52.pdf",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": null,
+      "muros_medidos": null,
+      "encofrado_separado": null,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": null,
+      "planilla_computos_columnas": ["ITEM", "UBICACION", "UNIDAD", "N_DE_VECES", "LARGO", "ANCHO", "AREA", "ALTO", "VOLUMEN", "COMPUTO_PARCIAL", "COMPUTO_TOTAL", "TOTAL"],
+      "requiere_croquis_por_item": true,
+      "requiere_texto_medicion_por_item": true,
+      "requiere_texto_forma_pago_por_item": true,
+      "notas": "No hay reglas nacionales de medición. La medición se define por ítem y por proyecto: cada especificación técnica lleva apartados obligatorios '12.3.4 Medición' y '12.3.5 Forma de Pago'. El motor debe guardar esos textos por ítem y exponer todos los umbrales como parámetros de proyecto, no como constantes de país. El desperdicio se declara en el componente Materiales del Formulario B-2, no en el cómputo métrico."
+    },
+    "campos_no_verificados": ["reglas_por_defecto.descuento_vanos_min_m2", "reglas_por_defecto.muros_medidos", "reglas_por_defecto.encofrado_separado", "reglas_por_defecto.desperdicio_acero_pct", "Manual de Especificaciones Técnicas ABC 2011", "normativa de CABOCO"],
+    "verificado": false
+  },
+  {
+    "pais": "Argentina",
+    "codigo_iso": "AR",
+    "normas": [
+      {
+        "nombre": "Pliego Único de Especificaciones Técnicas Generales, Edición 2019 Versión I (PUETG DVBA)",
+        "entidad": "Dirección de Vialidad de la Provincia de Buenos Aires",
+        "anio": 2019,
+        "url": "https://www.vialidad.gba.gob.ar/datos/licitaciones/Pliego%20%C3%9Anico%20de%20Especificaciones%20T%C3%A9cnicas%202019.pdf",
+        "alcance": "512 páginas. El último artículo de cada sección es 'Forma de medición y pago'. Es la fuente argentina abierta más completa con reglas de medición literales.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Pliegos de Especificaciones Técnicas Generales",
+        "entidad": "DNV - Dirección Nacional de Vialidad",
+        "anio": null,
+        "url": "https://www.argentina.gob.ar/transporte/vialidad-nacional/licitaciones/pliegos-de-especificaciones-tecnicas",
+        "alcance": "Repositorio oficial (1998-2017). Los capítulos de medición y pago de cada pliego no pudieron leerse.",
+        "es_de_pago": false,
+        "verificado": false
+      },
+      {
+        "nombre": "ICC - Índice del Costo de la Construcción en el Gran Buenos Aires (base 1993 = 100)",
+        "entidad": "INDEC",
+        "anio": null,
+        "url": "https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-33",
+        "alcance": "Referencia de estructura de capítulos e ítems de obra. NO incluye IVA, honorarios, terreno, gastos de administración ni beneficio de la empresa constructora.",
+        "es_de_pago": false,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "Pliegos: CAPÍTULO -> SECCIÓN -> ART. (último artículo = Forma de medición y pago). Edificación: decimal jerárquica rubro -> ítem -> subítem, hasta 3 niveles.",
+      "ejemplo": "1 TRABAJOS PRELIMINARES / 1.1 / 2.1.1",
+      "items_icc": ["1 Movimiento de tierra (1,6)", "2 Estructura (14,1)", "3 Albañilería (34,7)", "4 Yesería (2,4)", "5 Instalación sanitaria y contraincendios (9,7)", "6 Instalación de gas (3,4)", "7 Instalación eléctrica (4,7)", "8 Carpintería metálica y herrería (2,0)", "9 Carpintería de madera (8,0)", "10 Ascensores (4,3)", "11 Vidrios (0,6)", "12 Pintura (8,4)", "13 Otros trabajos y gastos (6,1)"],
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "ARS",
+      "simbolo": "$",
+      "decimales": 2,
+      "sep_decimal": ",",
+      "sep_miles": ".",
+      "nota": "2 decimales es la convención, pero en los presupuestos oficiales verificados los importes aparecen redondeados a peso entero por efecto inflacionario. No hay norma oficial de formato.",
+      "verificado": false
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "ml",
+      "unidad": "und",
+      "global": "glb",
+      "abreviaturas_locales": ["m2", "m3", "ml", "m", "Un", "UN", "u", "Gl", "GL", "mes", "kg"],
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "IVA",
+      "tasa": 0.21,
+      "aplica_a_obra": true,
+      "modelo": "linea_al_final",
+      "base": "valor de la operación",
+      "tasa_alternativa": {
+        "valor": 0.105,
+        "nombre": "Alícuota reducida para vivienda",
+        "condiciones": "Trabajos sobre inmueble ajeno (art. 3 inc. a) y obras sobre inmueble propio (art. 3 inc. b) destinados a vivienda, excluidos los realizados sobre construcciones preexistentes que no constituyan obras en curso.",
+        "verificado": true
+      },
+      "notas": "Art. 28 de la Ley de IVA, t.o. por Decreto 280/97. AFIP fue reemplazada por ARCA en 2024.",
+      "fuente": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/40000-44999/42701/texact.htm",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": null,
+      "muros_medidos": null,
+      "encofrado_separado": null,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": "compactado",
+      "unidad_mamposteria_multiple": ["m3", "m2", "ml"],
+      "notas": "No se encontró norma nacional ni IRAM de medición: las reglas viven en cada pliego. La costumbre 'vacío por lleno' con umbral de 3,00 m2 NO se pudo verificar en fuente oficial: no usarla como default duro. Movimiento de suelos verificado en PUETG DVBA 2019: el terraplén se mide 'en metros cúbicos (m3) de terraplén debidamente construido... con las exigencias de compactación' (volumen compactado, no en banco); la zanja por m3 de suelo excavado; la apertura de caja por m2 de superficie ejecutada. La mampostería convive en m3, m2 y ml según el pliego: el motor debe permitir las tres para el mismo concepto."
+    },
+    "campos_no_verificados": ["existencia de norma nacional o IRAM de medición", "reglas_por_defecto.descuento_vanos_min_m2", "reglas_por_defecto.muros_medidos", "reglas_por_defecto.encofrado_separado", "reglas_por_defecto.desperdicio_acero_pct", "moneda.decimales"],
+    "verificado": false
+  },
+  {
+    "pais": "España",
+    "codigo_iso": "ES",
+    "normas": [
+      {
+        "nombre": "CTE - Código Técnico de la Edificación (Real Decreto 314/2006)",
+        "entidad": "Gobierno de España / BOE",
+        "anio": 2006,
+        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2006-5515",
+        "alcance": "Regula las exigencias básicas de calidad de los edificios. Es normativa de diseño y prestaciones: NO contiene criterios de medición ni de valoración.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Código Estructural (Real Decreto 470/2021)",
+        "entidad": "Gobierno de España / BOE",
+        "anio": 2021,
+        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2021-13681",
+        "alcance": "Sustituye a la EHE-08. Normativa de aplicación en hormigón y encofrados. No es norma de medición.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Reglamento General de la Ley de Contratos de las AAPP (Real Decreto 1098/2001), arts. 130 y 131",
+        "entidad": "Gobierno de España / BOE",
+        "anio": 2001,
+        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2001-19995",
+        "alcance": "Art. 130: los precios unitarios se calculan sin incorporar el IVA. Art. 131: define el presupuesto de ejecución material y el presupuesto base de licitación con gastos generales de estructura del 13 al 17%, beneficio industrial del 6%, y el IVA aplicado sobre la suma del PEM y los gastos generales.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "Ley 9/2017 de Contratos del Sector Público, arts. 100 y 101",
+        "entidad": "Cortes Generales / BOE",
+        "anio": 2017,
+        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2017-12902",
+        "alcance": "El presupuesto base de licitación incluye el IVA; el valor estimado se calcula sin IVA. Obliga a desglosar costes directos, indirectos y costes salariales.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "BEDEC - Banco estructurado de datos de elementos constructivos",
+        "entidad": "ITeC - Institut de Tecnologia de la Construcció de Catalunya",
+        "anio": 2023,
+        "url": "https://itec.es/docs/pdf/bedec-criterios-es.pdf",
+        "alcance": "Base de precios con pliego de condiciones por partida; el tercer apartado del pliego recoge la unidad y el criterio de medición. ~5.000 pliegos paramétricos. De suscripción (desde 85 EUR/mes), con visor web público en https://bdc.itec.cat/vide",
+        "es_de_pago": true,
+        "verificado": true
+      },
+      {
+        "nombre": "Generador de Precios de la Construcción",
+        "entidad": "CYPE Ingenieros",
+        "anio": null,
+        "url": "https://www.generadordeprecios.info/",
+        "alcance": "Consulta web gratuita sin registro. Cada partida publica 'criterio de medición en proyecto', 'criterio de medición en obra y condiciones de abono' y a menudo 'criterio de valoración económica'. Exporta a FIEBDC-3 (.bc3). Es la fuente pública verificable de criterios de medición españoles.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "PREOC - Precios de Edificación y Obra Civil en España",
+        "entidad": "Editorial privada",
+        "anio": null,
+        "url": "https://www.preoc.es/",
+        "alcance": "Base de precios privada; requiere registro y compra.",
+        "es_de_pago": true,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "BEDEC: 9 caracteres = tipo (P elemento de obra / B material / C maquinaria / A mano de obra) + capítulo + subcapítulo + familia + guion + 4 diferenciadores. CYPE: capítulo (1 letra) + subcapítulo (2 letras) + familia (3 letras) + partida (3 letras + 3 dígitos).",
+      "ejemplo": "P129-6553, A04-FEPZ, B055-065X (BEDEC) ; FFX010, EHS012, EAS010, RPE005 (CYPE)",
+      "capitulos_cype_obra_nueva": ["Actuaciones previas", "Demoliciones", "Acondicionamiento del terreno", "Cimentaciones", "Estructuras", "Fachadas y particiones", "Aislamientos e impermeabilizaciones", "Cubiertas", "Revestimientos y trasdosados", "Instalaciones", "Carpintería, cerrajería, vidrios y protecciones solares", "Remates y ayudas", "Señalización y equipamiento", "Urbanización interior de la parcela", "Gestión de residuos", "Control de calidad y ensayos", "Seguridad y salud"],
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "EUR",
+      "simbolo": "€",
+      "decimales": 2,
+      "sep_decimal": ",",
+      "sep_miles": ".",
+      "posicion_simbolo": "sufijo",
+      "nota": "Formato verificado en documento oficial del ITeC: 1.709.697,80 €",
+      "verificado": true
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "kg",
+      "longitud": "m",
+      "unidad": "und",
+      "global": "glb",
+      "abreviaturas_locales": ["m²", "m³", "m", "kg", "t", "Ud", "u", "h", "l", "PA"],
+      "nota": "CYPE usa 'Ud' y escribe m²/m³ con superíndice; BEDEC usa 'u' y m2/m3 en plano. 'PA' = partida alzada, integrada en el PEM por el art. 131 del RD 1098/2001.",
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "IVA",
+      "tasa": 0.21,
+      "aplica_a_obra": true,
+      "modelo": "mayoracion_reglada",
+      "base": "Presupuesto de ejecución material + gastos generales de estructura (art. 131.2 RD 1098/2001). El beneficio industrial NO forma parte de la base según el literal del artículo.",
+      "estructura_presupuesto": {
+        "pem": "suma de cantidad x precio unitario + partidas alzadas",
+        "gastos_generales_pct_min": 0.13,
+        "gastos_generales_pct_max": 0.17,
+        "gastos_generales_pct_habitual": 0.13,
+        "beneficio_industrial_pct": 0.06,
+        "nota": "El 13% es el habitual por Orden FOM/1824/2013 y Orden APM/401/2018. En obra privada los porcentajes NO están regulados."
+      },
+      "tasas_alternativas": [
+        {"valor": 0.10, "nombre": "Renovación y reparación de vivienda (art. 91.Uno.2.10º)", "condiciones": "Destinatario persona física o comunidad de propietarios; vivienda terminada al menos 2 años antes; materiales aportados <= 40% de la base imponible.", "verificado": true},
+        {"valor": 0.10, "nombre": "Ejecuciones de obra promotor-contratista de vivienda (art. 91.Uno.3.1º)", "condiciones": "Contrato directo promotor-contratista para construcción o rehabilitación de edificaciones destinadas principalmente a viviendas (al menos el 50% de la superficie construida).", "verificado": true},
+        {"valor": 0.04, "nombre": "VPO de régimen especial o promoción pública (art. 91.Dos.1.6º)", "condiciones": "SOLO la ENTREGA por el promotor, no la ejecución de obra: el art. 91.Tres excluye expresamente las ejecuciones de obra de VPO del tipo superreducido. La obra de VPO tributa al 10%.", "verificado": true}
+      ],
+      "inversion_sujeto_pasivo": {
+        "aplica": true,
+        "articulo": "84.Uno.2º.f) Ley 37/1992",
+        "condiciones": "Ejecuciones de obra, con o sin aportación de materiales, por contratos directos promotor-contratista de urbanización de terrenos o construcción o rehabilitación de edificaciones; también entre contratista principal y subcontratistas. La factura va sin IVA y lo autoliquida el destinatario.",
+        "verificado": true
+      },
+      "excepcion_territorial": {"territorio": "Canarias", "impuesto": "IGIC", "tasa": null, "verificado": false},
+      "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28740",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": 2.0,
+      "descuento_vanos_modo": "umbral",
+      "umbrales_vanos_m2_por_familia": {
+        "fabrica_ladrillo": {"umbral_m2": 2.0, "modo": "umbral"},
+        "revestimientos_enfoscados": {"umbral_m2": 4.0, "modo": "deducir_exceso"}
+      },
+      "muros_medidos": "cara",
+      "encofrado_separado": null,
+      "encofrado_ambas_formas": true,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "doble_criterio_medicion": true,
+      "notas": "Fábrica de ladrillo (CYPE FFX010): 'Superficie medida en verdadera magnitud desde las caras exteriores de la fachada, deduciendo los huecos de superficie mayor de 2 m2. En los huecos que no se deduzcan, están incluidos los trabajos de realizar la superficie interior del hueco.' Revestimientos (CYPE RPE005): 'sin deducir huecos menores de 4 m2 y deduciendo, en los huecos de superficie mayor de 4 m2, el exceso sobre 4 m2.' Encofrado: CYPE ofrece las dos formas (EHS010 pilar en m3 con encofrado incluido; EHS012 sistema de encofrado en m2 de superficie en contacto con el hormigón). Acero (EAS010): en proyecto 'Peso nominal medido según documentación gráfica'; el precio incluye 'los cortes, los despuntes'. La costumbre de 'medición a cinta corrida' NO está publicada en BEDEC ni CYPE: no convertirla en default."
+    },
+    "campos_no_verificados": ["umbrales concretos de BEDEC", "bases de precios autonómicas (BCCA Andalucía, IVE, País Vasco)", "significado del código clásico BEDEC de 8 caracteres", "tasas del IGIC canario", "reglas_por_defecto.desperdicio_acero_pct"],
+    "verificado": true
+  },
+  {
+    "pais": "Estados Unidos",
+    "codigo_iso": "US",
+    "normas": [
+      {
+        "nombre": "MasterFormat 2026",
+        "entidad": "CSI - Construction Specifications Institute y CSC - Construction Specifications Canada",
+        "anio": 2026,
+        "url": "https://www.csiresources.org/standards/masterformat2026",
+        "alcance": "Taxonomía de work results para especificaciones y presupuestos. 50 divisiones (00-49) en 6 grupos; número de 6 dígitos leído en tres pares (división / sección / subsección). Divisiones reservadas: 15-20, 24, 29, 30, 36-39, 47, 49. MasterFormat 2020 fue la última edición fechada; desde febrero de 2026 CSI usa actualización continua bajo CSI Dynamic Standards. NO es una norma de medición.",
+        "es_de_pago": true,
+        "verificado": true
+      },
+      {
+        "nombre": "UniFormat",
+        "entidad": "CSI y CSC",
+        "anio": null,
+        "url": "https://www.csiresources.org/standards/uniformat/about-uniformat",
+        "alcance": "Clasificación por elementos funcionales de la instalación, sin considerar materiales ni métodos.",
+        "es_de_pago": true,
+        "verificado": true
+      },
+      {
+        "nombre": "ASTM E1557-09(2020)e1 Standard Classification for Building Elements and Related Sitework - UNIFORMAT II",
+        "entidad": "ASTM International",
+        "anio": 2020,
+        "url": "https://store.astm.org/e1557-09r20e01.html",
+        "alcance": "Clasificación de elementos de edificación. Nivel 1: A Substructure, B Shell, C Interiors, D Services, E Equipment & Furnishings, F Special Construction, G Building Sitework, Z General. Nivel 2 de 3 caracteres (A10), nivel 3 de 5 (A1010), nivel 4 opcional en el apéndice X1. NO es norma de medición. Precio USD 136.",
+        "es_de_pago": true,
+        "verificado": true
+      },
+      {
+        "nombre": "Standard Estimating Practice, 12ª edición",
+        "entidad": "ASPE - American Society of Professional Estimators",
+        "anio": null,
+        "url": "https://aspenational.org/12sep/",
+        "alcance": "Práctica recomendada de estimación, no obligatoria. De pago.",
+        "es_de_pago": true,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "MasterFormat: 6 dígitos en 3 pares (división / sección / subsección). UniFormat: letra + 2 dígitos (nivel 2) + 2 dígitos (nivel 3).",
+      "ejemplo": "06 10 00 (MasterFormat) ; A1010 (UniFormat II)",
+      "verificado": true
+    },
+    "moneda": {
+      "iso": "USD",
+      "simbolo": "$",
+      "decimales": 2,
+      "sep_decimal": ".",
+      "sep_miles": ",",
+      "verificado": true
+    },
+    "sistema_unidades": "imperial",
+    "unidades_tipicas": {
+      "area": "sf",
+      "volumen": "cy",
+      "peso": "lb",
+      "longitud": "lf",
+      "unidad": "ea",
+      "global": "ls",
+      "abreviaturas_locales": ["SF", "SY", "CF", "CY", "LF", "EA", "TON", "LB", "GAL", "HR", "LS", "SFCA"],
+      "nota": "SFCA = square feet of contact area, unidad de encofrado.",
+      "catalogo_cerrado": false
+    },
+    "impuesto": {
+      "nombre": "Sales & use tax (estatal y local)",
+      "tasa": null,
+      "aplica_a_obra": true,
+      "modelo": "sin_iva_impuesto_estatal_variable",
+      "base": "Varía por estado. En la mayoría el contratista es tratado como consumidor final de los materiales (paga el impuesto al comprarlos) y no cobra impuesto sobre el servicio; el resultado depende de si el contrato es lump-sum o separated y de si la obra es capital improvement o repair.",
+      "notas": "Estados Unidos NO tiene IVA. El motor no debe llevar una tasa nacional: debe pedir jurisdicción y tratamiento del contrato.",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": null,
+      "descuento_vanos_modo": null,
+      "muros_medidos": null,
+      "encofrado_separado": true,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": null,
+      "unidad_encofrado": "sfca",
+      "notas": "NO existe norma nacional obligatoria de medición en EE. UU. El encofrado se mide por práctica en SFCA (square feet of contact area). El acero se toma de bar lists a peso teórico y el desperdicio va en el precio. Las reglas concretas de ASPE Standard Estimating Practice no se pudieron verificar (publicación de pago)."
+    },
+    "campos_no_verificados": ["reglas_por_defecto.descuento_vanos_min_m2", "reglas_por_defecto.muros_medidos", "reglas_por_defecto.acero_incluye_desperdicio (fuente formal)", "reglas de medición de ASPE SEP 12ª ed."],
+    "verificado": true
+  },
+  {
+    "pais": "Internacional",
+    "codigo_iso": "INT",
+    "normas": [
+      {
+        "nombre": "ICMS 3 - International Cost Management Standard, 3rd edition",
+        "entidad": "ICMS Coalition (49 organizaciones), publicado por RICS",
+        "anio": 2022,
+        "url": "https://icms-coalition.org/the-standard/",
+        "alcance": "Marco de clasificación y reporte de costes y emisiones de carbono del ciclo de vida. Publicado el 01-06-2022. Descarga gratuita, con traducción al español. Ediciones: 1ª julio 2017, 2ª 2019 (life cycle costs), 3ª 2022 (costes y carbono). Jerarquía: nivel 1 project/sub-project, nivel 2 categories (6, ACROME), nivel 3 groups, nivel 4 sub-groups. Los niveles 2 y 3 son obligatorios y estandarizados; el nivel 4 es discrecional.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "RICS new rules of measurement - NRM 2: Detailed measurement for building works",
+        "entidad": "RICS - Royal Institution of Chartered Surveyors",
+        "anio": 2012,
+        "url": "https://www.rics.org/content/dam/ricsglobal/documents/standards/nrm_2_detailed_measurement_for_building_works_1st_edition_rics.pdf",
+        "alcance": "Reglas detalladas de medición para bills of quantities. 41 work sections. Publicada en abril de 2012, operativa desde el 01-01-2013; sustituyó a SMM7 el 01-07-2013. La suite NRM se reeditó en octubre de 2021 (efectiva 01-12-2021) y de nuevo en octubre de 2022, pasando a categoría de practice information sin cambios materiales.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "NRM 1: Order of cost estimating and cost planning for capital building works / NRM 3: para obras de mantenimiento",
+        "entidad": "RICS",
+        "anio": 2021,
+        "url": "https://www.rics.org/profession-standards/rics-standards-and-guidance/sector-standards/construction-standards/nrm",
+        "alcance": "Complementan a NRM2 en estimación y planificación de costes. Edición de octubre 2021/2022.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "POMI - Principles of Measurement (International) for Works of Construction",
+        "entidad": "RICS / BCIS",
+        "anio": 1979,
+        "url": "https://www.isurv.com/downloads/download/164/principles_of_measurement_international_for_works_of_construction_archived",
+        "alcance": "Publicado en junio de 1979; reimpresión inglesa 2004. RICS lo tiene ARCHIVADO, pero sigue en uso en contratos internacionales. Requiere especificación detallada y planos de licitación.",
+        "es_de_pago": false,
+        "verificado": true
+      },
+      {
+        "nombre": "SMM7 - Standard Method of Measurement of Building Works, 7th edition",
+        "entidad": "RICS / BCIS",
+        "anio": null,
+        "url": "https://www.designingbuildings.co.uk/wiki/Standard_Method_of_Measurement_SMM7",
+        "alcance": "23 work sections. SUSTITUIDO por NRM2 el 01-07-2013; no debe adoptarse.",
+        "es_de_pago": true,
+        "verificado": true
+      },
+      {
+        "nombre": "CESMM4 Revised - Civil Engineering Standard Method of Measurement",
+        "entidad": "ICE - Institution of Civil Engineers (ICE Publishing)",
+        "anio": 2019,
+        "url": "https://www.icebookshop.com/product/cesmm4-revised-civil-engineering-standard-method-of-measurement",
+        "alcance": "Equivalente de NRM2 para obra civil británica. 4ª edición original abril 2012; revisión publicada en junio de 2019. De pago.",
+        "es_de_pago": true,
+        "verificado": true
+      }
+    ],
+    "codificacion_partidas": {
+      "esquema": "ICMS: C.GG.SSS (categoría nivel 2 . grupo nivel 3 . sub-grupo nivel 4). NRM2: código elemental de 6 niveles (project number, bill number, group element, element, sub-element, component, sub-component) con sufijo opcional de work section.",
+      "ejemplo": "2.03.030, 1.01.010, 2.09.010 (ICMS) ; DPB27-3.1.1.2.1.4/04 (NRM2)",
+      "categorias_icms_nivel2": ["Acquisition", "Construction", "Renewal", "Operation", "Maintenance", "End of life"],
+      "work_sections_nrm2": 41,
+      "verificado": true
+    },
+    "moneda": {
+      "iso": null,
+      "simbolo": null,
+      "decimales": null,
+      "sep_decimal": null,
+      "sep_miles": null,
+      "nota": "ICMS: 'No single currency is used as the basis of cost classification in ICMS'. Se reporta en la moneda local del proyecto y es obligatorio declarar la base date y el tipo de cambio, para que otro usuario pueda reajustar. Este es el modelo recomendado para exportación entre países.",
+      "verificado": true
+    },
+    "sistema_unidades": "metrico",
+    "unidades_tipicas": {
+      "area": "m2",
+      "volumen": "m3",
+      "peso": "t",
+      "longitud": "m",
+      "unidad": "nr",
+      "global": "item",
+      "abreviaturas_locales": ["m", "m2", "m3", "kg", "t", "nr", "item"],
+      "nota": "NRM2 mide el acero de refuerzo en toneladas (t) y las mallas en m2. ICMS exige declarar la Project Quantity con su unidad de medida.",
+      "catalogo_cerrado": true
+    },
+    "impuesto": {
+      "nombre": null,
+      "tasa": null,
+      "aplica_a_obra": null,
+      "modelo": "no_aplica",
+      "notas": "Ni ICMS ni NRM2 fijan impuesto. ICMS incluye un cost group para 'Exchange rate fluctuation' (2.09.010).",
+      "verificado": true
+    },
+    "reglas_por_defecto": {
+      "descuento_vanos_min_m2": 0.5,
+      "descuento_vanos_modo": "umbral",
+      "umbrales_vanos_m2_por_familia": {
+        "masonry": 0.5,
+        "formwork": 5.0,
+        "mesh_reinforcement": 1.0,
+        "sheet_roof_coverings": 1.0,
+        "tile_and_slate_coverings": 1.0,
+        "finishings": 0.0
+      },
+      "muros_medidos": "cara",
+      "encofrado_separado": true,
+      "acero_incluye_desperdicio": false,
+      "desperdicio_acero_pct": null,
+      "metrado_neto": true,
+      "estado_volumen_movimiento_tierras": "banco",
+      "redondeo_dimensiones_mm": 10,
+      "decimales_toneladas": 2,
+      "decimales_otras_cantidades": 0,
+      "notas": "NRM2 3.3.2(1)(b): 'Net quantity measured shall be deemed to include all additional material required for laps, joints, seams and the like, as well as any waste material' - el metrado es NETO y el desperdicio va en el precio. 3.3.2(2): las deducciones mínimas por huecos solo aplican a huecos dentro del área medida; SIEMPRE se deducen los huecos en el borde del área, sin importar el tamaño. Masonry (sección 14): 'No deductions will be made for voids or built in items whose cross sectional area is equal to or less than 0.50m2'; 'All wall dimensions exclude applied finishes'. Formwork (sección 11): 'No deductions shall be made for voids <= 5.00m2', medido en m2 (o m si el ancho es <= 500 mm). Excavación (sección 5): 'The quantities given for excavation and filling are the bulk before excavating or the net void to be filled. No allowance is made for subsequent variations to bulk or for the extra space taken up by working space or earthwork support.' Acero en barras: toneladas; 'Forming hooks, tying wire, spacers, cutting, and bending is deemed included'."
+    },
+    "campos_no_verificados": ["reglas_por_defecto.desperdicio_acero_pct", "umbral de vanos para la sección 28 Floor, wall, ceiling and roof finishings (no se localizó umbral explícito: rige la regla general de medir neto)"],
+    "verificado": true
+  }
+]
