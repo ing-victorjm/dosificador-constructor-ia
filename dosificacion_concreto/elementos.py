@@ -309,41 +309,29 @@ TIPOS = [
 
 TIPOS_POR_CLAVE = {t.clave: t for t in TIPOS}
 
-ACERO_KG_M3 = {
-    "zapata": 40,
-    "columna": 100,
-    "viga": 80,
-    "viga_cimentacion": 60,
-    "cimiento_corrido": 25,
-    "sobrecimiento": 20,
-    "placa": 70,
-    "losa_maciza": 50,
-    "losa_aligerada_1d": 30,
-    "losa_aligerada_2d": 35,
-    "losa_piso": 10,
-    "zapata_combinada": 45,
-    "columna_circular": 100,
-    "columna_t": 95,
-    "columna_l": 95,
-    "viga_t": 75,
-    "viga_acartelada": 85,
-    "muro_contencion": 65,
-    "muro_estructural": 50,
-    "viga_voladizo": 90,
-    "falso_piso": 0,
-    "vereda": 5,
-    "platea": 60,
-    "solado": 0,
-    "dado": 90,
-    "pilote": 90,
-    "cisterna": 80,
-    "dintel": 80,
-    "sardinel": 5,
-    "escalera": 65,
-    "rampa": 50,
-    "viga_amarre": 75,
-    "personalizado": 0,
-}
+# El acero NO se deriva del volumen de concreto.
+#
+# Aqui habia una tabla ACERO_KG_M3 (zapata 40, columna 100, viga 80...) que
+# multiplicaba el volumen para "obtener" los kilos de acero. Se elimino porque
+# eso es predimensionamiento, no metrado.
+#
+# Norma Tecnica "Metrados para Obras de Edificacion y Habilitaciones Urbanas"
+# (R.D. 073-2010-VIVIENDA/VMCS-DNC), seccion OE.2.3, texto literal:
+#   "Para la armadura de acero se computa el peso total del fierro indicado en
+#    los planos. El calculo se hara determinando primero la longitud de cada
+#    elemento incluyendo los ganchos, dobleces y traslapes de varillas. Luego se
+#    suman todas las longitudes agrupandose por diametros iguales y se
+#    multiplican por sus pesos unitarios en kilos por metro."
+# La expresion "kg/m3" no aparece en toda la norma.
+#
+# Ademas un ratio no puede respetar la regla de arranques: la zapata excluye los
+# vastagos y arranques de columna (OE.2.3.2) y la columna si los incluye. Y
+# OE.2.2 dice que las obras de concreto SIMPLE "no llevan armadura metalica",
+# asi que asignar acero a cimiento corrido, sobrecimiento, vereda o falso piso
+# era inventar una partida que la norma no contempla.
+#
+# El acero se metra en la seccion "Acero - Despiece": barra por barra, por
+# diametro. El desperdicio NO va en el metrado; va en el analisis de precios.
 
 PESO_VARILLA = {
     "6mm (1/4\")": {"mm": 6, "kg_m": 0.222, "largo_m": 9.0},

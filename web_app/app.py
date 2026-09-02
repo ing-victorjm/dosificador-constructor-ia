@@ -1,5 +1,5 @@
 """
-Dosificador de Concreto - Web App (Flask localhost)
+Metrados - Web App (Flask localhost)
 Sirve en http://localhost:5050
 """
 import sys
@@ -44,13 +44,6 @@ def api_dosificar():
             desperdicio_pct=float(d.get("desperdicio_pct", 5.0)),
             peso_bolsa=float(d.get("peso_bolsa", 42.5)),
         )
-        precios = modelo.Precios(
-            cemento_bolsa=float(d.get("p_cemento", 30.0)),
-            arena_m3=float(d.get("p_arena", 60.0)),
-            piedra_m3=float(d.get("p_piedra", 70.0)),
-            agua_m3=float(d.get("p_agua", 10.0)),
-        )
-        pres = modelo.calcular_presupuesto(req, precios)
         dos = req.dosificacion
         return jsonify({
             "ok": True,
@@ -66,16 +59,6 @@ def api_dosificar():
                 "tmax": dos.tmax_pulg,
                 "proporcion": dos.dosificacion_volumen,
                 "interpolado": dos.interpolado,
-            },
-            "presupuesto": {
-                "total": round(pres.total, 2),
-                "costo_m3": round(pres.costo_m3, 2),
-                "lineas": [
-                    {"material": ln.material, "cantidad": round(ln.cantidad, 3),
-                     "unidad": ln.unidad, "precio_unit": round(ln.precio_unit, 2),
-                     "parcial": round(ln.parcial, 2)}
-                    for ln in pres.lineas
-                ],
             },
         })
     except Exception as e:
@@ -221,29 +204,24 @@ def api_metrado_calcular():
             return jsonify({"ok": False, "error": f"Tipo desconocido: {tipo_clave}"}), 400
         vol_unit = tipo.formula(valores)
         vol_total = vol_unit * cantidad
-        acero_kg_m3 = elementos.ACERO_KG_M3.get(tipo_clave, 0)
-        acero_kg_total = round(vol_total * acero_kg_m3, 2)
+        # El ACERO no se calcula aqui. La Norma Tecnica de Metrados para Obras de
+        # Edificacion (R.D. 073-2010-VIVIENDA/VMCS-DNC), seccion OE.2.3, exige
+        # computar "el peso total del fierro indicado en los planos", sumando la
+        # longitud de cada barra con sus ganchos, dobleces y traslapes, agrupada
+        # por diametros iguales y multiplicada por su peso en kg/m.
+        # La expresion "kg/m3" no aparece en la norma: multiplicar el volumen de
+        # concreto por un ratio es predimensionamiento, no metrado, y ademas no
+        # puede respetar la regla de arranques (la zapata los excluye, la columna
+        # los incluye). El acero se metra en la seccion "Acero - Despiece".
         enc_unit = elementos.encofrado_m2(tipo_clave, valores)
         exc_unit = elementos.excavacion_m3(tipo_clave, valores)
-        varillas_ref = []
-        for nombre, info in elementos.PESO_VARILLA.items():
-            kg_var = info["kg_m"] * info["largo_m"]
-            n_var = acero_kg_total / kg_var if kg_var > 0 else 0
-            varillas_ref.append({
-                "nombre": nombre, "mm": info["mm"],
-                "kg_varilla": round(kg_var, 2),
-                "varillas": round(n_var, 1),
-            })
         return jsonify({
             "ok": True,
             "vol_unit": round(vol_unit, 4),
             "vol_total": round(vol_total, 4),
             "ayuda": tipo.ayuda,
-            "acero_kg_m3": acero_kg_m3,
-            "acero_kg_total": acero_kg_total,
             "encofrado_m2": round(enc_unit * cantidad, 2),
             "excavacion_m3": round(exc_unit * cantidad, 3),
-            "varillas": varillas_ref,
         })
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 400
@@ -260,15 +238,8 @@ def api_exportar_dosificacion():
             desperdicio_pct=float(d.get("desperdicio_pct", 5.0)),
             peso_bolsa=float(d.get("peso_bolsa", 42.5)),
         )
-        precios = modelo.Precios(
-            cemento_bolsa=float(d.get("p_cemento", 30.0)),
-            arena_m3=float(d.get("p_arena", 60.0)),
-            piedra_m3=float(d.get("p_piedra", 70.0)),
-            agua_m3=float(d.get("p_agua", 10.0)),
-        )
-        pres = modelo.calcular_presupuesto(req, precios)
         buf = io.BytesIO()
-        exportar_excel.exportar(buf, req, responsable=d.get("responsable", ""), presupuesto=pres)
+        exportar_excel.exportar(buf, req, responsable=d.get("responsable", ""), presupuesto=None)
         buf.seek(0)
         return send_file(buf, download_name="dosificacion.xlsx", as_attachment=True,
                          mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
@@ -282,7 +253,12 @@ def api_exportar_metrado():
     d = request.json or {}
     items = d.get("items", [])
     proyecto = (d.get("proyecto") or "").strip() or "Proyecto sin nombre"
-    precios = d.get("precios") or {}
+    # El acero llega del DESPIECE (planilla real por diametro), no del volumen.
+    # despiece: [{"nombre": "1/2\"", "kg_m": 0.994, "kg_varilla": 8.95, "kg": 123.4}, ...]
+    despiece = d.get("despiece") or []
+    desp_pct = float(d.get("desperdicio_acero") or 0)
+    # kg NETO metrado (sin desperdicio: la norma lo manda al analisis de precios).
+    acero_kg = sum(float(x.get("kg") or 0) for x in despiece) if despiece else None
     try:
         from datetime import datetime
         from openpyxl import Workbook
@@ -302,8 +278,10 @@ def api_exportar_metrado():
         ws["A3"] = "Generado: " + datetime.now().strftime("%d/%m/%Y %H:%M") + " · NTE E.060 / ACI 318"
         ws["A3"].font = Font(size=9, color=GRIS, italic=True)
 
+        # Sin columna de acero: el acero se metra por despiece (OE.2.3), no se
+        # deriva del volumen. Exportarlo aqui daba un kilaje sin sustento.
         headers = ["#", "Elemento", "Dimensiones", "Cant.", "Vol. unit (m³)",
-                   "Vol. total (m³)", "Acero (kg)", "Encofrado (m²)", "Excavación (m³)"]
+                   "Vol. total (m³)", "Encofrado (m²)", "Excavación (m³)"]
         HR = 5
         for c, h in enumerate(headers, 1):
             cell = ws.cell(row=HR, column=c, value=h)
@@ -312,14 +290,13 @@ def api_exportar_metrado():
             cell.border = borde
             cell.alignment = Alignment(horizontal="center", vertical="center")
 
-        tv = ta = te = tx = 0.0
+        tv = te = tx = 0.0
         for i, it in enumerate(items, 1):
             r = HR + i
             vals = [i, it.get("tipo", ""), it.get("dims", ""), it.get("cantidad", 1),
                     round(float(it.get("vu", 0)), 4), round(float(it.get("vt", 0)), 4),
-                    round(float(it.get("acero_kg", 0)), 1),
                     round(float(it.get("encof", 0)), 2), round(float(it.get("exc", 0)), 3)]
-            tv += vals[5]; ta += vals[6]; te += vals[7]; tx += vals[8]
+            tv += vals[5]; te += vals[6]; tx += vals[7]
             for c, v in enumerate(vals, 1):
                 cell = ws.cell(row=r, column=c, value=v)
                 cell.border = borde
@@ -327,9 +304,9 @@ def api_exportar_metrado():
                 if c >= 4:
                     cell.alignment = Alignment(horizontal="right")
                     if c >= 5:
-                        cell.number_format = "0.000" if c in (5, 6, 9) else "0.0" if c == 7 else "0.00"
+                        cell.number_format = "0.000" if c in (5, 6, 8) else "0.00"
         rT = HR + len(items) + 1
-        tot_vals = ["", "TOTAL", "", "", "", round(tv, 3), round(ta, 1), round(te, 2), round(tx, 3)]
+        tot_vals = ["", "TOTAL", "", "", "", round(tv, 3), round(te, 2), round(tx, 3)]
         for c, v in enumerate(tot_vals, 1):
             cell = ws.cell(row=rT, column=c, value=v)
             cell.font = Font(bold=True, size=10)
@@ -338,56 +315,49 @@ def api_exportar_metrado():
             if c >= 5:
                 cell.alignment = Alignment(horizontal="right")
 
-        # presupuesto rapido
-        if precios:
-            rp = rT + 2
-            ws.cell(row=rp, column=2, value="PRESUPUESTO RÁPIDO (referencial)").font = Font(bold=True, size=11, color=DARK)
-            filas = [
-                ("Concreto", tv, "m³", float(precios.get("conc", 0))),
-                ("Acero", ta, "kg", float(precios.get("acero", 0))),
-                ("Encofrado", te, "m²", float(precios.get("encof", 0))),
-                ("Excavación", tx, "m³", float(precios.get("exc", 0))),
-            ]
-            total_soles = 0.0
-            for j, (nom, cant, und, pu) in enumerate(filas):
-                r = rp + 1 + j
-                parcial = cant * pu
-                total_soles += parcial
-                ws.cell(row=r, column=2, value=nom).border = borde
-                ws.cell(row=r, column=3, value=f"{round(cant,2)} {und}").border = borde
-                c4 = ws.cell(row=r, column=4, value=pu); c4.number_format = "\"S/\" 0.00"; c4.border = borde
-                c5 = ws.cell(row=r, column=5, value=round(parcial, 2)); c5.number_format = "\"S/\" #,##0.00"; c5.border = borde
-                c5.font = Font(bold=True)
-            rtt = rp + 5
-            ws.cell(row=rtt, column=2, value="TOTAL ESTIMADO").font = Font(bold=True, size=11)
-            ct = ws.cell(row=rtt, column=5, value=round(total_soles, 2))
-            ct.number_format = "\"S/\" #,##0.00"
-            ct.font = Font(bold=True, size=12, color=CYAN)
-
-        widths = [5, 26, 46, 7, 13, 13, 11, 13, 13]
-        for c, w in enumerate(widths, 1):
-            ws.column_dimensions[chr(64 + c)].width = w
-
-        # hoja despiece
-        ws2 = wb.create_sheet("Despiece acero")
-        ws2["A1"] = "Despiece — varillas de 9 m a comprar (equivalente por diámetro)"
-        ws2["A1"].font = Font(bold=True, size=11)
-        for c, h in enumerate(["Diámetro", "kg/m", "kg/varilla", "Varillas (9m)"], 1):
-            cell = ws2.cell(row=3, column=c, value=h)
-            cell.font = Font(bold=True, color="FFFFFF", size=10)
-            cell.fill = PatternFill("solid", fgColor=CYAN)
-            cell.border = borde
-        for j, (nombre, info) in enumerate(elementos.PESO_VARILLA.items()):
-            r = 4 + j
-            kgv = info["kg_m"] * info["largo_m"]
-            n = int(-(-ta // kgv)) if kgv > 0 else 0
-            for c, v in enumerate([nombre, info["kg_m"], round(kgv, 2), n], 1):
-                cell = ws2.cell(row=r, column=c, value=v)
+        # Hoja de acero SOLO si hay despiece. Antes esta hoja repartia el kilaje
+        # derivado del volumen entre todos los diametros "como si usaras uno solo":
+        # eso no es un despiece y no servia para comprar.
+        if despiece:
+            ws2 = wb.create_sheet("Acero")
+            ws2["A1"] = "ACERO — planilla por diámetro"
+            ws2["A1"].font = Font(bold=True, size=12, color=DARK)
+            ws2["A2"] = ("Metrado NETO segun OE.2.3 (longitud con ganchos, dobleces y traslapes "
+                         "× kg/m, agrupado por diámetro). El desperdicio NO va en el metrado: "
+                         "la norma lo manda al análisis de precios unitarios.")
+            ws2["A2"].font = Font(size=9, color=GRIS, italic=True)
+            cab = ["Diámetro", "kg/m", "Peso metrado (kg)",
+                   f"Para compra +{desp_pct:g}% (kg)", "Varillas 9 m"]
+            for c, h in enumerate(cab, 1):
+                cell = ws2.cell(row=4, column=c, value=h)
+                cell.font = Font(bold=True, color="FFFFFF", size=10)
+                cell.fill = PatternFill("solid", fgColor=CYAN)
+                cell.border = borde
+                cell.alignment = Alignment(horizontal="center", wrap_text=True)
+            tot_neto = tot_compra = 0.0
+            for j, x in enumerate(despiece):
+                r = 5 + j
+                kg = float(x.get("kg") or 0)
+                kgv = float(x.get("kg_varilla") or 0)
+                kg_c = kg * (1 + desp_pct / 100.0)
+                tot_neto += kg; tot_compra += kg_c
+                n = int(-(-kg_c // kgv)) if kgv > 0 else 0
+                for c, v in enumerate([x.get("nombre", ""), x.get("kg_m", 0),
+                                       round(kg, 1), round(kg_c, 1), n], 1):
+                    cell = ws2.cell(row=r, column=c, value=v)
+                    cell.border = borde
+                    if c > 1:
+                        cell.alignment = Alignment(horizontal="right")
+            rt = 5 + len(despiece)
+            for c, v in enumerate(["TOTAL", "", round(tot_neto, 1), round(tot_compra, 1), ""], 1):
+                cell = ws2.cell(row=rt, column=c, value=v)
+                cell.font = Font(bold=True, size=10)
+                cell.fill = PatternFill("solid", fgColor="E8F4F8")
                 cell.border = borde
                 if c > 1:
                     cell.alignment = Alignment(horizontal="right")
-        for c, w in enumerate([16, 10, 12, 14], 1):
-            ws2.column_dimensions[chr(64 + c)].width = w
+            for c, w in enumerate([16, 10, 18, 18, 13], 1):
+                ws2.column_dimensions[chr(64 + c)].width = w
 
         buf = io.BytesIO()
         wb.save(buf)
@@ -413,7 +383,6 @@ def api_opciones():
                 "clave": t.clave,
                 "nombre": t.nombre,
                 "ayuda": t.ayuda,
-                "acero_kg_m3": elementos.ACERO_KG_M3.get(t.clave, 0),
                 "campos": [
                     {"clave": c.clave, "etiqueta": c.etiqueta, "valor": c.valor,
                      "sufijo": c.sufijo, "paso": c.paso, "decimales": c.decimales,
@@ -442,6 +411,6 @@ def api_opciones():
 
 
 if __name__ == "__main__":
-    print("\n  Dosificador de Concreto · Constructor IA")
+    print("\n  Metrados · Constructor IA")
     print("  http://localhost:5050\n")
     app.run(host="0.0.0.0", port=5050, debug=False)
