@@ -21,15 +21,22 @@ DIAMS_LONG = {
 }
 
 # Peso lineal (kg/m) por diametro en mm
+# Pesos nominales ASTM A615 Gr.60 / NTP 341.031 (ficha de Aceros Arequipa).
+# Ojo con los pares que se confunden en obra: 6 mm no es 1/4", 8 mm no es 5/16"
+# y 12 mm no es 1/2". Se listan por separado con su peso real.
 PESO_KG_M = {
-    6.000: 0.222,
-    8.000: 0.395,
-    9.525: 0.560,
-    12.700: 0.994,
-    15.875: 1.552,
-    19.050: 2.235,
-    22.225: 3.042,
-    25.400: 3.973,
+    6.000: 0.222,    # 6 mm
+    6.350: 0.250,    # 1/4"
+    7.900: 0.384,    # 5/16"
+    8.000: 0.395,    # 8 mm
+    9.525: 0.560,    # 3/8"
+    12.000: 0.888,   # 12 mm
+    12.700: 0.994,   # 1/2"
+    15.875: 1.552,   # 5/8"
+    19.050: 2.235,   # 3/4"
+    22.225: 3.042,   # 7/8"
+    25.400: 3.973,   # 1"
+    35.800: 7.907,   # 1 3/8"
 }
 
 

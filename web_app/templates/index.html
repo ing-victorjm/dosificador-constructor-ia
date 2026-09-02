@@ -390,6 +390,8 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
     <p>Metrados · v2.2</p>
   </div>
   <nav id="nav">
+    <div class="nav-g">Entregable</div>
+    <button data-tab="pla"><span class="ico">📋</span>Planilla de metrados</button>
     <div class="nav-g">Concreto</div>
     <button class="active" data-tab="dos"><span class="ico">🧮</span>Dosificación</button>
     <button data-tab="cat"><span class="ico">📚</span>Catálogo</button>
@@ -621,101 +623,99 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 </div>
 </div>
 
-<!-- ═══ MORTERO ═══ -->
+<!-- ═══ MUROS Y TARRAJEO ═══ -->
 <div class="panel" id="tab-mort">
-<!-- Calculators -->
-<div class="g g2">
-  <div class="card">
-    <div class="card-title">🧱 Asentado de muro</div>
-    <div class="frow"><label>Área de muro (m²)</label><input type="number" id="m-area" value="12" step="1" oninput="drawMuro2d()"></div>
-    <div class="frow"><label>Ladrillo</label><select id="m-lad" onchange="drawMuro2d()"></select></div>
-    <div class="frow"><label>Aparejo</label><select id="m-ap" onchange="drawMuro2d()"></select></div>
-    <div class="frow"><label>Junta (cm)</label><input type="number" id="m-junta" value="1.5" step="0.5" min="0.5" max="3" oninput="drawMuro2d()"></div>
-    <div class="frow"><label>Proporción mortero</label><select id="m-prop"></select></div>
-    <button class="btn btn-v btn-fw mt" onclick="calcAsentado()">Calcular asentado</button>
-    <div class="hr"></div>
-    <div class="g g2" id="m-res" style="display:none">
-      <div class="metric am"><div class="metric-lbl">Ladrillos</div><div class="metric-val" id="m-lads">—</div><div class="metric-unit">unidades</div></div>
-      <div class="metric or"><div class="metric-lbl">Lad/m²</div><div class="metric-val" id="m-ladm2">—</div><div class="metric-unit">und/m²</div></div>
-      <div class="metric"><div class="metric-lbl">Cemento</div><div class="metric-val" id="m-cem">—</div><div class="metric-unit">bolsas</div></div>
-      <div class="metric cy"><div class="metric-lbl">Arena</div><div class="metric-val" id="m-are">—</div><div class="metric-unit">m³</div></div>
+<div class="cols">
+  <div class="col-side">
+    <div class="card">
+      <div class="card-title">Paños de muro</div>
+      <p class="note">Mide cada paño por su largo y su altura. Los vanos se restan abajo: la norma pide áreas netas.</p>
+      <div class="g g2 mt">
+        <div class="frow"><label>Tipo de muro</label>
+          <select id="mu-tipo" onchange="muCalc()">
+            <option value="soga">Ladrillo KK · soga (0.13 m)</option>
+            <option value="cabeza">Ladrillo KK · cabeza (0.25 m)</option>
+            <option value="canto">Ladrillo KK · canto (0.09 m)</option>
+            <option value="pandereta">Pandereta · soga (0.11 m)</option>
+          </select>
+        </div>
+        <div class="frow"><label>Ubicación</label>
+          <select id="mu-ubi" onchange="muCalc()">
+            <option value="int">Interior</option>
+            <option value="ext">Exterior</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-v btn-fw mt" onclick="muAddPano()">+ Agregar paño</button>
     </div>
-    <p class="note" id="m-det" style="margin-top:10px">Seleccione parámetros y calcule</p>
-  </div>
-  <div class="card">
-    <div class="card-title">🏗️ Tarrajeo / Revoque</div>
-    <div class="frow"><label>Área a tarrajear (m²)</label><input type="number" id="t-area" value="20" step="1" oninput="drawTarr2d()"></div>
-    <div class="frow"><label>Espesor (cm)</label><input type="number" id="t-esp" value="1.5" step="0.5" min="0.5" max="5" oninput="drawTarr2d()"></div>
-    <div class="frow"><label>Caras</label><select id="t-caras" onchange="drawTarr2d()"><option value="1">1 cara</option><option value="2">2 caras</option></select></div>
-    <div class="frow"><label>Proporción mortero</label><select id="t-prop"></select></div>
-    <button class="btn btn-v btn-fw mt" onclick="calcTarrajeo()">Calcular tarrajeo</button>
-    <div class="hr"></div>
-    <div class="g g2" id="t-res" style="display:none">
-      <div class="metric"><div class="metric-lbl">Cemento</div><div class="metric-val" id="t-cem">—</div><div class="metric-unit">bolsas</div></div>
-      <div class="metric cy"><div class="metric-lbl">Arena</div><div class="metric-val" id="t-are">—</div><div class="metric-unit">m³</div></div>
-      <div class="metric bl"><div class="metric-lbl">Mortero</div><div class="metric-val" id="t-vol">—</div><div class="metric-unit">m³</div></div>
-      <div class="metric gn"><div class="metric-lbl">Rendimiento</div><div class="metric-val" id="t-rend">—</div><div class="metric-unit">m²/bolsa</div></div>
+
+    <div class="card mt">
+      <div class="card-title">Tarrajeo</div>
+      <div class="frow"><label>Caras a tarrajear</label>
+        <select id="mu-caras" onchange="muCalc()">
+          <option value="0">No lleva tarrajeo</option>
+          <option value="1">Una cara</option>
+          <option value="2" selected>Dos caras</option>
+        </select>
+      </div>
+      <p class="note">OE.3.2.2 y OE.3.2.3 son partidas distintas: el tarrajeo exterior va aparte porque necesita andamiaje.</p>
     </div>
-    <p class="note" id="t-det" style="margin-top:10px">Seleccione parámetros y calcule</p>
-  </div>
-</div>
 
-<!-- 2D Diagrams -->
-<div class="g g2 mt2">
-  <div class="card" style="text-align:center">
-    <div class="card-title">Vista 2D — Aparejo de muro</div>
-    <canvas id="mort-2d-muro" width="340" height="200" style="width:100%;max-width:340px;border-radius:var(--radius-sm);background:#EDF3FC;border:1px solid var(--border2);margin-top:10px"></canvas>
-  </div>
-  <div class="card" style="text-align:center">
-    <div class="card-title">Vista 2D — Sección de tarrajeo</div>
-    <canvas id="mort-2d-tarr" width="340" height="200" style="width:100%;max-width:340px;border-radius:var(--radius-sm);background:#EDF3FC;border:1px solid var(--border2);margin-top:10px"></canvas>
-  </div>
-</div>
-
-<!-- Reference Tables -->
-<div class="g g2 mt2">
-  <div class="card">
-    <div class="card-title">📋 Proporciones de mortero — Uso típico</div>
-    <div style="overflow-x:auto">
-    <table>
-      <thead><tr><th>Proporción</th><th>Uso típico</th><th style="text-align:right">Bolsas/m³</th><th style="text-align:right">Arena m³/m³</th></tr></thead>
-      <tbody>
-        <tr><td style="font-weight:800;color:var(--amber)">1 : 3</td><td>Mortero estructural, sobrecimientos, contrazócalos</td><td class="n">11.0</td><td class="n">1.03</td></tr>
-        <tr><td style="font-weight:800;color:var(--cyan)">1 : 4</td><td>Asentado de muros portantes, juntas</td><td class="n">8.9</td><td class="n">1.09</td></tr>
-        <tr><td style="font-weight:800;color:var(--violet2)">1 : 5</td><td>Tarrajeo exterior, pisos, muros no portantes</td><td class="n">7.4</td><td class="n">1.10</td></tr>
-        <tr><td style="font-weight:800;color:var(--text3)">1 : 6</td><td>Tarrajeo interior, acabados finos</td><td class="n">6.2</td><td class="n">1.10</td></tr>
-      </tbody>
-    </table>
+    <div class="card mt">
+      <div class="card-title">Enviar a la planilla</div>
+      <p class="note">Cada partida viaja con sus mediciones, no solo con el total.</p>
+      <button class="btn btn-cy btn-fw mt" onclick="muEnviar()">📋 Enviar partidas</button>
     </div>
-    <p class="note">Dosificación en volumen. Bolsa: 42.5 kg = 1 pie³. Fuente: RNE / práctica peruana.</p>
   </div>
-  <div class="card">
-    <div class="card-title">📐 Rendimiento de tarrajeo (m² por bolsa)</div>
-    <div style="overflow-x:auto">
-    <table>
-      <thead><tr><th>Espesor</th><th style="text-align:right">1:4</th><th style="text-align:right">1:5</th><th style="text-align:right">1:6</th></tr></thead>
-      <tbody id="mort-rend-tbl"></tbody>
-    </table>
+
+  <div class="col-main">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Paños</div>
+        <button class="btn btn-o btn-sm" onclick="muLimpiar()">Limpiar</button>
+      </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Descripción</th><th class="n" style="width:58px">Cant.</th>
+          <th class="n" style="width:74px">Largo</th><th class="n" style="width:74px">Altura</th>
+          <th class="n" style="width:80px">Área m²</th><th style="width:38px"></th></tr></thead>
+        <tbody id="mu-panos"></tbody>
+      </table></div>
+      <p id="mu-panos-vacio" class="note" style="text-align:center;padding:16px 0">Agrega el primer paño</p>
     </div>
-    <p class="note">Incluye 10% desperdicio. Una cara. Valores referenciales.</p>
-  </div>
-</div>
 
-<div class="card mt2">
-  <div class="card-title">🧱 Ladrillos por m² de muro (junta 1.5 cm, +5% rotura)</div>
-  <div style="overflow-x:auto">
-  <table>
-    <thead><tr><th>Ladrillo</th><th>Dimensiones (cm)</th><th style="text-align:right">Soga (und/m²)</th><th style="text-align:right">Cabeza (und/m²)</th><th style="text-align:right">Canto (und/m²)</th></tr></thead>
-    <tbody id="mort-lad-tbl"></tbody>
-  </table>
-  </div>
-  <p class="note">Soga = cara vista largo×alto. Cabeza = cara vista ancho×alto. Canto = cara vista largo×ancho.</p>
-</div>
+    <div class="card mt">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Vanos a descontar</div>
+          <p class="note" style="margin-top:6px">Puertas, ventanas, mamparas y cualquier otro vacío.</p>
+        </div>
+        <button class="btn btn-v btn-sm" onclick="muAddVano()">+ Vano</button>
+      </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Descripción</th><th class="n" style="width:58px">Cant.</th>
+          <th class="n" style="width:74px">Ancho</th><th class="n" style="width:74px">Alto</th>
+          <th class="n" style="width:80px">Área m²</th><th style="width:38px"></th></tr></thead>
+        <tbody id="mu-vanos"></tbody>
+      </table></div>
+      <p id="mu-vanos-vacio" class="note" style="text-align:center;padding:16px 0">Sin vanos</p>
+    </div>
 
-<div class="card mt2">
-  <div class="card-title">🧱 Tipos de ladrillo y bloqueta — referencia visual</div>
-  <div id="ladrillo-gallery" class="mt"></div>
-  <p class="note">Ilustraciones referenciales. Las dimensiones y N° de huecos varían por fabricante.</p>
+    <div class="g g4 mt">
+      <div class="metric"><div class="metric-lbl">Muro bruto</div><div class="metric-val" id="mu-bruto">0.00</div><div class="metric-unit">m²</div></div>
+      <div class="metric rd"><div class="metric-lbl">Vanos</div><div class="metric-val" id="mu-desc">0.00</div><div class="metric-unit">m² a restar</div></div>
+      <div class="metric cy"><div class="metric-lbl">Muro neto</div><div class="metric-val" id="mu-neto">0.00</div><div class="metric-unit">m²</div></div>
+      <div class="metric am"><div class="metric-lbl">Derrames</div><div class="metric-val" id="mu-derr">0.00</div><div class="metric-unit">m</div></div>
+    </div>
+
+    <div class="card mt">
+      <div class="card-title">Partidas que salen de aquí</div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Partida</th><th style="width:60px">Und.</th><th class="n" style="width:110px">Metrado</th></tr></thead>
+        <tbody id="mu-partidas"></tbody>
+      </table></div>
+      <p class="note" id="mu-nota"></p>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -1018,6 +1018,75 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 </div>
 </div>
 
+<!-- ═══ PLANILLA DE METRADOS ═══ -->
+<div class="panel" id="tab-pla">
+<div class="card">
+  <div class="card-head">
+    <div>
+      <div class="card-title">Planilla de metrados</div>
+      <p class="note" style="margin-top:6px">Formato de expediente técnico. Parcial = Cant. × Veces × Largo × Ancho × Alto; las casillas vacías no multiplican. Para descontar, usa cantidad negativa.</p>
+    </div>
+    <div class="row-act">
+      <button class="btn btn-o btn-sm" onclick="plaExportExcel()">📊 Excel</button>
+      <button class="btn btn-o btn-sm" onclick="plaExportPDF()">📄 Imprimir</button>
+    </div>
+  </div>
+  <div class="g g4 mt">
+    <div class="frow"><label>Obra</label><input type="text" id="pla-obra" placeholder="Nombre del proyecto" oninput="plaSave()"></div>
+    <div class="frow"><label>Cliente / Entidad</label><input type="text" id="pla-cli" placeholder="Municipalidad, propietario…" oninput="plaSave()"></div>
+    <div class="frow"><label>Ubicación</label><input type="text" id="pla-ubi" placeholder="Distrito - Provincia - Región" oninput="plaSave()"></div>
+    <div class="frow"><label>Responsable</label><input type="text" id="pla-resp" placeholder="Nombre y CIP" oninput="plaSave()"></div>
+  </div>
+</div>
+
+<div class="card mt">
+  <div class="card-head">
+    <div class="card-title">Partidas</div>
+    <div class="row-act">
+      <select id="pla-grupo" style="width:auto">
+        <option value="OE.2">OE.2 Estructuras</option>
+        <option value="OE.3">OE.3 Arquitectura</option>
+        <option value="OE.4">OE.4 Inst. sanitarias</option>
+        <option value="OE.5">OE.5 Inst. eléctricas</option>
+        <option value="OE.1">OE.1 Obras provisionales</option>
+      </select>
+      <button class="btn btn-v btn-sm" onclick="plaAddPartida()">+ Partida</button>
+      <button class="btn btn-o btn-sm" onclick="plaLimpiar()">Limpiar</button>
+    </div>
+  </div>
+  <div style="overflow-x:auto" class="mt">
+    <table id="pla-tbl-wrap">
+      <thead><tr>
+        <th style="width:78px">Ítem</th>
+        <th>Descripción</th>
+        <th style="width:56px">Und.</th>
+        <th class="n" style="width:62px">Cant.</th>
+        <th class="n" style="width:56px">Veces</th>
+        <th class="n" style="width:70px">Largo</th>
+        <th class="n" style="width:70px">Ancho</th>
+        <th class="n" style="width:70px">Alto</th>
+        <th class="n" style="width:80px">Parcial</th>
+        <th class="n" style="width:86px">Total</th>
+        <th style="width:70px"></th>
+      </tr></thead>
+      <tbody id="pla-tbl"></tbody>
+    </table>
+  </div>
+  <p id="pla-empty" class="note" style="text-align:center;padding:22px 0">
+    Sin partidas todavía. Agrega una, o envíalas desde las otras secciones con el botón «Enviar a la planilla».
+  </p>
+</div>
+
+<div class="card mt">
+  <div class="card-title">Resumen por grupo</div>
+  <div style="overflow-x:auto"><table>
+    <thead><tr><th>Grupo</th><th>Partida</th><th style="width:60px">Und.</th><th class="n" style="width:110px">Metrado</th></tr></thead>
+    <tbody id="pla-resumen"></tbody>
+  </table></div>
+  <p class="note">El expediente técnico pide las dos cosas: esta hoja de resumen y la planilla detallada de arriba.</p>
+</div>
+</div>
+
 <!-- ═══ VISOR IFC ═══ -->
 <div class="panel" id="tab-ifc">
 <div class="card">
@@ -1095,7 +1164,7 @@ function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('open');
 }
-const titles={dos:'🧮 <span>Dosificación</span>',cat:'📚 <span>Catálogo</span>',met:'📦 <span>Metrado concreto</span>',obra:'🪣 <span>Vaciado en obra</span>',mort:'🧱 <span>Muros & Mortero</span>',est:'🔩 <span>Estribos</span>',ifc:'📐 <span>Visor IFC</span>',pin:'🎨 <span>Pintura</span>',pis:'◼️ <span>Pisos & Enchapes</span>',ace:'⛓️ <span>Acero — Despiece</span>',san:'🚰 <span>Inst. Sanitarias</span>',ele:'⚡ <span>Inst. Eléctricas</span>',ren:'📈 <span>Rendimientos</span>'};
+const titles={pla:'📋 <span>Planilla de metrados</span>',dos:'🧮 <span>Dosificación</span>',cat:'📚 <span>Catálogo</span>',met:'📦 <span>Metrado concreto</span>',obra:'🪣 <span>Vaciado en obra</span>',mort:'🧱 <span>Muros & Mortero</span>',est:'🔩 <span>Estribos</span>',ifc:'📐 <span>Visor IFC</span>',pin:'🎨 <span>Pintura</span>',pis:'◼️ <span>Pisos & Enchapes</span>',ace:'⛓️ <span>Acero — Despiece</span>',san:'🚰 <span>Inst. Sanitarias</span>',ele:'⚡ <span>Inst. Eléctricas</span>',ren:'📈 <span>Rendimientos</span>'};
 document.getElementById('nav').addEventListener('click',e=>{
   const b=e.target.closest('button[data-tab]');if(!b)return;
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('active'));
@@ -1143,8 +1212,7 @@ fetch('/api/opciones').then(r=>r.json()).then(d=>{
     const rt=$('ob-ref-tbl');
     rt.innerHTML=d.tabla_baldes.map(r=>'<tr><td class="n" style="color:var(--text);font-weight:700">'+r.fc+'</td><td>'+r.proporcion+'</td><td class="n">'+F(r.b18_arena,2)+'</td><td class="n">'+F(r.b18_piedra,2)+'</td><td class="n" style="color:var(--cyan)">'+F(r.b20_arena,2)+'</td><td class="n" style="color:var(--cyan)">'+F(r.b20_piedra,2)+'</td></tr>').join('');
   }
-  buildMorteroRefTables();buildBrickGallery();loadState();initMetradosPro();
-  drawMuro2d();drawTarr2d();
+  loadState();initMetradosPro();muLoad();plaLoad();
 }).catch(()=>toast('Error cargando opciones',false));
 
 /* ═══ DOSIFICACIÓN ═══ */
@@ -1316,6 +1384,381 @@ async function exportMetradoExcel(){
     setTimeout(()=>URL.revokeObjectURL(a.href),5000);toast('Excel descargado');
   }catch(e){toast('Error exportando Excel',false)}
 }
+/* ═══ PLANILLA DE METRADOS ═══
+   Formato tomado de planillas reales de expedientes tecnicos peruanos
+   (Municipalidad Provincial de Islay, Municipalidad Distrital de Las Piedras,
+   Municipalidad Provincial de Piura), verificado fila por fila:
+       Parcial = Cant. x Veces x Largo x Ancho x Alto
+   Las casillas vacias NO multiplican: se ignoran, no valen cero. Para descontar
+   se usa cantidad negativa, igual que en las hojas reales, donde los vanos y los
+   volumenes sumergidos aparecen con signo menos. */
+let planilla = [];
+
+const PLA_GRUPOS = {
+  "OE.1": "Obras provisionales y trabajos preliminares",
+  "OE.2": "Estructuras",
+  "OE.3": "Arquitectura",
+  "OE.4": "Instalaciones sanitarias",
+  "OE.5": "Instalaciones eléctricas y mecánicas"
+};
+
+/* Una casilla vacia se ignora; un cero escrito si cuenta como cero. */
+function plaFactor(v){
+  if(v===""||v===null||v===undefined) return 1;
+  const n=+v; return isNaN(n)?1:n;
+}
+function plaParcial(f){
+  return plaFactor(f.cant)*plaFactor(f.veces)*plaFactor(f.largo)*plaFactor(f.ancho)*plaFactor(f.alto);
+}
+function plaTotal(p){ return (p.filas||[]).reduce((s,f)=>s+plaParcial(f),0); }
+
+function plaAddPartida(datos){
+  const g=(datos&&datos.grupo)||$('pla-grupo').value;
+  planilla.push({
+    grupo:g,
+    codigo:(datos&&datos.codigo)||"",
+    partida:(datos&&datos.partida)||"",
+    unidad:(datos&&datos.unidad)||"m3",
+    filas:(datos&&datos.filas&&datos.filas.length)?datos.filas
+         :[{desc:"",cant:1,veces:"",largo:"",ancho:"",alto:""}]
+  });
+  plaRender(); plaSave();
+}
+function plaAddFila(i){
+  planilla[i].filas.push({desc:"",cant:1,veces:"",largo:"",ancho:"",alto:""});
+  plaRender(); plaSave();
+}
+function plaDelFila(i,j){
+  planilla[i].filas.splice(j,1);
+  if(!planilla[i].filas.length) planilla.splice(i,1);
+  plaRender(); plaSave();
+}
+function plaDelPartida(i){ planilla.splice(i,1); plaRender(); plaSave(); }
+function plaSet(i,campo,v){ planilla[i][campo]=v; plaSave(); plaResumen(); }
+function plaSetFila(i,j,campo,v){
+  planilla[i].filas[j][campo]=v;
+  const p=document.getElementById('pla-p-'+i+'-'+j);
+  if(p){ const val=plaParcial(planilla[i].filas[j]);
+         p.textContent=F(val,2);
+         p.style.color=val<0?'#f87171':'var(--text)'; }
+  const t=document.getElementById('pla-t-'+i);
+  if(t) t.textContent=F(plaTotal(planilla[i]),2);
+  plaSave(); plaResumen();
+}
+function plaLimpiar(){
+  ask('¿Vaciar la planilla completa? Esta acción no se puede deshacer.',()=>{ planilla=[]; plaRender(); plaSave(); });
+}
+
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+function plaRender(){
+  const tb=$('pla-tbl'), em=$('pla-empty');
+  if(!tb) return;
+  if(!planilla.length){ tb.innerHTML=''; if(em) em.style.display='block'; plaResumen(); return; }
+  if(em) em.style.display='none';
+  const num=(i,j,c,v)=>'<td class="n"><input type="number" step="0.01" value="'+esc(v)+
+    '" oninput="plaSetFila('+i+','+j+',\''+c+'\',this.value)" '+
+    'style="width:100%;text-align:right;padding:4px 6px;font-size:12px"></td>';
+  let html='', grupoActual='';
+  planilla.forEach((p,i)=>{
+    if(p.grupo!==grupoActual){
+      grupoActual=p.grupo;
+      html+='<tr><td colspan="11" style="background:rgba(124,58,237,.14);font-weight:700;'+
+            'letter-spacing:.4px;font-size:11px;text-transform:uppercase;padding:8px 10px">'+
+            esc(p.grupo)+' · '+esc(PLA_GRUPOS[p.grupo]||'')+'</td></tr>';
+    }
+    html+='<tr style="background:rgba(255,255,255,.03)">'+
+      '<td><input type="text" value="'+esc(p.codigo)+'" placeholder="02.01.01" '+
+      'oninput="plaSet('+i+',\'codigo\',this.value)" style="width:100%;padding:4px 6px;font-size:12px"></td>'+
+      '<td><input type="text" value="'+esc(p.partida)+'" placeholder="Nombre de la partida" '+
+      'oninput="plaSet('+i+',\'partida\',this.value)" style="width:100%;padding:4px 6px;font-weight:600"></td>'+
+      '<td><input type="text" value="'+esc(p.unidad)+'" '+
+      'oninput="plaSet('+i+',\'unidad\',this.value)" style="width:100%;padding:4px 6px;text-align:center;font-size:12px"></td>'+
+      '<td colspan="5"></td><td></td>'+
+      '<td class="n" style="font-weight:800;color:var(--cyan)" id="pla-t-'+i+'">'+F(plaTotal(p),2)+'</td>'+
+      '<td><div class="row-act">'+
+      '<button class="act-btn" title="Agregar medición" onclick="plaAddFila('+i+')">+</button>'+
+      '<button class="act-btn danger" title="Quitar partida" onclick="plaDelPartida('+i+')">✕</button>'+
+      '</div></td></tr>';
+    p.filas.forEach((f,j)=>{
+      const val=plaParcial(f);
+      html+='<tr><td></td>'+
+        '<td style="padding-left:22px"><input type="text" value="'+esc(f.desc)+'" '+
+        'placeholder="Z-1, Eje A, 2° piso…" oninput="plaSetFila('+i+','+j+',\'desc\',this.value)" '+
+        'style="width:100%;padding:4px 6px;font-size:12px;color:var(--text2)"></td>'+
+        '<td></td>'+
+        num(i,j,'cant',f.cant)+num(i,j,'veces',f.veces)+num(i,j,'largo',f.largo)+
+        num(i,j,'ancho',f.ancho)+num(i,j,'alto',f.alto)+
+        '<td class="n" id="pla-p-'+i+'-'+j+'" style="color:'+(val<0?'#f87171':'var(--text)')+'">'+F(val,2)+'</td>'+
+        '<td></td>'+
+        '<td><button class="act-btn danger" title="Quitar medición" onclick="plaDelFila('+i+','+j+')">✕</button></td>'+
+        '</tr>';
+    });
+  });
+  tb.innerHTML=html;
+  plaResumen();
+}
+
+function plaResumen(){
+  const tb=$('pla-resumen'); if(!tb) return;
+  if(!planilla.length){
+    tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text3)">Sin partidas</td></tr>';
+    return;
+  }
+  let html='';
+  ['OE.1','OE.2','OE.3','OE.4','OE.5'].forEach(g=>{
+    const ps=planilla.filter(p=>p.grupo===g);
+    if(!ps.length) return;
+    html+='<tr><td colspan="4" style="background:rgba(124,58,237,.14);font-weight:700;font-size:11px;'+
+          'text-transform:uppercase;letter-spacing:.4px">'+g+' · '+esc(PLA_GRUPOS[g])+'</td></tr>';
+    ps.forEach(p=>{
+      html+='<tr><td style="color:var(--text3);font-size:11px">'+(esc(p.codigo)||'—')+'</td>'+
+            '<td>'+(esc(p.partida)||'<span style="color:var(--text3)">sin nombre</span>')+'</td>'+
+            '<td style="text-align:center;font-size:11px">'+esc(p.unidad)+'</td>'+
+            '<td class="n" style="font-weight:700;color:var(--cyan)">'+F(plaTotal(p),2)+'</td></tr>';
+    });
+  });
+  tb.innerHTML=html;
+}
+
+/* Puerta de entrada del resto de secciones: cada una manda sus partidas aqui en
+   vez de dejar el numero muerto en su propia pantalla. */
+function plaEnviar(partidas){
+  const lista=Array.isArray(partidas)?partidas:[partidas];
+  let n=0;
+  lista.forEach(p=>{
+    if(!p||!p.partida) return;
+    planilla.push({
+      grupo:p.grupo||'OE.2',
+      codigo:p.codigo||'',
+      partida:p.partida,
+      unidad:p.unidad||'',
+      filas:(p.filas&&p.filas.length)?p.filas
+           :[{desc:p.desc||'',cant:(p.cant==null?1:p.cant),veces:'',
+              largo:(p.valor==null?'':p.valor),ancho:'',alto:''}]
+    });
+    n++;
+  });
+  if(!n){ toast('No hay nada que enviar',false); return; }
+  const orden={'OE.1':1,'OE.2':2,'OE.3':3,'OE.4':4,'OE.5':5};
+  planilla.sort((a,b)=>(orden[a.grupo]||9)-(orden[b.grupo]||9));
+  plaRender(); plaSave();
+  toast(n===1?'1 partida enviada a la planilla':n+' partidas enviadas a la planilla');
+}
+
+const PLA_STORE='cia_planilla_v1';
+function plaSave(){
+  try{
+    localStorage.setItem(PLA_STORE,JSON.stringify({
+      v:1, planilla,
+      obra:($('pla-obra')||{}).value||'', cliente:($('pla-cli')||{}).value||'',
+      ubicacion:($('pla-ubi')||{}).value||'', responsable:($('pla-resp')||{}).value||''
+    }));
+  }catch(e){}
+}
+function plaLoad(){
+  try{
+    const d=JSON.parse(localStorage.getItem(PLA_STORE)||'null');
+    if(d){
+      if(Array.isArray(d.planilla)) planilla=d.planilla;
+      if($('pla-obra')) $('pla-obra').value=d.obra||'';
+      if($('pla-cli')) $('pla-cli').value=d.cliente||'';
+      if($('pla-ubi')) $('pla-ubi').value=d.ubicacion||'';
+      if($('pla-resp')) $('pla-resp').value=d.responsable||'';
+    }
+  }catch(e){}
+  plaRender();
+}
+
+function plaCabecera(){
+  return {
+    obra:($('pla-obra')||{}).value||'', cliente:($('pla-cli')||{}).value||'',
+    ubicacion:($('pla-ubi')||{}).value||'', responsable:($('pla-resp')||{}).value||''
+  };
+}
+async function plaExportExcel(){
+  if(!planilla.length){ toast('La planilla está vacía',false); return; }
+  try{
+    const cab=plaCabecera();
+    const r=await fetch('/api/exportar_planilla',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({obra:cab.obra,cliente:cab.cliente,ubicacion:cab.ubicacion,
+                           responsable:cab.responsable,planilla:planilla})});
+    if(!r.ok) throw new Error();
+    const b=await r.blob(), a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download='planilla_de_metrados.xlsx'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    toast('Planilla descargada');
+  }catch(e){ toast('Error exportando la planilla',false); }
+}
+
+/* ═══ MUROS Y TARRAJEO ═══
+   Metrado real, no calculo de insumos.
+
+   Norma Tecnica de Metrados (R.D. 073-2010-VIVIENDA):
+   - OE.3.1 muros, unidad m2: "Las areas son netas, por lo tanto, se descontaran
+     en la medicion las areas de los vanos de puertas, ventanas, mamparas y
+     algunos otros vacios si los hubiera."
+   - OE.3.2.1 tarrajeo, unidad m2: "Se computaran todas las areas netas a vestir
+     o revocar. Por consiguiente se descontaran los vanos o aberturas."
+   - OE.3.2.2 tarrajeo interior y OE.3.2.3 tarrajeo exterior son PARTIDAS
+     DISTINTAS: el exterior "se considera en partida aparte por que generalmente
+     requiere de un andamiaje apropiado para su ejecucion".
+   - OE.3.2.11 derrames, unidad METRO: "A la superficie cuya longitud es el
+     perimetro del vano y cuyo ancho es el espesor del muro, se le llama derrame".
+
+   OJO CON EL UMBRAL: mucha gente aplica "no se descuentan vanos menores de 1 m2".
+   Ese minimo viene del D.S. 013-79-VC, que la R.D. 073-2010 cita solo como
+   referencia y NO reprodujo. Para muros y tarrajeo la norma vigente no fija
+   ningun minimo: se descuenta todo. Los unicos umbrales de toda la norma son
+   0.25 m2 (contrapisos y pisos), 0.50 m2 (coberturas) y 1.00 m2 (cajones de
+   ventilacion), y ninguno aplica aqui.
+
+   Los materiales (bolsas de cemento, m3 de arena, ladrillos) NO son metrado:
+   van en el analisis de precios unitarios, que es de otra app. */
+
+let muPanos = [], muVanos = [];
+
+const MU_TIPOS = {
+  soga:       { nombre: "Muro de ladrillo KK de arcilla, aparejo de soga",   e: 0.13 },
+  cabeza:     { nombre: "Muro de ladrillo KK de arcilla, aparejo de cabeza", e: 0.25 },
+  canto:      { nombre: "Muro de ladrillo KK de arcilla, aparejo de canto",  e: 0.09 },
+  pandereta:  { nombre: "Muro de ladrillo pandereta, aparejo de soga",       e: 0.11 }
+};
+
+function muNum(v){ const n=+v; return isNaN(n)?0:n; }
+function muAreaPano(p){ return muNum(p.cant)*muNum(p.largo)*muNum(p.alto); }
+function muAreaVano(v){ return muNum(v.cant)*muNum(v.ancho)*muNum(v.alto); }
+/* Derrame: el perimetro del vano por su cantidad. Se mide en metros, no en m2. */
+function muPerimVano(v){ return muNum(v.cant)*2*(muNum(v.ancho)+muNum(v.alto)); }
+
+function muAddPano(){
+  muPanos.push({desc:"",cant:1,largo:"",alto:2.40});
+  muRender(); muSave();
+}
+function muAddVano(){
+  muVanos.push({desc:"",cant:1,ancho:"",alto:""});
+  muRender(); muSave();
+}
+function muDelPano(i){ muPanos.splice(i,1); muRender(); muSave(); }
+function muDelVano(i){ muVanos.splice(i,1); muRender(); muSave(); }
+function muSetPano(i,c,v){ muPanos[i][c]=v; muCalc(); muSave(); }
+function muSetVano(i,c,v){ muVanos[i][c]=v; muCalc(); muSave(); }
+function muLimpiar(){
+  ask('¿Vaciar los paños y vanos de esta sección?',()=>{
+    muPanos=[]; muVanos=[]; muRender(); muSave();
+  });
+}
+
+function muRender(){
+  const tp=$('mu-panos'), tv=$('mu-vanos');
+  if(!tp||!tv) return;
+  const inp=(f,i,c,v,paso)=>'<td class="n"><input type="number" step="'+paso+'" value="'+esc(v)+
+    '" oninput="'+f+'('+i+',\''+c+'\',this.value)" style="width:100%;text-align:right;padding:4px 6px;font-size:12px"></td>';
+  const txt=(f,i,ph,v)=>'<td><input type="text" value="'+esc(v)+'" placeholder="'+ph+
+    '" oninput="'+f+'('+i+',\'desc\',this.value)" style="width:100%;padding:4px 6px;font-size:12px"></td>';
+
+  $('mu-panos-vacio').style.display = muPanos.length ? 'none' : 'block';
+  tp.innerHTML = muPanos.map((p,i)=>'<tr>'+
+    txt('muSetPano',i,'Eje A, 1er piso…',p.desc)+
+    inp('muSetPano',i,'cant',p.cant,'1')+inp('muSetPano',i,'largo',p.largo,'0.01')+
+    inp('muSetPano',i,'alto',p.alto,'0.01')+
+    '<td class="n" style="color:var(--cyan);font-weight:700">'+F(muAreaPano(p),2)+'</td>'+
+    '<td><button class="act-btn danger" onclick="muDelPano('+i+')">✕</button></td></tr>').join('');
+
+  $('mu-vanos-vacio').style.display = muVanos.length ? 'none' : 'block';
+  tv.innerHTML = muVanos.map((v,i)=>'<tr>'+
+    txt('muSetVano',i,'Puerta P-1, Ventana V-2…',v.desc)+
+    inp('muSetVano',i,'cant',v.cant,'1')+inp('muSetVano',i,'ancho',v.ancho,'0.01')+
+    inp('muSetVano',i,'alto',v.alto,'0.01')+
+    '<td class="n" style="color:#f87171;font-weight:700">−'+F(muAreaVano(v),2)+'</td>'+
+    '<td><button class="act-btn danger" onclick="muDelVano('+i+')">✕</button></td></tr>').join('');
+
+  muCalc();
+}
+
+function muPartidas(){
+  const bruto = muPanos.reduce((s,p)=>s+muAreaPano(p),0);
+  const desc  = muVanos.reduce((s,v)=>s+muAreaVano(v),0);
+  const neto  = Math.max(0, bruto-desc);
+  const derr  = muVanos.reduce((s,v)=>s+muPerimVano(v),0);
+  const tipo  = MU_TIPOS[$('mu-tipo').value] || MU_TIPOS.soga;
+  const ext   = $('mu-ubi').value === 'ext';
+  const caras = +$('mu-caras').value || 0;
+
+  const filasMuro = muPanos.map(p=>({desc:p.desc||'Paño',cant:p.cant,veces:'',
+                                     largo:p.largo,ancho:'',alto:p.alto}))
+    .concat(muVanos.map(v=>({desc:(v.desc||'Vano')+' (-)',cant:-Math.abs(muNum(v.cant)),
+                             veces:'',largo:v.ancho,ancho:'',alto:v.alto})));
+
+  const out = [];
+  if(neto>0 || filasMuro.length){
+    out.push({grupo:'OE.3', codigo:'', unidad:'m2',
+              partida:tipo.nombre+' (e='+tipo.e.toFixed(2)+' m)',
+              valor:neto, filas:filasMuro});
+  }
+  if(caras>0 && neto>0){
+    // El tarrajeo repite las mismas mediciones del muro, tantas veces como caras.
+    const filasT = filasMuro.map(f=>({...f, veces:caras}));
+    out.push({grupo:'OE.3', codigo:'', unidad:'m2',
+              partida:'Tarrajeo en muros '+(ext?'exteriores':'interiores'),
+              valor:neto*caras, filas:filasT});
+  }
+  if(derr>0){
+    out.push({grupo:'OE.3', codigo:'', unidad:'m',
+              partida:'Vestidura de derrames (e='+tipo.e.toFixed(2)+' m)',
+              valor:derr,
+              filas:muVanos.map(v=>({desc:v.desc||'Vano',cant:v.cant,veces:2,
+                                     largo:(muNum(v.ancho)+muNum(v.alto)),ancho:'',alto:''}))});
+  }
+  return {bruto,desc,neto,derr,partidas:out};
+}
+
+function muCalc(){
+  if(!$('mu-panos')) return;
+  const r = muPartidas();
+  $('mu-bruto').textContent = F(r.bruto,2);
+  $('mu-desc').textContent  = F(r.desc,2);
+  $('mu-neto').textContent  = F(r.neto,2);
+  $('mu-derr').textContent  = F(r.derr,2);
+  $('mu-partidas').innerHTML = r.partidas.length
+    ? r.partidas.map(p=>'<tr><td>'+esc(p.partida)+'</td>'+
+        '<td style="text-align:center;font-size:11px">'+p.unidad+'</td>'+
+        '<td class="n" style="font-weight:700;color:var(--cyan)">'+F(p.valor,2)+'</td></tr>').join('')
+    : '<tr><td colspan="3" style="text-align:center;color:var(--text3)">Agrega paños para ver las partidas</td></tr>';
+  $('mu-nota').textContent = r.desc>0
+    ? 'Se descontaron ' + F(r.desc,2) + ' m² de vanos. La norma vigente no fija un mínimo: se descuenta todo.'
+    : 'Sin vanos que descontar.';
+  muSave();
+}
+
+function muEnviar(){
+  const r = muPartidas();
+  if(!r.partidas.length){ toast('Agrega paños primero',false); return; }
+  plaEnviar(r.partidas);
+}
+
+const MU_STORE='cia_muros_v1';
+function muSave(){
+  try{ localStorage.setItem(MU_STORE,JSON.stringify({
+    v:1, panos:muPanos, vanos:muVanos,
+    tipo:($('mu-tipo')||{}).value, ubi:($('mu-ubi')||{}).value, caras:($('mu-caras')||{}).value
+  })); }catch(e){}
+}
+function muLoad(){
+  try{
+    const d=JSON.parse(localStorage.getItem(MU_STORE)||'null');
+    if(d){
+      if(Array.isArray(d.panos)) muPanos=d.panos;
+      if(Array.isArray(d.vanos)) muVanos=d.vanos;
+      if(d.tipo&&$('mu-tipo')) $('mu-tipo').value=d.tipo;
+      if(d.ubi&&$('mu-ubi')) $('mu-ubi').value=d.ubi;
+      if(d.caras&&$('mu-caras')) $('mu-caras').value=d.caras;
+    }
+  }catch(e){}
+  muRender();
+}
+
 /* ── Modal de confirmación ── */
 let _modalCb=null;
 function ask(msg,cb){$('modal-msg').textContent=msg;_modalCb=cb;$('modal').classList.add('open')}
@@ -1584,8 +2027,10 @@ function renderRend(){
 function initMetradosPro(){
   calcPintura();calcPisos();calcSan();calcEle();
   buildRendChips();renderRend();
-  if(!aceRows.length){aceAdd('Columnas — longitudinal',4,16,3.2);aceAdd('Columnas — estribos',1,104,1.5);aceAdd('Vigas — longitudinal',4,12,5.6);}
-  else aceRender();
+  // El despiece arranca VACIO. Antes se cargaban solas tres filas de ejemplo
+  // (104 estribos y 16 barras que nadie metro) y se podian exportar a Excel
+  // como si fueran un metrado real. Un metrado inventado es peor que ninguno.
+  aceRender();
 }
 
 /* ═══ CATÁLOGO ═══ */
@@ -2413,24 +2858,6 @@ function calcObra(){
 }
 
 /* ═══ MORTERO ═══ */
-function calcAsentado(){
-  post('/api/mortero/asentado',{area:+$('m-area').value,ladrillo_idx:+$('m-lad').value,aparejo:$('m-ap').value,junta_cm:+$('m-junta').value,proporcion:$('m-prop').value},d=>{
-    $('m-res').style.display='grid';
-    $('m-lads').textContent=F(d.ladrillos,0);$('m-ladm2').textContent=F(d.ladrillos_por_m2,1);
-    $('m-cem').textContent=F(d.cemento_bolsas,1);$('m-are').textContent=F(d.arena_m3,3);
-    $('m-det').textContent=d.detalle+' · Mortero: '+F(d.volumen_m3,4)+' m³';
-    toast('Asentado: '+F(d.ladrillos,0)+' ladrillos · '+F(d.cemento_bolsas,1)+' bolsas');
-  });
-}
-function calcTarrajeo(){
-  post('/api/mortero/tarrajeo',{area:+$('t-area').value,espesor_cm:+$('t-esp').value,proporcion:$('t-prop').value,caras:+$('t-caras').value},d=>{
-    $('t-res').style.display='grid';
-    $('t-cem').textContent=F(d.cemento_bolsas,1);$('t-are').textContent=F(d.arena_m3,3);
-    $('t-vol').textContent=F(d.volumen_m3,4);$('t-rend').textContent=F(d.m2_por_bolsa,1);
-    $('t-det').textContent=d.detalle+' · Rend: '+F(d.m2_por_bolsa,1)+' m²/bolsa';
-    toast('Tarrajeo: '+F(d.cemento_bolsas,1)+' bolsas · '+F(d.m2_por_bolsa,1)+' m²/bolsa');
-  });
-}
 /* Ilustración isométrica de un ladrillo/bloqueta con huecos */
 function isoBrick(L,A,H,opt){
   opt=opt||{};const c30=0.866,s30=0.5,W=180,VH=155,pad=30;
@@ -2460,120 +2887,6 @@ function isoBrick(L,A,H,opt){
   s+=`<g fill="none" stroke="${pal.edge}" stroke-width="1.4" stroke-linejoin="round"><polygon points="${pl(top)}"/><polygon points="${pl(left)}"/><polygon points="${pl(right)}"/></g>`;
   return `<svg viewBox="0 0 ${W} ${VH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">${s}</svg>`;
 }
-function buildBrickGallery(){
-  const g=$('ladrillo-gallery');if(!g)return;
-  const clay={top:'#CE6E45',left:'#AC5330',right:'#8C4023',edge:'#57230F',hole:'#3A180C'};
-  const clayL={top:'#D08159',left:'#B26743',right:'#95502F',edge:'#5E2E17',hole:'#4A2214'};
-  const conc={top:'#C2C8D0',left:'#9FA6B1',right:'#828993',edge:'#525863',hole:'#363B43'};
-  const bricks=[
-    {n:'King Kong 18 huecos',d:'23 × 12.5 × 9 cm',u:'Muro portante',svg:isoBrick(23,12.5,9,{holes:'vertical',cols:6,rows:3,pal:clay})},
-    {n:'King Kong artesanal',d:'24 × 13 × 9 cm',u:'Muro portante',svg:isoBrick(24,13,9,{holes:'none',pal:clayL})},
-    {n:'Pandereta',d:'23 × 11 × 9 cm',u:'Tabique (no portante)',svg:isoBrick(23,11,9,{holes:'horizontal',rows:3,pal:clayL})},
-    {n:'Bloqueta de concreto',d:'39 × 19 × 19 cm',u:'Muro / cerco',svg:isoBrick(39,19,19,{holes:'cells',cells:2,pal:conc})},
-  ];
-  g.className='cat-row';
-  g.innerHTML=bricks.map(b=>`<div class="brick-card"><div class="brick-img">${b.svg}</div><div class="brick-n">${b.n}</div><div class="brick-d">${b.d}</div><div class="brick-u">${b.u}</div></div>`).join('');
-}
-function buildMorteroRefTables(){
-  const props={14:8.9,15:7.4,16:6.2};
-  const espesores=[1.0,1.5,2.0,2.5,3.0];
-  const tb=$('mort-rend-tbl');
-  tb.innerHTML=espesores.map(e=>{
-    const cols=[14,15,16].map(p=>{
-      const vol=e/100*1.10;const bm2=vol*props[p];const rend=bm2>0?(1/bm2):0;
-      return '<td class="n"'+(p===15?' style="color:var(--cyan);font-weight:800"':'')+'>'+F(rend,1)+'</td>';
-    }).join('');
-    return '<tr><td style="font-weight:700;color:var(--text)">'+e.toFixed(1)+' cm</td>'+cols+'</tr>';
-  }).join('');
-  const lt=$('mort-lad-tbl');
-  const lads=[
-    {n:'King Kong 18 huecos',l:23,a:12.5,h:9},
-    {n:'King Kong artesanal',l:24,a:13,h:9},
-    {n:'Pandereta',l:23,a:11,h:9},
-    {n:'Bloque de concreto',l:39,a:19,h:19}
-  ];
-  const j=1.5;
-  lt.innerHTML=lads.map(b=>{
-    const dims=[b.l,b.a,b.h];
-    const soga=Math.round(1/((dims[0]/100+j/100)*(dims[2]/100+j/100))*1.05*10)/10;
-    const cabeza=Math.round(1/((dims[1]/100+j/100)*(dims[2]/100+j/100))*1.05*10)/10;
-    const canto=Math.round(1/((dims[0]/100+j/100)*(dims[1]/100+j/100))*1.05*10)/10;
-    return '<tr><td style="font-weight:700;color:var(--text)">'+b.n+'</td><td>'+b.l+'×'+b.a+'×'+b.h+'</td><td class="n" style="color:var(--amber)">'+F(soga,1)+'</td><td class="n" style="color:var(--cyan)">'+F(cabeza,1)+'</td><td class="n">'+F(canto,1)+'</td></tr>';
-  }).join('');
-}
-function drawMuro2d(){
-  const cv=$('mort-2d-muro');if(!cv)return;
-  const ctx=cv.getContext('2d');cv.width=340;cv.height=200;
-  const W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);
-  const ladIdx=+($('m-lad')?$('m-lad').value:0);
-  const aparejo=$('m-ap')?$('m-ap').value:'Soga';
-  const jcm=+($('m-junta')?$('m-junta').value:1.5);
-  const lads=[{l:23,a:12.5,h:9},{l:24,a:13,h:9},{l:23,a:11,h:9},{l:39,a:19,h:19}];
-  const b=lads[ladIdx]||lads[0];
-  let bw,bh;
-  if(aparejo==='Soga'){bw=b.l;bh=b.h}else if(aparejo==='Cabeza'){bw=b.a;bh=b.h}else{bw=b.l;bh=b.a}
-  const sc=Math.min((W-50)/(bw*4+jcm*5),(H-50)/(bh*5+jcm*6));
-  const bwP=bw*sc,bhP=bh*sc,jP=jcm*sc;
-  const rows=5,cols=4;
-  const totalW=cols*bwP+(cols-1)*jP,totalH=rows*bhP+(rows-1)*jP;
-  const ox=(W-totalW)/2,oy=H-20-totalH;
-  for(let r=0;r<rows;r++){
-    const y=oy+r*(bhP+jP);
-    const off=r%2===1?(bwP+jP)/2:0;
-    for(let c=-1;c<=cols;c++){
-      let x=ox+c*(bwP+jP)-off;
-      const x1=Math.max(ox,x),x2=Math.min(ox+totalW,x+bwP);
-      if(x2<=x1)continue;
-      ctx.fillStyle='#FDE68A';ctx.fillRect(x1,y,x2-x1,bhP);
-      ctx.strokeStyle='#B45309';ctx.lineWidth=0.8;ctx.strokeRect(x1+.5,y+.5,x2-x1-1,bhP-1);
-    }
-    if(r<rows-1){ctx.fillStyle='#CBD5E1';ctx.fillRect(ox,y+bhP,totalW,jP)}
-  }
-  for(let c=0;c<cols-1;c++){const x=ox+(c+1)*(bwP+jP)-jP;ctx.fillStyle='#CBD5E1';ctx.fillRect(x,oy,jP,totalH)}
-  ctx.strokeStyle='#334155';ctx.lineWidth=1.5;ctx.strokeRect(ox-1,oy-1,totalW+2,totalH+2);
-  ctx.fillStyle='#1E293B';ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='center';
-  ctx.fillText(bw+'×'+bh+' cm  ·  junta '+jcm+' cm',W/2,oy-8);
-  ctx.fillStyle='#64748B';ctx.font='10px Inter,sans-serif';
-  ctx.fillText('Aparejo: '+aparejo,W/2,H-5);
-}
-function drawTarr2d(){
-  const cv=$('mort-2d-tarr');if(!cv)return;
-  const ctx=cv.getContext('2d');cv.width=340;cv.height=200;
-  const W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);
-  const esp=+($('t-esp')?$('t-esp').value:1.5);
-  const caras=+($('t-caras')?$('t-caras').value:1);
-  const wallW_cm=15,wallH_cm=40;
-  const totalW_cm=wallW_cm+(caras===2?esp*2:esp);
-  const sc=Math.min((W-80)/totalW_cm,(H-60)/wallH_cm);
-  const wW=wallW_cm*sc,wH=wallH_cm*sc,tE=esp*sc;
-  const cx=W/2,wy=(H-wH)/2;
-  let wallX=cx-wW/2;
-  if(caras===1)wallX=cx-(wW+tE)/2+tE;
-  hatchRect(ctx,wallX,wy,wW,wH,8);
-  ctx.strokeStyle='#1E293B';ctx.lineWidth=1.5;ctx.strokeRect(wallX,wy,wW,wH);
-  ctx.fillStyle='#64748B';ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='center';
-  ctx.fillText('MURO',wallX+wW/2,wy+wH/2+4);
-  if(caras>=1){
-    const tx=wallX-tE;
-    ctx.fillStyle='#DBEAFE';ctx.fillRect(tx,wy,tE,wH);
-    ctx.strokeStyle='#2563EB';ctx.lineWidth=1;ctx.strokeRect(tx,wy,tE,wH);
-    ctx.fillStyle='#2563EB';ctx.font='8px Inter,sans-serif';
-    ctx.save();ctx.translate(tx+tE/2,wy+wH/2);ctx.rotate(-Math.PI/2);ctx.fillText('TARRAJEO',0,3);ctx.restore();
-    dimLine(ctx,tx,wy+wH+5,wallX,wy+wH+5,esp.toFixed(1)+'cm','bottom');
-  }
-  if(caras===2){
-    const tx=wallX+wW;
-    ctx.fillStyle='#DBEAFE';ctx.fillRect(tx,wy,tE,wH);
-    ctx.strokeStyle='#2563EB';ctx.lineWidth=1;ctx.strokeRect(tx,wy,tE,wH);
-    ctx.fillStyle='#2563EB';ctx.font='8px Inter,sans-serif';
-    ctx.save();ctx.translate(tx+tE/2,wy+wH/2);ctx.rotate(-Math.PI/2);ctx.fillText('TARRAJEO',0,3);ctx.restore();
-    dimLine(ctx,tx,wy+wH+5,tx+tE,wy+wH+5,esp.toFixed(1)+'cm','bottom');
-  }
-  dimLine(ctx,wallX-(caras>=1?tE:0)-5,wy,wallX-(caras>=1?tE:0)-5,wy+wH,wallH_cm+'cm','left');
-  ctx.fillStyle='#1E293B';ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='center';
-  ctx.fillText('CORTE - Tarrajeo e='+esp+'cm · '+caras+' cara(s)',W/2,14);
-}
-
 /* ═══ ESTRIBOS ═══ */
 function calcEstribos(){
   const b={h_cm:+$('es-h').value,a_cm:+$('es-a').value,b_cm:+$('es-b').value,de_mm:+$('es-de').value,db_mm:+$('es-db').value,rec_cm:+$('es-rec').value,s1:+$('es-s1').value||null,s2:+$('es-s2').value||null,lo:+$('es-lo').value||null,sistema:$('es-sistema')?.value||'porticos'};

@@ -4,6 +4,7 @@ Sirve en http://localhost:5050
 """
 import sys
 import io
+import os
 from pathlib import Path
 from unittest.mock import MagicMock
 
@@ -25,6 +26,51 @@ try:
     app.json.ensure_ascii = False          # Flask >= 2.3
 except AttributeError:
     app.config["JSON_AS_ASCII"] = False    # Flask < 2.3
+
+# Un IFC de edificacion pesa. 200 MB cubre practicamente cualquier expediente.
+app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024
+
+
+# ── API: Modelo IFC -> metrado ──────────────────────────────────────────────
+@app.route("/api/ifc/leer", methods=["POST"])
+def api_ifc_leer():
+    """Lee un .ifc y devuelve las cantidades agrupadas por (clase, tipo).
+
+    Devuelve DOS fuentes por grupo y nunca las mezcla:
+      Q = cantidad declarada por el autor del modelo (Qto_*BaseQuantities)
+      G = volumen/area de la malla real del solido
+    El desvio entre ambas es el dato de control: si no coinciden, el modelo
+    tiene un problema y el usuario debe verlo ANTES de meterlo a la planilla.
+    """
+    import tempfile
+    f = request.files.get("archivo")
+    if f is None or not f.filename.lower().endswith(".ifc"):
+        return jsonify({"ok": False, "error": "Sube un archivo .ifc"}), 400
+    try:
+        from dosificacion_concreto import ifc_metrado
+    except ImportError:
+        return jsonify({
+            "ok": False,
+            "error": ("Falta ifcopenshell. Instalalo con:  pip install ifcopenshell  "
+                      "(el resto de la app funciona sin el).")
+        }), 501
+    tmp = None
+    try:
+        fd, tmp = tempfile.mkstemp(suffix=".ifc")
+        os.close(fd)
+        f.save(tmp)
+        d = ifc_metrado.leer(tmp)
+        d["ok"] = True
+        d["archivo"] = f.filename
+        return jsonify(d)
+    except Exception as e:
+        return jsonify({"ok": False, "error": "No se pudo leer el IFC: " + str(e)}), 400
+    finally:
+        if tmp and os.path.exists(tmp):
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
 
 
 # ── Pagina principal ────────────────────────────────────────────────────────
@@ -412,6 +458,189 @@ def api_opciones():
         ],
     })
 
+
+
+
+# ── API: Planilla de metrados ────────────────────────────────────────────────
+def _pla_factor(v):
+    """Una casilla vacia no multiplica; un cero escrito si cuenta como cero.
+
+    Es la regla que siguen las planillas reales: en las hojas de expedientes
+    publicados las celdas de Ancho o Alto van en blanco cuando la partida es
+    lineal o superficial, y el parcial sale igual.
+    """
+    if v is None or v == "":
+        return 1.0
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return 1.0
+
+
+def _pla_parcial(f):
+    return (_pla_factor(f.get("cant")) * _pla_factor(f.get("veces"))
+            * _pla_factor(f.get("largo")) * _pla_factor(f.get("ancho"))
+            * _pla_factor(f.get("alto")))
+
+
+_PLA_GRUPOS = {
+    "OE.1": "OBRAS PROVISIONALES Y TRABAJOS PRELIMINARES",
+    "OE.2": "ESTRUCTURAS",
+    "OE.3": "ARQUITECTURA",
+    "OE.4": "INSTALACIONES SANITARIAS",
+    "OE.5": "INSTALACIONES ELECTRICAS Y MECANICAS",
+}
+
+
+@app.route("/api/exportar_planilla", methods=["POST"])
+def api_exportar_planilla():
+    """Exporta la planilla en el formato de los expedientes tecnicos peruanos.
+
+    Columnas tomadas de planillas reales publicadas (Municipalidad Provincial de
+    Islay, Municipalidad Distrital de Las Piedras, Municipalidad Provincial de
+    Piura), verificadas fila por fila:
+        Item | Descripcion | Und. | Cant. | Veces | Largo | Ancho | Alto | Parcial | Total
+    Se generan las DOS hojas que pide un expediente: la planilla detallada con
+    las mediciones y el resumen con el total por partida.
+    """
+    d = request.json or {}
+    planilla = d.get("planilla") or []
+    if not planilla:
+        return jsonify({"ok": False, "error": "La planilla está vacía"}), 400
+    try:
+        from datetime import datetime
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+
+        CYAN, DARK, GRIS, LILA = "0E7490", "0F172A", "64748B", "7C3AED"
+        thin = Side(style="thin", color="CBD5E1")
+        borde = Border(left=thin, right=thin, top=thin, bottom=thin)
+        wb = Workbook()
+
+        # ── Hoja 1: planilla detallada ──────────────────────────────────────
+        ws = wb.active
+        ws.title = "Planilla de metrados"
+        ws["A1"] = "PLANILLA DE METRADOS"
+        ws["A1"].font = Font(bold=True, size=14, color=DARK)
+        meta = [
+            ("Obra", d.get("obra") or "—"),
+            ("Cliente / Entidad", d.get("cliente") or "—"),
+            ("Ubicación", d.get("ubicacion") or "—"),
+            ("Responsable", d.get("responsable") or "—"),
+            ("Fecha", datetime.now().strftime("%d/%m/%Y")),
+        ]
+        for i, (k, v) in enumerate(meta, start=2):
+            ws.cell(row=i, column=1, value=k + ":").font = Font(bold=True, size=9, color=GRIS)
+            ws.cell(row=i, column=2, value=v).font = Font(size=9)
+
+        cab = ["Ítem", "Descripción", "Und.", "Cant.", "Veces",
+               "Largo", "Ancho", "Alto", "Parcial", "Total"]
+        HR = 8
+        for c, h in enumerate(cab, 1):
+            cel = ws.cell(row=HR, column=c, value=h)
+            cel.font = Font(bold=True, color="FFFFFF", size=10)
+            cel.fill = PatternFill("solid", fgColor=CYAN)
+            cel.border = borde
+            cel.alignment = Alignment(horizontal="center", vertical="center")
+
+        fila = HR + 1
+        grupo_actual = None
+        for part in planilla:
+            g = part.get("grupo") or "OE.2"
+            if g != grupo_actual:
+                grupo_actual = g
+                cel = ws.cell(row=fila, column=1,
+                              value=f"{g}  {_PLA_GRUPOS.get(g, '')}")
+                cel.font = Font(bold=True, size=10, color="FFFFFF")
+                for c in range(1, 11):
+                    ws.cell(row=fila, column=c).fill = PatternFill("solid", fgColor=LILA)
+                    ws.cell(row=fila, column=c).border = borde
+                fila += 1
+
+            filas = part.get("filas") or []
+            total = sum(_pla_parcial(f) for f in filas)
+            ws.cell(row=fila, column=1, value=part.get("codigo") or "").font = Font(bold=True, size=10)
+            ws.cell(row=fila, column=2, value=part.get("partida") or "").font = Font(bold=True, size=10)
+            ws.cell(row=fila, column=3, value=part.get("unidad") or "").alignment = Alignment(horizontal="center")
+            ct = ws.cell(row=fila, column=10, value=round(total, 2))
+            ct.font = Font(bold=True, size=10, color=CYAN)
+            ct.number_format = "0.00"
+            ct.alignment = Alignment(horizontal="right")
+            for c in range(1, 11):
+                ws.cell(row=fila, column=c).border = borde
+                ws.cell(row=fila, column=c).fill = PatternFill("solid", fgColor="F1F5F9")
+            fila += 1
+
+            for f in filas:
+                vals = [
+                    "", f.get("desc") or "", "",
+                    f.get("cant"), f.get("veces"),
+                    f.get("largo"), f.get("ancho"), f.get("alto"),
+                    round(_pla_parcial(f), 2), "",
+                ]
+                for c, v in enumerate(vals, 1):
+                    cel = ws.cell(row=fila, column=c, value=(v if v != "" else None))
+                    cel.border = borde
+                    cel.font = Font(size=10)
+                    if c == 2:
+                        cel.alignment = Alignment(horizontal="left", indent=2)
+                    elif c >= 4:
+                        cel.alignment = Alignment(horizontal="right")
+                        cel.number_format = "0.00"
+                fila += 1
+
+        for c, w in enumerate([12, 52, 8, 9, 8, 10, 10, 10, 12, 13], 1):
+            ws.column_dimensions[chr(64 + c)].width = w
+        ws.freeze_panes = ws.cell(row=HR + 1, column=1)
+
+        # ── Hoja 2: resumen por partida ─────────────────────────────────────
+        # El expediente exige las dos: la hoja detallada y este resumen.
+        ws2 = wb.create_sheet("Resumen")
+        ws2["A1"] = "RESUMEN DE METRADOS"
+        ws2["A1"].font = Font(bold=True, size=13, color=DARK)
+        ws2["A2"] = d.get("obra") or "—"
+        ws2["A2"].font = Font(size=10, color=GRIS)
+        for c, h in enumerate(["Ítem", "Partida", "Und.", "Metrado"], 1):
+            cel = ws2.cell(row=4, column=c, value=h)
+            cel.font = Font(bold=True, color="FFFFFF", size=10)
+            cel.fill = PatternFill("solid", fgColor=CYAN)
+            cel.border = borde
+            cel.alignment = Alignment(horizontal="center")
+        r = 5
+        for g in ("OE.1", "OE.2", "OE.3", "OE.4", "OE.5"):
+            partes = [p for p in planilla if (p.get("grupo") or "OE.2") == g]
+            if not partes:
+                continue
+            ws2.cell(row=r, column=1, value=f"{g}  {_PLA_GRUPOS.get(g, '')}").font = Font(
+                bold=True, size=10, color="FFFFFF")
+            for c in range(1, 5):
+                ws2.cell(row=r, column=c).fill = PatternFill("solid", fgColor=LILA)
+                ws2.cell(row=r, column=c).border = borde
+            r += 1
+            for part in partes:
+                total = sum(_pla_parcial(f) for f in (part.get("filas") or []))
+                vals = [part.get("codigo") or "", part.get("partida") or "",
+                        part.get("unidad") or "", round(total, 2)]
+                for c, v in enumerate(vals, 1):
+                    cel = ws2.cell(row=r, column=c, value=v)
+                    cel.border = borde
+                    cel.font = Font(size=10)
+                    if c == 3:
+                        cel.alignment = Alignment(horizontal="center")
+                    if c == 4:
+                        cel.alignment = Alignment(horizontal="right")
+                        cel.number_format = "0.00"
+                r += 1
+        for c, w in enumerate([13, 58, 9, 14], 1):
+            ws2.column_dimensions[chr(64 + c)].width = w
+
+        buf = io.BytesIO()
+        wb.save(buf)
+        buf.seek(0)
+        return send_file(buf, download_name="planilla_de_metrados.xlsx", as_attachment=True,
+                         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
 
 if __name__ == "__main__":
     print("\n  Metrados · Constructor IA")

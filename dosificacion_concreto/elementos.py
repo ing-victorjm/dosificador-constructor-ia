@@ -340,14 +340,30 @@ TIPOS_POR_CLAVE = {t.clave: t for t in TIPOS}
 # El acero se metra en la seccion "Acero - Despiece": barra por barra, por
 # diametro. El desperdicio NO va en el metrado; va en el analisis de precios.
 
+# Pesos nominales del fierro corrugado ASTM A615 Gr.60 / NTP 341.031, segun la
+# ficha tecnica de Aceros Arequipa.
+#
+# OJO: aqui habia un error que llegaba hasta la orden de compra. Las entradas
+# decian "12mm (1/2\")" y "6mm (1/4\")" como si fueran la misma barra, y no lo son:
+#     12 mm = 0.888 kg/m   pero   1/2\" = 0.994 kg/m   (+11.9%)
+#      6 mm = 0.222 kg/m   pero   1/4\" = 0.250 kg/m   (+12.6%)
+#      8 mm = 0.395 kg/m   pero  5/16\" = 0.384 kg/m
+# Quien metraba estribos de 1/4\" con el peso del de 6 mm se quedaba 12% corto de
+# fierro. Ahora cada diametro es su propia entrada, con su peso real, y se
+# anaden el 7/8\" y el 1 3/8\", que faltaban.
 PESO_VARILLA = {
-    "6mm (1/4\")": {"mm": 6, "kg_m": 0.222, "largo_m": 9.0},
-    "8mm (5/16\")": {"mm": 8, "kg_m": 0.395, "largo_m": 9.0},
-    "3/8\"": {"mm": 9.5, "kg_m": 0.560, "largo_m": 9.0},
-    "12mm (1/2\")": {"mm": 12.7, "kg_m": 0.994, "largo_m": 9.0},
-    "5/8\"": {"mm": 15.9, "kg_m": 1.552, "largo_m": 9.0},
-    "3/4\"": {"mm": 19.1, "kg_m": 2.235, "largo_m": 9.0},
-    "1\"": {"mm": 25.4, "kg_m": 3.973, "largo_m": 9.0},
+    "6 mm":    {"mm": 6.0,  "kg_m": 0.222, "largo_m": 9.0},
+    "1/4\"":   {"mm": 6.35, "kg_m": 0.250, "largo_m": 9.0},
+    "8 mm":    {"mm": 8.0,  "kg_m": 0.395, "largo_m": 9.0},
+    "5/16\"":  {"mm": 7.9,  "kg_m": 0.384, "largo_m": 9.0},
+    "3/8\"":   {"mm": 9.5,  "kg_m": 0.560, "largo_m": 9.0},
+    "12 mm":   {"mm": 12.0, "kg_m": 0.888, "largo_m": 9.0},
+    "1/2\"":   {"mm": 12.7, "kg_m": 0.994, "largo_m": 9.0},
+    "5/8\"":   {"mm": 15.9, "kg_m": 1.552, "largo_m": 9.0},
+    "3/4\"":   {"mm": 19.1, "kg_m": 2.235, "largo_m": 9.0},
+    "7/8\"":   {"mm": 22.2, "kg_m": 3.042, "largo_m": 9.0},
+    "1\"":     {"mm": 25.4, "kg_m": 3.973, "largo_m": 9.0},
+    "1 3/8\"": {"mm": 35.8, "kg_m": 7.907, "largo_m": 9.0},
 }
 
 
