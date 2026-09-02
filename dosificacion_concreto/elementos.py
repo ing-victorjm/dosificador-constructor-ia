@@ -58,7 +58,8 @@ TIPOS = [
     TipoElemento(
         "zapata", "Zapata",
         [_c("largo", "Largo", 1.20), _c("ancho", "Ancho", 1.20),
-         _c("peralte", "Peralte (altura)", 0.50)],
+         _c("peralte", "Peralte (altura)", 0.50),
+         _c("profundidad", "Profundidad Df (desde terreno)", 1.5, paso=0.1)],
         lambda d: d["largo"] * d["ancho"] * d["peralte"],
         "Zapata aislada: Largo x Ancho x Peralte.",
     ),
@@ -79,14 +80,16 @@ TIPOS = [
     TipoElemento(
         "viga_cimentacion", "Viga de cimentacion",
         [_c("base", "Base", 0.30), _c("peralte", "Peralte", 0.60),
-         _c("longitud", "Longitud", 4.00)],
+         _c("longitud", "Longitud", 4.00),
+         _c("profundidad", "Profundidad Df (desde terreno)", 1.20, paso=0.1)],
         lambda d: d["base"] * d["peralte"] * d["longitud"],
         "Viga de cimentacion (VC): base x peralte x longitud.",
     ),
     TipoElemento(
         "cimiento_corrido", "Cimiento corrido",
         [_c("ancho", "Ancho", 0.60), _c("altura", "Altura", 0.60),
-         _c("longitud", "Longitud", 5.00)],
+         _c("longitud", "Longitud", 5.00),
+         _c("profundidad", "Profundidad Df (desde terreno)", 1.0, paso=0.1)],
         lambda d: d["ancho"] * d["altura"] * d["longitud"],
         "Cimiento corrido: ancho x altura x longitud.",
     ),
@@ -139,7 +142,8 @@ TIPOS = [
         [_c("largo", "Largo", 2.40), _c("ancho", "Ancho", 1.20),
          _c("peralte", "Peralte", 0.50),
          _c("sep_columnas", "Separacion de columnas", 1.60),
-         _c("lado_col", "Lado de columna", 0.30)],
+         _c("lado_col", "Lado de columna", 0.30),
+         _c("profundidad", "Profundidad Df (desde terreno)", 1.5, paso=0.1)],
         lambda d: d["largo"] * d["ancho"] * d["peralte"],
         "Zapata combinada bajo dos columnas: Largo x Ancho x Peralte (solo la zapata).",
     ),
@@ -228,7 +232,8 @@ TIPOS = [
     TipoElemento(
         "platea", "Platea de cimentacion",
         [_c("area", "Area", 40.0, sufijo=" m2", paso=1.0),
-         _c("espesor", "Espesor", 0.30)],
+         _c("espesor", "Espesor", 0.30),
+         _c("profundidad", "Profundidad Df (desde terreno)", 0.8, paso=0.1)],
         lambda d: d["area"] * d["espesor"],
         "Platea (losa) de cimentacion: Area x espesor. Doble malla sup. e inf.",
     ),
@@ -242,7 +247,8 @@ TIPOS = [
     TipoElemento(
         "dado", "Dado / Pedestal",
         [_c("lado_a", "Lado a", 0.50), _c("lado_b", "Lado b", 0.50),
-         _c("altura", "Altura", 0.80)],
+         _c("altura", "Altura", 0.80),
+         _c("profundidad", "Profundidad Df (desde terreno)", 1.0, paso=0.1)],
         lambda d: d["lado_a"] * d["lado_b"] * d["altura"],
         "Dado o pedestal de concreto: a x b x altura.",
     ),
@@ -255,7 +261,8 @@ TIPOS = [
     TipoElemento(
         "cisterna", "Cisterna / Tanque",
         [_c("largo", "Largo interior", 2.00), _c("ancho", "Ancho interior", 1.50),
-         _c("altura", "Altura interior", 1.80), _c("espesor", "Espesor de muro/losa", 0.20)],
+         _c("altura", "Altura interior", 1.80), _c("espesor", "Espesor de muro/losa", 0.20),
+         _c("profundidad", "Profundidad Df (desde terreno)", 2.2, paso=0.1)],
         lambda d: (
             (d["largo"] + 2 * d["espesor"]) * (d["ancho"] + 2 * d["espesor"]) * d["espesor"]
             + ((d["largo"] + 2 * d["espesor"]) * (d["ancho"] + 2 * d["espesor"]) - d["largo"] * d["ancho"]) * d["altura"]
@@ -382,25 +389,66 @@ def encofrado_m2(clave, d):
     return 0.0
 
 
-def excavacion_m3(clave, d):
-    """Volumen de excavacion por unidad (geometrico), en m3. 0 si no aplica."""
+# Sobreancho por cara para poder trabajar dentro de la excavacion. No es un dato
+# de norma sino practica de obra, por eso es un valor visible y editable, y no
+# una constante escondida dentro de la formula como estaba antes.
+SOBREANCHO_M = 0.15
+
+
+def profundidad_excavacion(clave, d):
+    """Altura de excavacion en metros, medida desde el nivel de terreno.
+
+    Norma Tecnica de Metrados (R.D. 073-2010-VIVIENDA), OE.2.1.2:
+      "El volumen de excavacion se obtendra multiplicando largo por ancho por
+       altura de la excavacion [...] siendo la altura medida desde el nivel de
+       fondo de cimentacion del elemento hasta el nivel de terreno,
+       clasificandolas por la profundidad de excavacion."
+
+    Antes se usaba el ESPESOR del elemento (el peralte de la zapata, por
+    ejemplo). Una zapata de 1.20x1.20x0.50 con Df = 1.50 m daba 1.13 m3 en vez
+    de 3.38 m3: un 67% menos de lo que hay que excavar de verdad.
+
+    Se toma el campo "profundidad" (Df). Si el usuario aun no lo indico se cae
+    al espesor del elemento, que es el minimo geometrico posible, nunca mas.
+    """
+    df = d.get("profundidad", 0) or 0
+    if df > 0:
+        return df
+    for alterno in ("peralte", "altura", "espesor"):
+        v = d.get(alterno, 0) or 0
+        if v > 0:
+            return v
+    return 0.0
+
+
+def excavacion_m3(clave, d, sobreancho=SOBREANCHO_M):
+    """Volumen de excavacion por unidad, en m3. 0 si no aplica.
+
+    El sobreancho se aplica a las dos caras de cada dimension en planta (de ahi
+    el 2*), solo en excavaciones donde hace falta espacio de trabajo. En platea
+    y pilote no aplica: la platea se excava a su propia area y el pilote es
+    perforado a su diametro.
+    """
     g = d.get
+    h = profundidad_excavacion(clave, d)
+    s2 = 2.0 * sobreancho
     if clave in ("zapata", "zapata_combinada"):
-        return (g("largo", 0) + 0.30) * (g("ancho", 0) + 0.30) * g("peralte", 0)
+        return (g("largo", 0) + s2) * (g("ancho", 0) + s2) * h
     if clave == "cimiento_corrido":
-        return (g("ancho", 0) + 0.30) * g("altura", 0) * g("longitud", 0)
+        return (g("ancho", 0) + s2) * h * g("longitud", 0)
     if clave == "viga_cimentacion":
-        return (g("base", 0) + 0.30) * g("peralte", 0) * g("longitud", 0)
+        return (g("base", 0) + s2) * h * g("longitud", 0)
     if clave == "dado":
-        return (g("lado_a", 0) + 0.30) * (g("lado_b", 0) + 0.30) * g("altura", 0)
+        return (g("lado_a", 0) + s2) * (g("lado_b", 0) + s2) * h
     if clave == "pilote":
+        # Perforado a su diametro: no lleva sobreancho de trabajo.
         return math.pi * (g("diametro", 0) / 2) ** 2 * g("longitud", 0)
     if clave == "platea":
-        return g("area", 0) * g("espesor", 0)
+        return g("area", 0) * h
     if clave == "cisterna":
         e = g("espesor", 0)
         lo, wo = g("largo", 0) + 2 * e, g("ancho", 0) + 2 * e
-        return (lo + 0.30) * (wo + 0.30) * (g("altura", 0) + e)
+        return (lo + s2) * (wo + s2) * h
     return 0.0
 
 

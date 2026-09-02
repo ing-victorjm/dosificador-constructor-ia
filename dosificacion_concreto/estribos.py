@@ -54,15 +54,56 @@ def calcular_lo(h_cm: float, a_cm: float, b_cm: float) -> float:
     return max(h_cm / 6.0, max(a_cm, b_cm), 50.0)
 
 
-def s_max_confinada(a_cm: float, b_cm: float, db_mm: float, de_mm: float) -> float:
-    """Separacion maxima en zona confinada (menor valor NTE E.060)"""
+# Sistemas estructurales de la E.060. La separacion de estribos NO es la misma
+# en los dos, y antes aqui se aplicaba una unica formula que ademas venia del
+# ACI 318 (d_min/4), no de la E.060, pese a que la pantalla decia "auto E.060".
+PORTICOS = "porticos"   # porticos y dual II  -> E.060 21.6.4
+MUROS = "muros"         # muros estructurales y dual I -> E.060 21.4.5
+
+
+def s_max_confinada(
+    a_cm: float, b_cm: float, db_mm: float, de_mm: float, sistema: str = PORTICOS
+) -> float:
+    """Separacion maxima dentro de la zona de confinamiento Lo.
+
+    E.060 21.6.4.2 (porticos y dual II): la menor de un tercio de la dimension
+    minima del elemento, seis veces el diametro de la barra longitudinal, y 100 mm.
+    E.060 21.4.5.3 (muros estructurales y dual I): la menor de ocho veces el
+    diametro de la barra longitudinal, la mitad de la menor dimension, y 100 mm.
+
+    Antes se usaba d_min/4, que es ACI 318-19 18.7.5.3(a) y no existe en la
+    E.060: sobrecontaba ~35% en la zona confinada.
+    """
     d_min = min(a_cm, b_cm)
-    return min(d_min / 4.0, 6.0 * db_mm / 10.0, 10.0)
+    db_cm = db_mm / 10.0
+    if sistema == MUROS:
+        return min(8.0 * db_cm, d_min / 2.0, 10.0)
+    return min(d_min / 3.0, 6.0 * db_cm, 10.0)
 
 
-def s_max_central(db_mm: float, de_mm: float) -> float:
-    """Separacion maxima en zona central (menor valor NTE E.060)"""
-    return min(16.0 * db_mm / 10.0, 48.0 * de_mm / 10.0, 30.0)
+def s_max_central(
+    db_mm: float, de_mm: float, a_cm: float = 0.0, b_cm: float = 0.0,
+    sistema: str = PORTICOS
+) -> float:
+    """Separacion maxima fuera de la zona de confinamiento.
+
+    E.060 21.6.4.5 (porticos y dual II): no mayor que la menor de diez veces el
+    diametro de la barra longitudinal y 250 mm.
+    E.060 21.4.5.4 remite a 7.10.5.2 (16 db, 48 de, menor dimension del elemento)
+    y a 11.5.5.1 (d/2), con tope de 300 mm.
+
+    Antes se aplicaba siempre la regla de columna SIN responsabilidad sismica, y
+    ademas incompleta (el tercer limite estaba cableado en 30 cm): subcontaba
+    hasta 60% en la zona central.
+    """
+    db_cm = db_mm / 10.0
+    de_cm = de_mm / 10.0
+    if sistema == MUROS:
+        d_min = min(a_cm, b_cm) if a_cm and b_cm else float("inf")
+        # d/2 con el peralte efectivo aproximado como la dimension menos el
+        # recubrimiento tipico; se acota por el tope de 300 mm de todos modos.
+        return min(16.0 * db_cm, 48.0 * de_cm, d_min, 30.0)
+    return min(10.0 * db_cm, 25.0)
 
 
 def longitud_estribo_cm(a_cm: float, b_cm: float, rec_cm: float, de_mm: float) -> float:
@@ -73,7 +114,10 @@ def longitud_estribo_cm(a_cm: float, b_cm: float, rec_cm: float, de_mm: float) -
     de_cm = de_mm / 10.0
     radio = 2.5 * de_cm                          # radio minimo de doblado
     arco = math.pi * (135.0 / 180.0) * radio     # arco del gancho 135°
-    ext = max(6.0 * de_cm, 7.5)                  # extension libre >= 75 mm
+    # E.060 21.1, gancho sismico: doblez de 135 grados con extension de OCHO
+    # veces el diametro de la barra, no menor de 75 mm. Antes decia 6 db, que es
+    # el gancho general del ACI; dejaba ~5 kg sin metrar por cada 100 estribos.
+    ext = max(8.0 * de_cm, 7.5)
     gancho = arco + ext
     return perimetro + 2.0 * gancho
 
@@ -110,11 +154,18 @@ def calcular(
     s1_manual: float = None,
     s2_manual: float = None,
     lo_manual: float = None,
+    sistema: str = PORTICOS,
 ) -> ResultadoEstribos:
     lo = lo_manual if lo_manual else calcular_lo(h_cm, a_cm, b_cm)
     lo = min(lo, h_cm / 2.0)
-    s1 = s1_manual if s1_manual else s_max_confinada(a_cm, b_cm, db_mm, de_mm)
-    s2 = s2_manual if s2_manual else s_max_central(db_mm, de_mm)
+    s1 = s1_manual if s1_manual else s_max_confinada(a_cm, b_cm, db_mm, de_mm, sistema)
+    s2 = s2_manual if s2_manual else s_max_central(db_mm, de_mm, a_cm, b_cm, sistema)
+    # E-25: con separaciones <= 0 los bucles de posiciones no terminan nunca y
+    # el servidor se queda colgado. Se rechaza antes de entrar.
+    if s1 <= 0 or s2 <= 0:
+        raise ValueError("Las separaciones s1 y s2 deben ser mayores que cero.")
+    if h_cm <= 0 or a_cm <= 0 or b_cm <= 0:
+        raise ValueError("Las dimensiones de la columna deben ser mayores que cero.")
 
     l_central = max(0.0, h_cm - 2.0 * lo)
 

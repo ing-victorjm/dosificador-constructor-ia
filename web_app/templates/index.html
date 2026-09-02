@@ -971,7 +971,16 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
       <div class="frow"><label>Estribo</label><select id="es-de"></select></div>
       <div class="frow"><label>Barra longitudinal</label><select id="es-db"></select></div>
       <div class="hr"></div>
-      <div class="card-title">Manual (0 = auto NTE E.060)</div>
+      <div class="card-title">Sistema estructural</div>
+      <div class="frow">
+        <select id="es-sistema" onchange="calcEstribos()">
+          <option value="porticos">Pórticos o Dual II — E.060 21.6.4</option>
+          <option value="muros">Muros estructurales o Dual I — E.060 21.4.5</option>
+        </select>
+      </div>
+      <p class="note">La E.060 fija separaciones distintas para cada sistema. Elegir mal cambia el número de estribos.</p>
+      <div class="hr"></div>
+      <div class="card-title">Manual (0 = automático según E.060)</div>
       <div class="g g3">
         <div class="frow"><label>s₁ (cm)</label><input type="number" id="es-s1" value="0" step="1"></div>
         <div class="frow"><label>s₂ (cm)</label><input type="number" id="es-s2" value="0" step="1"></div>
@@ -2567,7 +2576,7 @@ function drawTarr2d(){
 
 /* ═══ ESTRIBOS ═══ */
 function calcEstribos(){
-  const b={h_cm:+$('es-h').value,a_cm:+$('es-a').value,b_cm:+$('es-b').value,de_mm:+$('es-de').value,db_mm:+$('es-db').value,rec_cm:+$('es-rec').value,s1:+$('es-s1').value||null,s2:+$('es-s2').value||null,lo:+$('es-lo').value||null};
+  const b={h_cm:+$('es-h').value,a_cm:+$('es-a').value,b_cm:+$('es-b').value,de_mm:+$('es-de').value,db_mm:+$('es-db').value,rec_cm:+$('es-rec').value,s1:+$('es-s1').value||null,s2:+$('es-s2').value||null,lo:+$('es-lo').value||null,sistema:$('es-sistema')?.value||'porticos'};
   post('/api/estribos',b,d=>{
     $('es-lo-v').textContent=d.lo_cm;$('es-s1-v').textContent=d.s1_cm;$('es-s2-v').textContent=d.s2_cm;$('es-le-v').textContent=d.long_estribo_cm;
     $('es-tbl').innerHTML=[['Conf. inferior (s₁='+d.s1_cm+'cm)',d.n_conf_inf],['Central (s₂='+d.s2_cm+'cm)',d.n_central],['Conf. superior (s₁='+d.s1_cm+'cm)',d.n_conf_sup],['<strong>TOTAL</strong>','<strong>'+d.n_total+'</strong>']].map(([z,c])=>'<tr><td>'+z+'</td><td class="n">'+c+'</td></tr>').join('');

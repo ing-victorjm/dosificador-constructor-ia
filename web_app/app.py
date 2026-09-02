@@ -160,6 +160,9 @@ def api_estribos():
             s1_manual=float(d["s1"]) if d.get("s1") else None,
             s2_manual=float(d["s2"]) if d.get("s2") else None,
             lo_manual=float(d["lo"]) if d.get("lo") else None,
+            # La E.060 da separaciones distintas segun el sistema estructural:
+            # 21.6.4 para porticos y dual II, 21.4.5 para muros y dual I.
+            sistema=(d.get("sistema") or estribos.PORTICOS),
         )
         return jsonify({
             "ok": True,
