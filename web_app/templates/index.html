@@ -963,46 +963,71 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 </div>
 </div>
 
-<!-- ═══ INST. SANITARIAS ═══ -->
+<!-- ═══ INST. SANITARIAS · OE.4 ═══ -->
 <div class="panel" id="tab-san">
 <div class="cols">
   <div class="col-side">
     <div class="card">
-      <div class="card-title">Puntos de la vivienda</div>
-      <div class="g g2">
-        <div class="frow"><label>Puntos agua fría</label><input type="number" id="san-af" value="6" min="0" step="1" oninput="calcSan()"></div>
-        <div class="frow"><label>Puntos agua caliente</label><input type="number" id="san-ac" value="2" min="0" step="1" oninput="calcSan()"></div>
-        <div class="frow"><label>Puntos desagüe 2"</label><input type="number" id="san-d2" value="5" min="0" step="1" oninput="calcSan()"></div>
-        <div class="frow"><label>Puntos desagüe 4"</label><input type="number" id="san-d4" value="3" min="0" step="1" oninput="calcSan()"></div>
+      <div class="card-title">Agregar partida</div>
+      <div class="frow"><label>Partida (Norma de Metrados, OE.4)</label>
+        <select id="san-cat"></select>
       </div>
+      <button class="btn btn-v btn-fw mt" onclick="sanAdd()">+ Agregar fila</button>
+      <p class="note">La app no cuenta nada por ti: escribe las cantidades y los metros que mediste en el plano. Cada fila lleva su material y su diámetro porque la norma manda agrupar las partidas «por tipo de material y diámetro».</p>
+    </div>
+
+    <div class="card mt">
+      <div class="card-title">Cómo se mide · OE.4</div>
+      <p class="note">
+        <b>Salidas — Pto.</b> Se cuenta el número de puntos de salida (OE.4.2.1, OE.4.3.1); en desagüe, el número de puntos de entrada (OE.4.6.1). El punto ya incluye su tubería y sus accesorios dentro del ambiente: <b>no se convierte a metros</b>.<br><br>
+        <b>Redes — m.</b> «El cómputo se ejecutará por metro lineal <b>sin descontar la longitud de los accesorios</b>» (OE.4.2.2, OE.4.6.2).<br><br>
+        <b>Accesorios y válvulas — Und.</b> Por cantidad, «agrupándose por tipo de material y diámetro» (OE.4.2.4, OE.4.2.5).<br><br>
+        <b>No se metra</b> la conexión domiciliaria de agua (OE.4.2).
+      </p>
       <div class="hr"></div>
-      <div class="card-title">Redes adicionales (ml)</div>
-      <div class="g g3">
-        <div class="frow"><label>Red ½"</label><input type="number" id="san-m1" value="8" min="0" step="1" oninput="calcSan()"></div>
-        <div class="frow"><label>Red 2"</label><input type="number" id="san-m2" value="6" min="0" step="1" oninput="calcSan()"></div>
-        <div class="frow"><label>Red 4"</label><input type="number" id="san-m4" value="10" min="0" step="1" oninput="calcSan()"></div>
-      </div>
-      <div class="g g2">
-        <div class="frow"><label>Registros 4"</label><input type="number" id="san-reg" value="2" min="0" step="1" oninput="calcSan()"></div>
-        <div class="frow"><label>Sumideros 2"</label><input type="number" id="san-sum" value="2" min="0" step="1" oninput="calcSan()"></div>
-      </div>
-      <p class="note">Factores por punto según planillas típicas de vivienda (referencial): agua = 3.0 ml + 3 codos + 1 tee · desagüe 2" = 2.5 ml + 2 codos + 1 yee · desagüe 4" = 1.8 ml + 1 codo + 1 yee.</p>
+      <p class="note">R.D. N° 073-2010/VIVIENDA/VMCS-DNC, de aplicación obligatoria en Expedientes Técnicos.</p>
     </div>
   </div>
+
   <div class="col-main">
-    <div class="card-title">Tubería a comprar</div>
-    <div class="g g3 mt">
-      <div class="metric cy"><div class="metric-lbl">PVC ½" agua (×5 m)</div><div class="metric-val" id="san-t1">—</div><div class="metric-unit" id="san-t1u">tubos</div></div>
-      <div class="metric am"><div class="metric-lbl">PVC 2" desagüe (×3 m)</div><div class="metric-val" id="san-t2">—</div><div class="metric-unit" id="san-t2u">tubos</div></div>
-      <div class="metric or"><div class="metric-lbl">PVC 4" desagüe (×3 m)</div><div class="metric-val" id="san-t4">—</div><div class="metric-unit" id="san-t4u">tubos</div></div>
-    </div>
-    <div class="card mt2">
-      <div class="card-title">Accesorios y consumibles</div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Partidas medidas</div>
+        <button class="btn btn-o btn-sm" onclick="sanLimpiar()">Limpiar</button>
+      </div>
       <div style="overflow-x:auto"><table>
-        <thead><tr><th>Material</th><th style="text-align:right">Cantidad</th><th>Unidad</th></tr></thead>
-        <tbody id="san-acc"></tbody>
+        <thead><tr>
+          <th style="min-width:180px">Partida</th>
+          <th style="min-width:130px">Descripción / ubicación</th>
+          <th style="min-width:110px">Material</th>
+          <th style="min-width:80px">Ø</th>
+          <th class="n" style="width:64px">Cant.</th>
+          <th class="n" style="width:78px">Long. m</th>
+          <th class="n" style="width:80px">Parcial</th>
+          <th style="width:48px">Und.</th>
+          <th style="width:38px"></th>
+        </tr></thead>
+        <tbody id="san-tbl"></tbody>
       </table></div>
-      <p class="note">Cantidades referenciales para presupuesto. El metrado fino se hace sobre el plano isométrico.</p>
+      <p id="san-vacio" class="note" style="text-align:center;padding:20px 0">Sin partidas. Agrega la primera desde el panel izquierdo.</p>
+    </div>
+
+    <div class="g g3 mt">
+      <div class="metric"><div class="metric-lbl">Salidas</div><div class="metric-val" id="san-pto">0</div><div class="metric-unit">pto</div></div>
+      <div class="metric cy"><div class="metric-lbl">Redes</div><div class="metric-val" id="san-ml">0</div><div class="metric-unit">m</div></div>
+      <div class="metric am"><div class="metric-lbl">Accesorios y aparatos</div><div class="metric-val" id="san-und">0</div><div class="metric-unit">und</div></div>
+    </div>
+
+    <div class="card mt">
+      <div class="card-head">
+        <div class="card-title">Resumen de partidas</div>
+        <span class="note" id="san-np">0 partidas</span>
+      </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>#</th><th>Partida</th><th class="n">Metrado</th><th>Und.</th></tr></thead>
+        <tbody id="san-res"></tbody>
+      </table></div>
+      <button class="btn btn-cy btn-fw mt" onclick="sanEnviar()">📋 Enviar partidas a la planilla</button>
     </div>
   </div>
 </div>
@@ -2159,6 +2184,203 @@ function aceroPartidas(){
            unidad:'kg',metrado:+t[k].toFixed(2),oe:P.oe,regla:P.r};});
 }
 
+/* ═══ INSTALACIONES SANITARIAS · OE.4 ═══
+   La app NO genera cantidades: el ingeniero escribe lo que conto y midio en el
+   plano. Antes esta seccion fabricaba tuberia multiplicando puntos por una
+   longitud fija (puntos x 3.0 m), que no es metrado sino invento.
+
+   Norma Tecnica de Metrados (R.D. 073-2010-VIVIENDA/VMCS-DNC), OE.4:
+   - Salidas: se cuenta el numero de puntos (Pto). El punto ya incluye su
+     tuberia y accesorios dentro del ambiente: no se convierte a metros.
+   - Redes: metro lineal, "sin descontar la longitud de los accesorios".
+   - Accesorios y valvulas: unidad, "agrupandose por tipo de material y
+     diametro" — por eso material y diametro van en columnas separadas. */
+
+/* Materiales y diametros por sistema. El material va aparte del diametro
+   porque la norma agrupa las partidas por AMBOS. */
+const SAN_MAT = {
+  af: ['PVC-SAP', 'CPVC', 'F°G°', 'PEAD'],
+  ac: ['CPVC', 'F°G°', 'PP-R'],
+  de: ['PVC-SAL', 'F°F°', 'Concreto simple'],
+  no: ['—']
+};
+const SAN_DIA = {
+  af: ['½"', '¾"', '1"', '1¼"', '1½"', '2"', '3"', '4"'],
+  ac: ['½"', '¾"', '1"'],
+  de: ['2"', '3"', '4"', '6"', '8"'],
+  no: ['—']
+};
+const SAN_U = { pto: 'Pto', m: 'm', und: 'Und', glb: 'Glb' };
+
+/* Catalogo OE.4. u = unidad · s = sistema (af/ac/de/no) · L = lleva longitud
+   medida · T = el nombre lo escribe el usuario (la norma no da lista cerrada). */
+const SAN_P = {
+  ap_sum : {g:'Aparatos', n:'', u:'und', oe:'OE.4.1.1', s:'no', T:1, ph:'INODORO TANQUE BAJO'},
+  ap_ins : {g:'Aparatos', n:'', u:'und', oe:'OE.4.1.3', s:'no', T:1, ph:'INODORO — instalación'},
+  ac_sum : {g:'Aparatos', n:'', u:'und', oe:'OE.4.1.2', s:'no', T:1, ph:'PAPELERA DE LOSA'},
+  af_sal : {g:'Agua fría', n:'SALIDA DE AGUA FRÍA', u:'pto', oe:'OE.4.2.1', s:'af', ph:'Baño 1 · lavatorio'},
+  af_dist: {g:'Agua fría', n:'RED DE DISTRIBUCIÓN DE AGUA FRÍA', u:'m', oe:'OE.4.2.2', s:'af', L:1, ph:'Baño 1 · eje A'},
+  af_alim: {g:'Agua fría', n:'RED DE ALIMENTACIÓN DE AGUA FRÍA', u:'m', oe:'OE.4.2.3', s:'af', L:1, ph:'Cisterna → tanque'},
+  af_acc : {g:'Agua fría', n:'', u:'und', oe:'OE.4.2.4', s:'af', T:1, ph:'CODO 90°'},
+  af_val : {g:'Agua fría', n:'', u:'und', oe:'OE.4.2.5', s:'af', T:1, ph:'VÁLVULA COMPUERTA DE BRONCE'},
+  af_alm : {g:'Agua fría', n:'', u:'glb', oe:'OE.4.2.6', s:'no', T:1, ph:'TANQUE ELEVADO 1100 L'},
+  ac_sal : {g:'Agua caliente', n:'SALIDA DE AGUA CALIENTE', u:'pto', oe:'OE.4.3.1', s:'ac', ph:'Baño 1 · ducha'},
+  ac_dist: {g:'Agua caliente', n:'RED DE DISTRIBUCIÓN DE AGUA CALIENTE', u:'m', oe:'OE.4.3.2', s:'ac', L:1, ph:'Terma → baño 1'},
+  ac_acc : {g:'Agua caliente', n:'', u:'und', oe:'OE.4.3.3', s:'ac', T:1, ph:'CODO 90°'},
+  ac_val : {g:'Agua caliente', n:'', u:'und', oe:'OE.4.3.4', s:'ac', T:1, ph:'VÁLVULA ESFÉRICA DE BRONCE'},
+  ac_eq  : {g:'Agua caliente', n:'', u:'und', oe:'OE.4.3.5', s:'no', T:1, ph:'TERMA ELÉCTRICA 80 L'},
+  de_sal : {g:'Desagüe', n:'SALIDA DE DESAGÜE', u:'pto', oe:'OE.4.6.1', s:'de', ph:'Baño 1 · inodoro'},
+  de_der : {g:'Desagüe', n:'RED DE DERIVACIÓN', u:'m', oe:'OE.4.6.2', s:'de', L:1, ph:'Baño 1 → montante'},
+  de_col : {g:'Desagüe', n:'RED COLECTORA', u:'m', oe:'OE.4.6.3', s:'de', L:1, ph:'Caja 1 → caja 2'},
+  de_acc : {g:'Desagüe', n:'', u:'und', oe:'OE.4.6.4', s:'de', T:1, ph:'YEE 4"×2"'},
+  de_caj : {g:'Desagüe', n:'', u:'und', oe:'OE.4.6.5.1', s:'no', T:1, ph:'CAJA DE REGISTRO 12"×24"'},
+  de_esp : {g:'Desagüe', n:'', u:'und', oe:'OE.4.6.6', s:'no', T:1, ph:'TRAMPA DE GRASA'},
+  pl_red : {g:'Pluvial', n:'RED DE RECOLECCIÓN PLUVIAL', u:'m', oe:'OE.4.5.1', s:'de', L:1, ph:'Canaleta techo'},
+  pl_acc : {g:'Pluvial', n:'', u:'und', oe:'OE.4.5.2', s:'de', T:1, ph:'REJILLA DE CANALETA'}
+};
+const SAN_ORD = ['ap_sum','ap_ins','ac_sum','af_sal','af_dist','af_alim','af_acc','af_val','af_alm',
+                 'ac_sal','ac_dist','ac_acc','ac_val','ac_eq',
+                 'de_sal','de_der','de_col','de_acc','de_caj','de_esp','pl_red','pl_acc'];
+
+let sanRows = [];
+
+function sanParcial(r){
+  const p = SAN_P[r.p]; if(!p) return 0;
+  return (+r.c || 0) * (p.L ? (+r.L || 0) : 1);
+}
+function sanDec(u){ return u === 'm' ? 2 : 0 }
+
+function sanAdd(){
+  const k = ($('san-cat') || {}).value || 'af_sal';
+  const p = SAN_P[k];
+  sanRows.push({ p:k, d:'', mat:SAN_MAT[p.s][0], dia:SAN_DIA[p.s][0], c:1, L:0 });
+  sanRender(); sanGuardar();
+}
+function sanDel(i){ sanRows.splice(i,1); sanRender(); sanGuardar() }
+function sanSet(i, campo, v){
+  sanRows[i][campo] = v;
+  if(campo === 'p'){
+    const p = SAN_P[v];
+    sanRows[i].mat = SAN_MAT[p.s][0];
+    sanRows[i].dia = SAN_DIA[p.s][0];
+    sanRender();
+  } else {
+    sanCalc();
+  }
+  sanGuardar();
+}
+function sanLimpiar(){
+  if(!sanRows.length) return;
+  ask('¿Vaciar las '+sanRows.length+' filas de instalaciones sanitarias?',()=>{
+    sanRows=[]; sanRender(); sanGuardar();
+  });
+}
+
+function sanRender(){
+  const tb = $('san-tbl'), vac = $('san-vacio');
+  if(!tb) return;
+  if(vac) vac.style.display = sanRows.length ? 'none' : 'block';
+  const opcs = SAN_ORD.map(k=>{
+    const p = SAN_P[k];
+    return '<option value="'+k+'">'+p.g+' · '+(p.n || p.ph)+'</option>';
+  }).join('');
+  tb.innerHTML = sanRows.map((r,i)=>{
+    const p = SAN_P[r.p], u = SAN_U[p.u];
+    const sel = (campo, lista, val) =>
+      '<td><select onchange="sanSet('+i+',\''+campo+'\',this.value)" style="width:100%;padding:4px 6px;font-size:12px">'+
+      lista.map(o=>'<option'+(o===val?' selected':'')+'>'+o+'</option>').join('')+'</select></td>';
+    return '<tr>'+
+      '<td><select onchange="sanSet('+i+',\'p\',this.value)" style="width:100%;padding:4px 6px;font-size:11px;font-weight:600">'+
+        SAN_ORD.map(k=>'<option value="'+k+'"'+(k===r.p?' selected':'')+'>'+SAN_P[k].g+' · '+(SAN_P[k].n||SAN_P[k].ph)+'</option>').join('')+
+      '</select><div style="font-size:9px;color:var(--text3);margin-top:2px">'+p.oe+'</div></td>'+
+      '<td><input type="text" value="'+esc(r.d)+'" placeholder="'+esc(p.ph)+'" '+
+        'oninput="sanSet('+i+',\'d\',this.value)" style="width:100%;padding:4px 6px;font-size:12px"></td>'+
+      sel('mat', SAN_MAT[p.s], r.mat) +
+      sel('dia', SAN_DIA[p.s], r.dia) +
+      '<td class="n"><input type="number" step="1" min="0" value="'+esc(r.c)+'" '+
+        'oninput="sanSet('+i+',\'c\',this.value)" style="width:100%;text-align:right;padding:4px 6px;font-size:12px"></td>'+
+      '<td class="n">'+(p.L
+        ? '<input type="number" step="0.01" min="0" value="'+esc(r.L)+'" oninput="sanSet('+i+',\'L\',this.value)" style="width:100%;text-align:right;padding:4px 6px;font-size:12px">'
+        : '<span style="color:var(--text3)">—</span>')+'</td>'+
+      '<td class="n" id="san-p-'+i+'" style="color:var(--cyan);font-weight:700">'+F(sanParcial(r), sanDec(p.u))+'</td>'+
+      '<td style="font-size:11px;color:var(--text2)">'+u+'</td>'+
+      '<td><button class="act-btn danger" onclick="sanDel('+i+')">✕</button></td>'+
+      '</tr>';
+  }).join('');
+  sanCalc();
+}
+
+/* Agrupa por partida + material + diametro, que es como la norma manda
+   presentarlas. */
+function sanPartidas(){
+  const map = new Map();
+  sanRows.forEach(r=>{
+    const p = SAN_P[r.p]; if(!p) return;
+    const base = p.T ? ((r.d||'').trim().toUpperCase() || '(SIN DESCRIPCIÓN)') : p.n;
+    const mat = (r.mat && r.mat !== '—') ? ' ' + r.mat : '';
+    const dia = (r.dia && r.dia !== '—') ? ' Ø ' + r.dia : '';
+    const nom = base + mat + dia;
+    const k = p.oe + '|' + nom;
+    if(!map.has(k)) map.set(k, {oe:p.oe, grupo:p.g, partida:nom, und:SAN_U[p.u],
+                               dec:sanDec(p.u), total:0, filas:[]});
+    const o = map.get(k);
+    o.total += sanParcial(r);
+    o.filas.push({desc: p.T ? (r.d||'') : (r.d || p.ph), cant:+r.c||0, veces:'',
+                  largo: p.L ? (+r.L||0) : '', ancho:'', alto:''});
+  });
+  return [...map.values()].sort((a,b)=> a.oe.localeCompare(b.oe) || a.partida.localeCompare(b.partida));
+}
+
+function sanCalc(){
+  const ps = sanPartidas();
+  const tot = u => ps.filter(p=>p.und===u).reduce((s,p)=>s+p.total,0);
+  if($('san-pto')) tween($('san-pto'), tot('Pto'), 0);
+  if($('san-ml'))  tween($('san-ml'),  tot('m'),   2);
+  if($('san-und')) tween($('san-und'), tot('Und'), 0);
+  const np = $('san-np');
+  if(np) np.textContent = ps.length + (ps.length===1 ? ' partida' : ' partidas');
+  const res = $('san-res');
+  if(res) res.innerHTML = ps.map((p,i)=>
+    '<tr><td class="n" style="color:var(--text3)">'+(i+1)+'</td>'+
+    '<td style="font-weight:600;color:var(--text)">'+esc(p.partida)+
+      '<div style="font-size:9px;color:var(--text3);margin-top:2px">'+p.grupo+' · '+p.oe+' · '+
+      p.filas.length+(p.filas.length===1?' fila':' filas')+'</div></td>'+
+    '<td class="n" style="color:var(--cyan);font-weight:800">'+F(p.total,p.dec)+'</td>'+
+    '<td style="font-size:11px">'+p.und+'</td></tr>'
+  ).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:18px">Aún no hay partidas.</td></tr>';
+  sanRows.forEach((r,i)=>{
+    const c = document.getElementById('san-p-'+i);
+    if(c) c.textContent = F(sanParcial(r), sanDec(SAN_P[r.p].u));
+  });
+}
+
+function sanEnviar(){
+  const ps = sanPartidas();
+  if(!ps.length){ toast('Agrega partidas primero', false); return; }
+  plaEnviar(ps.map(p=>({grupo:'OE.4', codigo:'', partida:p.partida, unidad:p.und, filas:p.filas})));
+}
+
+const SAN_STORE = 'cia_sanitarias_v1';
+function sanGuardar(){
+  try{ localStorage.setItem(SAN_STORE, JSON.stringify({v:1, filas:sanRows})); }catch(e){}
+}
+function sanCargar(){
+  try{
+    const d = JSON.parse(localStorage.getItem(SAN_STORE) || 'null');
+    if(d && Array.isArray(d.filas)) sanRows = d.filas;
+  }catch(e){}
+  const s = $('san-cat');
+  if(s && !s.options.length){
+    s.innerHTML = SAN_ORD.map(k=>{
+      const p = SAN_P[k];
+      return '<option value="'+k+'">'+p.g+' · '+(p.n || p.ph)+'</option>';
+    }).join('');
+  }
+  sanRender();
+}
+/* Lo llama initMetradosPro() */
+function calcSan(){ sanCargar(); }
+
 /* ── Modal de confirmación ── */
 let _modalCb=null;
 function ask(msg,cb){$('modal-msg').textContent=msg;_modalCb=cb;$('modal').classList.add('open')}
@@ -2291,31 +2513,6 @@ function calcPisos(){
 }
 /* Acero — despiece por barras */
 /* Instalaciones sanitarias */
-function calcSan(){
-  const af=+$('san-af').value||0,ac=+$('san-ac').value||0,d2=+$('san-d2').value||0,d4=+$('san-d4').value||0;
-  const m1=+$('san-m1').value||0,m2=+$('san-m2').value||0,m4=+$('san-m4').value||0;
-  const reg=+$('san-reg').value||0,sum=+$('san-sum').value||0;
-  const pA=af+ac;
-  const ml1=pA*3.0+m1, ml2=d2*2.5+m2, ml4=d4*1.8+m4;
-  const t1=Math.ceil(ml1*1.05/5), t2=Math.ceil(ml2*1.05/3), t4=Math.ceil(ml4*1.05/3);
-  $('san-t1').textContent=t1;$('san-t1u').textContent='tubos · '+F(ml1,1)+' ml';
-  $('san-t2').textContent=t2;$('san-t2u').textContent='tubos · '+F(ml2,1)+' ml';
-  $('san-t4').textContent=t4;$('san-t4u').textContent='tubos · '+F(ml4,1)+' ml';
-  const cod1=pA*3, tee1=pA*1, uni1=pA*2;
-  const cod2=d2*2, yee2=d2*1, cod4=d4*1, yee4=d4*1;
-  const uniones=cod1+tee1+uni1+cod2+yee2+cod4+yee4+(t1+t2+t4);
-  const peg=Math.max(0.25,Math.ceil(uniones/300*4)/4);
-  const tef=Math.ceil(pA*0.5);
-  $('san-acc').innerHTML=[
-    ['Codo PVC ½" × 90°',cod1,'und'],['Tee PVC ½"',tee1,'und'],['Unión / adaptador ½"',uni1,'und'],
-    ['Codo PVC 2" × 90°',cod2,'und'],['Yee PVC 2"',yee2,'und'],
-    ['Codo PVC 4" × 90°',cod4,'und'],['Yee PVC 4"',yee4,'und'],
-    ['Yee reducción 4"×2"',Math.min(d2,d4)||0,'und'],
-    ['Registro roscado bronce 4"',reg,'und'],['Sumidero 2"',sum,'und'],
-    ['Sombrero ventilación 2"',Math.ceil(d4/2),'und'],
-    ['Pegamento PVC',peg,'galón'],['Cinta teflón',tef,'rollos'],
-  ].map(r=>'<tr><td style="font-weight:600;color:var(--text)">'+r[0]+'</td><td class="n" style="color:var(--cyan);font-weight:800">'+r[1]+'</td><td>'+r[2]+'</td></tr>').join('');
-}
 /* Instalaciones eléctricas */
 function calcEle(){
   const luz=+$('ele-luz').value||0,tom=+$('ele-tom').value||0,is=+$('ele-is').value||0,id2=+$('ele-id').value||0,cir=+$('ele-cir').value||1;
