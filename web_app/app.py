@@ -329,8 +329,10 @@ def api_exportar_metrado():
 
         # Sin columna de acero: el acero se metra por despiece (OE.2.3), no se
         # deriva del volumen. Exportarlo aqui daba un kilaje sin sustento.
-        headers = ["#", "Elemento", "Dimensiones", "Cant.", "Vol. unit (m³)",
-                   "Vol. total (m³)", "Encofrado (m²)", "Excavación (m³)"]
+        # Solo concreto: el encofrado y la excavacion son partidas propias y se
+        # miden aparte, no como columnas de la hoja de concreto.
+        headers = ["#", "Elemento", "Dimensiones", "f'c", "Cant.",
+                   "Vol. unit (m³)", "Vol. total (m³)"]
         HR = 5
         for c, h in enumerate(headers, 1):
             cell = ws.cell(row=HR, column=c, value=h)
@@ -339,13 +341,13 @@ def api_exportar_metrado():
             cell.border = borde
             cell.alignment = Alignment(horizontal="center", vertical="center")
 
-        tv = te = tx = 0.0
+        tv = 0.0
         for i, it in enumerate(items, 1):
             r = HR + i
-            vals = [i, it.get("tipo", ""), it.get("dims", ""), it.get("cantidad", 1),
-                    round(float(it.get("vu", 0)), 4), round(float(it.get("vt", 0)), 4),
-                    round(float(it.get("encof", 0)), 2), round(float(it.get("exc", 0)), 3)]
-            tv += vals[5]; te += vals[6]; tx += vals[7]
+            vals = [i, it.get("tipo", ""), it.get("dims", ""), it.get("fc", 210),
+                    it.get("cantidad", 1),
+                    round(float(it.get("vu", 0)), 4), round(float(it.get("vt", 0)), 4)]
+            tv += vals[6]
             for c, v in enumerate(vals, 1):
                 cell = ws.cell(row=r, column=c, value=v)
                 cell.border = borde
@@ -353,9 +355,9 @@ def api_exportar_metrado():
                 if c >= 4:
                     cell.alignment = Alignment(horizontal="right")
                     if c >= 5:
-                        cell.number_format = "0.000" if c in (5, 6, 8) else "0.00"
+                        cell.number_format = "0.000" if c in (6, 7) else "0.00"
         rT = HR + len(items) + 1
-        tot_vals = ["", "TOTAL", "", "", "", round(tv, 3), round(te, 2), round(tx, 3)]
+        tot_vals = ["", "TOTAL", "", "", "", "", round(tv, 3)]
         for c, v in enumerate(tot_vals, 1):
             cell = ws.cell(row=rT, column=c, value=v)
             cell.font = Font(bold=True, size=10)
@@ -363,6 +365,9 @@ def api_exportar_metrado():
             cell.border = borde
             if c >= 5:
                 cell.alignment = Alignment(horizontal="right")
+
+        for c, w in enumerate([5, 28, 44, 8, 8, 14, 14], 1):
+            ws.column_dimensions[chr(64 + c)].width = w
 
         # Hoja de acero SOLO si hay despiece. Antes esta hoja repartia el kilaje
         # derivado del volumen entre todos los diametros "como si usaras uno solo":

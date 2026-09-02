@@ -497,7 +497,20 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
       <div class="card-title">Nuevo elemento</div>
       <div class="frow"><label>Tipo de elemento</label><select id="met-tipo" onchange="metTipoChange()"></select></div>
       <div id="met-campos" class="g g2"></div>
-      <div class="frow mt"><label>Cantidad</label><input type="number" id="met-cant" value="1" min="1" step="1"></div>
+      <div class="g g2 mt">
+        <div class="frow"><label>Cantidad</label><input type="number" id="met-cant" value="1" min="1" step="1"></div>
+        <div class="frow"><label>f'c (kg/cm²)</label>
+          <select id="met-fc">
+            <option value="100">100 — solados</option>
+            <option value="140">140</option>
+            <option value="175">175</option>
+            <option value="210" selected>210</option>
+            <option value="245">245</option>
+            <option value="280">280</option>
+          </select>
+        </div>
+      </div>
+      <p class="note">La norma pide separar partidas por resistencia: «Para cada elemento diferente de concreto se indicará su calidad […] f'c» (OE.2.3).</p>
       <button class="btn btn-v btn-fw mt" onclick="metAgregar()">+ Agregar elemento</button>
       <p class="note" id="met-ayuda">—</p>
     </div>
@@ -534,7 +547,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
       </div>
       <div style="overflow-x:auto">
       <table>
-        <thead><tr><th>#</th><th>Elemento</th><th>Dimensiones</th><th>Cant.</th><th style="text-align:right">Vol. m³</th><th style="text-align:right">Encof. m²</th><th style="text-align:right">Excav. m³</th><th></th></tr></thead>
+        <thead><tr><th>#</th><th>Elemento</th><th>Dimensiones</th><th style="text-align:center">f'c</th><th class="n">Cant.</th><th class="n">Vol. m³</th><th></th></tr></thead>
         <tbody id="met-tbl"></tbody>
       </table>
       </div>
@@ -550,11 +563,20 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
         <button class="btn mt" style="background:rgba(11,20,32,.05);color:var(--text);border:1px solid rgba(11,20,32,.12)" onclick="metUsarVol()">Usar en dosificación →</button>
       </div>
       <div class="card mt">
-        <div class="card-title">Resumen de obra</div>
-        <div class="g g3 mt">
-          <div class="metric bl"><div class="metric-lbl">Encofrado</div><div class="metric-val" id="met-encof-m2">0</div><div class="metric-unit">m²</div></div>
-          <div class="metric or"><div class="metric-lbl">Excavación</div><div class="metric-val" id="met-excav-m3">0</div><div class="metric-unit">m³</div></div>
+        <div class="card-title">Material que consume ese concreto</div>
+        <div class="g g4 mt">
+          <div class="metric"><div class="metric-lbl">Cemento</div><div class="metric-val" id="met-cem">0</div><div class="metric-unit">bolsas 42.5 kg</div></div>
+          <div class="metric cy"><div class="metric-lbl">Arena</div><div class="metric-val" id="met-are">0</div><div class="metric-unit">m³</div></div>
+          <div class="metric am"><div class="metric-lbl">Piedra</div><div class="metric-val" id="met-pie">0</div><div class="metric-unit">m³</div></div>
+          <div class="metric bl"><div class="metric-lbl">Agua</div><div class="metric-val" id="met-agu">0</div><div class="metric-unit">litros</div></div>
         </div>
+        <div class="frow mt"><label>Desperdicio de obra (%)</label><input type="number" id="met-desp" value="5" min="0" max="20" step="1" oninput="metMateriales()"></div>
+        <p class="note">El material NO es metrado: el metrado es el m³ de concreto. Esto es para pedir en obra, y por eso lleva desperdicio (la norma lo manda al análisis de precios, no a la partida).</p>
+        <div style="overflow-x:auto" class="mt"><table>
+          <thead><tr><th>f'c</th><th>Proporción</th><th class="n">Vol. m³</th><th class="n">Bolsas</th><th class="n">Arena m³</th><th class="n">Piedra m³</th></tr></thead>
+          <tbody id="met-mat-tbl"></tbody>
+        </table></div>
+        <button class="btn btn-cy btn-fw mt" onclick="metEnviarPlanilla()">📋 Enviar partidas a la planilla</button>
         <div class="g g2 mt">
           <button class="btn btn-o btn-sm" onclick="exportMetradoPDF()">📄 PDF</button>
           <button class="btn btn-o btn-sm" onclick="exportMetradoExcel()">📊 Excel</button>
@@ -1346,10 +1368,11 @@ function metAgregar(){
   const cant=+$('met-cant').value||1;
   post('/api/metrado/calcular',{tipo:t.clave,valores:vals,cantidad:cant},d=>{
     const dims=t.campos.map(c=>c.etiqueta+': '+vals[c.clave]+(c.sufijo||' m')).join(' · ');
-    metItems.push({tipo:t.nombre,clave:t.clave,vals,dims,cantidad:cant,vu:d.vol_unit,vt:d.vol_total,encof:d.encofrado_m2||0,exc:d.excavacion_m3||0});
+    const fc=+$('met-fc').value||210;
+    metItems.push({tipo:t.nombre,clave:t.clave,vals,dims,cantidad:cant,vu:d.vol_unit,vt:d.vol_total,fc:fc});
     metRender();saveState();
     if($('v3d').style.display!=='none')loadV3d(t.clave,vals);
-    toast(t.nombre+' · '+F(d.vol_total,3)+' m³ · '+F(d.encofrado_m2||0,2)+' m² encof.');
+    toast(t.nombre+" · f'c "+fc+' · '+F(d.vol_total,3)+' m³');
   });
 }
 /* contador animado (con fallback si la pestaña está oculta) */
@@ -1368,14 +1391,73 @@ function metRender(){
   const tb=$('met-tbl'),em=$('met-empty'),sec=$('met-acero-section');
   if(!metItems.length){tb.innerHTML='';em.style.display='block';sec.style.display='none';return}
   em.style.display='none';sec.style.display='block';
-  tb.innerHTML=metItems.map((m,i)=>'<tr><td>'+(i+1)+'</td><td style="font-weight:600;color:var(--text)">'+m.tipo+'</td><td style="font-size:11px;color:var(--text3)">'+m.dims+'</td><td class="n">'+m.cantidad+'</td><td class="n" style="color:var(--cyan)">'+F(m.vt,3)+'</td><td class="n" style="color:var(--blue)">'+F(m.encof||0,2)+'</td><td class="n" style="color:var(--orange)">'+(m.exc?F(m.exc,3):'—')+'</td><td><div class="row-act"><button class="act-btn" title="Editar" onclick="metEdit('+i+')">✎</button><button class="act-btn" title="Duplicar" onclick="metDup('+i+')">⧉</button><button class="act-btn danger" title="Eliminar" onclick="metDel('+i+')">✕</button></div></td></tr>').join('');
+  tb.innerHTML=metItems.map((m,i)=>'<tr><td>'+(i+1)+'</td>'+
+    '<td style="font-weight:600;color:var(--text)">'+esc(m.tipo)+'</td>'+
+    '<td style="font-size:11px;color:var(--text3)">'+esc(m.dims)+'</td>'+
+    '<td style="text-align:center;font-weight:700;color:var(--violet)">'+(m.fc||210)+'</td>'+
+    '<td class="n">'+m.cantidad+'</td>'+
+    '<td class="n" style="color:var(--cyan);font-weight:700">'+F(m.vt,3)+'</td>'+
+    '<td><div class="row-act"><button class="act-btn" title="Editar" onclick="metEdit('+i+')">✎</button>'+
+    '<button class="act-btn" title="Duplicar" onclick="metDup('+i+')">⧉</button>'+
+    '<button class="act-btn danger" title="Eliminar" onclick="metDel('+i+')">✕</button></div></td></tr>').join('');
   const tot=metItems.reduce((s,m)=>s+m.vt,0);
-  const totEncof=metItems.reduce((s,m)=>s+(m.encof||0),0);
-  const totExc=metItems.reduce((s,m)=>s+(m.exc||0),0);
   tween($('met-total-vol'),tot,3,' m³');
   $('met-total-n').textContent=metItems.length+(metItems.length===1?' elemento':' elementos');
-  tween($('met-encof-m2'),totEncof,2);
-  tween($('met-excav-m3'),totExc,3);
+  metMateriales();
+}
+
+/* Agrupa por resistencia: la norma manda partidas separadas por f'c, y ademas
+   cada resistencia lleva su propia proporcion de mezcla. */
+function metPorFc(){
+  const g={};
+  metItems.forEach(m=>{const fc=m.fc||210; g[fc]=(g[fc]||0)+m.vt});
+  return Object.keys(g).map(Number).sort((a,b)=>a-b).map(fc=>({fc,vol:g[fc]}));
+}
+
+/* El material NO es metrado: el metrado es el m3 de concreto. Esto sirve para
+   pedir en obra, y por eso si lleva desperdicio. */
+async function metMateriales(){
+  const tb=$('met-mat-tbl'); if(!tb) return;
+  const grupos=metPorFc();
+  if(!grupos.length){
+    tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3)">Sin elementos</td></tr>';
+    ['met-cem','met-are','met-pie','met-agu'].forEach(id=>{const e=$(id); if(e) e.textContent='0'});
+    return;
+  }
+  const desp=+($('met-desp')||{}).value||0;
+  let cem=0,are=0,pie=0,agu=0,filas='';
+  for(const g of grupos){
+    try{
+      const r=await fetch('/api/dosificar',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({fc:g.fc,volumen_m3:g.vol,desperdicio_pct:desp,peso_bolsa:42.5})}).then(x=>x.json());
+      if(!r.ok) continue;
+      cem+=r.cemento_bolsas; are+=r.arena_m3; pie+=r.piedra_m3; agu+=r.agua_litros;
+      filas+='<tr><td style="font-weight:700;color:var(--violet)">'+g.fc+'</td>'+
+        '<td style="font-size:11px">'+esc(r.dosificacion.proporcion)+'</td>'+
+        '<td class="n">'+F(g.vol,3)+'</td>'+
+        '<td class="n" style="color:var(--cyan);font-weight:700">'+Math.ceil(r.cemento_bolsas)+'</td>'+
+        '<td class="n">'+F(r.arena_m3,3)+'</td>'+
+        '<td class="n">'+F(r.piedra_m3,3)+'</td></tr>';
+    }catch(e){}
+  }
+  tb.innerHTML=filas||'<tr><td colspan="6" style="text-align:center;color:var(--text3)">—</td></tr>';
+  tween($('met-cem'),cem,1); tween($('met-are'),are,3);
+  tween($('met-pie'),pie,3); tween($('met-agu'),agu,0);
+}
+
+/* Una partida de concreto por cada resistencia, con sus elementos como
+   mediciones: es como se presenta en una planilla de expediente. */
+function metEnviarPlanilla(){
+  if(!metItems.length){ toast('Agrega elementos primero',false); return; }
+  const partidas=metPorFc().map(g=>({
+    grupo:'OE.2', unidad:'m3',
+    partida:"Concreto f'c="+g.fc+" kg/cm2",
+    filas:metItems.filter(m=>(m.fc||210)===g.fc).map(m=>({
+      desc:m.tipo+(m.dims?' — '+m.dims:''), cant:m.cantidad, veces:'',
+      largo:+(m.vu||0).toFixed(4), ancho:'', alto:''
+    }))
+  }));
+  plaEnviar(partidas);
 }
 function metDel(i){metItems.splice(i,1);metRender();saveState()}
 function metDup(i){const c=JSON.parse(JSON.stringify(metItems[i]));metItems.splice(i+1,0,c);metRender();saveState();toast('Elemento duplicado')}
@@ -2133,11 +2215,11 @@ function sectionThumb(clave,vals,W,H){
 function exportMetradoPDF(){
   if(!metItems.length){toast('Agrega elementos primero',false);return;}
   const tot=metItems.reduce((s,m)=>s+m.vt,0),
-        totE=metItems.reduce((s,m)=>s+(m.encof||0),0),totX=metItems.reduce((s,m)=>s+(m.exc||0),0);
+        porFc=metPorFc();
   const proyecto=$('proj-name')?.value||'Proyecto sin nombre';
   const fecha=new Date().toLocaleDateString('es-PE',{day:'2-digit',month:'long',year:'numeric'});
   const logoUrl=location.origin+'/static/brand/logo-full.png';
-  const rows=metItems.map((m,i)=>'<tr><td>'+(i+1)+'</td><td>'+m.tipo+'</td><td>'+m.dims+'</td><td class="r">'+m.cantidad+'</td><td class="r">'+F(m.vt,3)+'</td><td class="r">'+F(m.encof||0,2)+'</td><td class="r">'+(m.exc?F(m.exc,3):'—')+'</td></tr>').join('');
+  const rows=metItems.map((m,i)=>'<tr><td>'+(i+1)+'</td><td>'+m.tipo+'</td><td>'+m.dims+'</td><td class="r">'+(m.fc||210)+'</td><td class="r">'+m.cantidad+'</td><td class="r">'+F(m.vt,3)+'</td></tr>').join('');
   // esquemas de sección por elemento
   const secs=metItems.map((m,i)=>{
     if(!m.vals)return '';
@@ -2163,11 +2245,10 @@ function exportMetradoPDF(){
     '<div class="hd"><div><h1>Metrado de Concreto</h1><div class="sub">R.D. 073-2010-VIVIENDA · Norma Técnica de Metrados</div></div><div class="rt"><img src="'+logoUrl+'" onerror="this.style.display=\'none\'"></div></div>'+
     '<div class="meta">Proyecto: <b>'+proyecto+'</b> · '+fecha+' · '+metItems.length+' elementos</div>'+
     '<div class="cards"><div class="cd"><div class="l">Concreto</div><div class="v">'+F(tot,2)+' m³</div></div>'+
-    '<div class="cd"><div class="l">Encofrado</div><div class="v">'+F(totE,1)+' m²</div></div>'+
-    '<div class="cd"><div class="l">Excavación</div><div class="v">'+F(totX,2)+' m³</div></div>'+
+    porFc.map(g=>'<div class="cd"><div class="l">f&#39;c '+g.fc+'</div><div class="v">'+F(g.vol,2)+' m³</div></div>').join('')+
     '</div>'+
-    '<h2>Detalle de elementos</h2><table><thead><tr><th>#</th><th>Elemento</th><th>Dimensiones</th><th class="r">Cant.</th><th class="r">Vol. m³</th><th class="r">Encof. m²</th><th class="r">Excav. m³</th></tr></thead><tbody>'+rows+'</tbody>'+
-    '<tfoot><tr><td colspan="4">TOTAL</td><td class="r">'+F(tot,3)+'</td><td class="r">'+F(totE,2)+'</td><td class="r">'+F(totX,3)+'</td></tr></tfoot></table>'+
+    '<h2>Detalle de elementos</h2><table><thead><tr><th>#</th><th>Elemento</th><th>Dimensiones</th><th class="r">f&#39;c</th><th class="r">Cant.</th><th class="r">Vol. m³</th></tr></thead><tbody>'+rows+'</tbody>'+
+    '<tfoot><tr><td colspan="5">TOTAL</td><td class="r">'+F(tot,3)+'</td></tr></tfoot></table>'+
     (secs?'<h2>Esquemas de sección</h2><div class="secs">'+secs+'</div>':'')+
     '<div class="ft">Valores referenciales. Verificar con el proyecto estructural. · Constructor IA · constructoria</div></body></html>';
   const blob=new Blob([html],{type:'text/html'});
