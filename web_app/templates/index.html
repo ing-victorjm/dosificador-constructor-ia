@@ -11,31 +11,31 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#070A12;--bg2:#0B0F1C;--bg3:#111827;--bg4:#182135;
-  --surface:#0D1424;--surface2:#111A2E;--surface3:#182339;
-  --border:#1E2A45;--border2:#2E4470;
-  --text:#E9F0FB;--text2:#A7B8D6;--text3:#6B7EA3;
-  --violet:#B45CFF;--violet2:#CE93FF;--violet-dim:rgba(180,92,255,.12);
-  --cyan:#22E0FF;--cyan-dim:rgba(34,224,255,.12);
-  --amber:#FFB020;--amber-dim:rgba(255,176,32,.12);
-  --blue:#4DA6FF;--blue-dim:rgba(77,166,255,.12);
-  --red:#FF4D6D;--red-dim:rgba(255,77,109,.12);
-  --green:#2BE8A0;--green-dim:rgba(43,232,160,.12);
-  --orange:#FF8A3D;--orange-dim:rgba(255,138,61,.12);
-  --neon:0 0 18px rgba(34,224,255,.35);
-  --glow:0 0 40px rgba(180,92,255,.15);
+  --bg:#FFFFFF;--bg2:#F4F8FC;--bg3:#EAF1F8;--bg4:#DFE9F3;
+  --surface:#FFFFFF;--surface2:#F7FAFD;--surface3:#EEF4FA;
+  --border:#D6E2EE;--border2:#B4CADF;
+  --text:#0B1420;--text2:#3C5670;--text3:#6E869F;
+  --violet:#7C3AED;--violet2:#9061F9;--violet-dim:rgba(124,58,237,.10);
+  --cyan:#0E7490;--cyan-dim:rgba(14,116,144,.10);
+  --amber:#B45309;--amber-dim:rgba(180,83,9,.10);
+  --blue:#1D4ED8;--blue-dim:rgba(29,78,216,.10);
+  --red:#DC2626;--red-dim:rgba(220,38,38,.10);
+  --green:#047857;--green-dim:rgba(4,120,87,.10);
+  --orange:#C2410C;--orange-dim:rgba(194,65,12,.10);
+  --neon:0 1px 3px rgba(11,20,32,.08);
+  --glow:0 8px 28px rgba(11,20,32,.07);
   --radius:12px;--radius-sm:8px;
   --tech:'Orbitron','Rajdhani','Inter',sans-serif;
   font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;
 }
+
 html{scroll-behavior:smooth}
 body{
+  /* Papel blanco con una reticula tenue, como una lamina de metrado. */
   background:
-    linear-gradient(rgba(34,224,255,.028) 1px,transparent 1px) 0 0/30px 30px,
-    linear-gradient(90deg,rgba(34,224,255,.028) 1px,transparent 1px) 0 0/30px 30px,
-    radial-gradient(1200px 620px at 82% -12%,rgba(180,92,255,.13),transparent 60%),
-    radial-gradient(1000px 560px at -12% 112%,rgba(34,224,255,.10),transparent 60%),
-    #070A12;
+    linear-gradient(rgba(14,116,144,.05) 1px,transparent 1px) 0 0/30px 30px,
+    linear-gradient(90deg,rgba(14,116,144,.05) 1px,transparent 1px) 0 0/30px 30px,
+    var(--bg);
   color:var(--text);min-height:100vh;overflow-x:hidden;
 }
 
@@ -44,39 +44,40 @@ body{
 
 /* ── Sidebar ─── */
 .sidebar{
-  width:240px;background:linear-gradient(180deg,#0A1120 0%,#070A12 100%);
-  border-right:1px solid var(--border);
-  box-shadow:1px 0 0 rgba(34,224,255,.08), 8px 0 40px rgba(0,0,0,.4);
+  width:240px;background:linear-gradient(180deg,#0B2033 0%,#06131F 100%);
+  border-right:1px solid #0A2A40;
+  box-shadow:1px 0 0 rgba(14,116,144,.18), 4px 0 24px rgba(11,20,32,.10);
   display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;
   transition:transform .3s;
 }
 .sidebar .brand{
   padding:20px;border-bottom:1px solid var(--border);
-  background:linear-gradient(180deg,rgba(34,224,255,.05),transparent);
+  background:linear-gradient(180deg,rgba(14,116,144,.05),transparent);
 }
 .sidebar .brand-logo{
   width:100%;max-width:196px;display:block;margin-bottom:9px;
-  filter:drop-shadow(0 0 14px rgba(34,224,255,.35));
+  filter:none;
 }
-.sidebar .brand p{font-size:9px;color:var(--cyan);margin-top:2px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+.sidebar{--sb-txt:#C8DCEC;--sb-txt2:#8FB0C9;--sb-act:#7FE3FF}
+.sidebar .brand p{font-size:9px;color:var(--sb-act);margin-top:2px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
 .sidebar nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
 .sidebar nav button{
   display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;
   border:none;background:none;border-radius:var(--radius-sm);cursor:pointer;
-  font-size:13px;font-weight:500;color:var(--text2);text-align:left;
+  font-size:13px;font-weight:500;color:var(--sb-txt);text-align:left;
   transition:all .18s ease;position:relative;
 }
 .sidebar nav button .ico{font-size:16px;width:24px;text-align:center;flex-shrink:0}
-.sidebar nav button:hover{background:rgba(34,224,255,.06);color:var(--text)}
+.sidebar nav button:hover{background:rgba(127,227,255,.10);color:#fff}
 .sidebar nav button.active{
-  background:linear-gradient(90deg,rgba(34,224,255,.14),rgba(180,92,255,.05));
+  background:linear-gradient(90deg,rgba(127,227,255,.16),rgba(127,227,255,.02));
   color:#fff;font-weight:700;
-  box-shadow:inset 3px 0 0 var(--cyan), 0 0 22px rgba(34,224,255,.10);
+  box-shadow:inset 3px 0 0 var(--sb-act);
 }
-.sidebar nav button.active .ico{filter:drop-shadow(0 0 6px rgba(34,224,255,.8))}
+.sidebar nav button.active .ico{filter:drop-shadow(0 0 6px rgba(14,116,144,.8))}
 .sidebar .sb-foot{
-  padding:14px 16px;border-top:1px solid var(--border);
-  font-size:10px;color:var(--text3);text-align:center;letter-spacing:.4px;
+  padding:14px 16px;border-top:1px solid rgba(127,227,255,.14);
+  font-size:10px;color:var(--sb-txt2);text-align:center;letter-spacing:.4px;
 }
 
 /* ── Mobile hamburger ─── */
@@ -85,9 +86,9 @@ body{
   width:40px;height:40px;border-radius:10px;background:var(--surface2);
   border:1px solid var(--border2);cursor:pointer;
   align-items:center;justify-content:center;font-size:18px;color:var(--cyan);
-  box-shadow:0 0 14px rgba(34,224,255,.2);
+  box-shadow:0 0 14px rgba(14,116,144,.2);
 }
-.overlay{display:none;position:fixed;inset:0;background:rgba(3,6,14,.6);z-index:45}
+.overlay{display:none;position:fixed;inset:0;background:rgba(11,20,32,.35);z-index:45}
 @media(max-width:860px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
@@ -100,18 +101,18 @@ body{
 .content{margin-left:240px;flex:1;min-height:100vh}
 .topbar{
   position:sticky;top:0;z-index:40;
-  background:rgba(9,13,24,.72);backdrop-filter:blur(18px) saturate(160%);
+  background:rgba(255,255,255,.86);backdrop-filter:blur(18px) saturate(160%);
   border-bottom:1px solid var(--border);
-  box-shadow:0 1px 0 rgba(34,224,255,.08);
+  box-shadow:0 1px 0 rgba(14,116,144,.10);
   padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
 }
-.topbar h1{font-family:var(--tech);font-size:17px;font-weight:800;letter-spacing:1px;color:#fff;text-transform:uppercase}
-.topbar h1 span{color:var(--cyan);text-shadow:0 0 14px rgba(34,224,255,.5)}
+.topbar h1{font-family:var(--tech);font-size:17px;font-weight:800;letter-spacing:1px;color:var(--text);text-transform:uppercase}
+.topbar h1 span{color:var(--cyan);text-shadow:0 0 14px rgba(14,116,144,.5)}
 .topbar .tag{
   font-size:10px;background:var(--cyan-dim);
-  color:var(--cyan);border:1px solid rgba(34,224,255,.3);
+  color:var(--cyan);border:1px solid rgba(14,116,144,.3);
   padding:5px 12px;border-radius:6px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  box-shadow:0 0 14px rgba(34,224,255,.12);
+  box-shadow:0 0 14px rgba(14,116,144,.12);
 }
 .page{padding:24px 28px;max-width:1320px}
 @media(max-width:860px){.page{padding:16px 14px}.topbar{padding:14px 16px 14px 56px}}
@@ -123,14 +124,14 @@ body{
 
 /* ── Cards ─── */
 .card{
-  background:linear-gradient(180deg,rgba(19,29,51,.55),rgba(13,20,36,.8));
+  background:var(--surface);
   border:1px solid var(--border);
   border-radius:var(--radius);padding:20px;
   transition:border-color .25s,box-shadow .25s,transform .2s;
   position:relative;backdrop-filter:blur(6px);
-  box-shadow:0 2px 22px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.03);
+  box-shadow:0 2px 22px rgba(11,20,32,.10),inset 0 1px 0 rgba(11,20,32,.035);
 }
-.card:hover{border-color:var(--border2);box-shadow:0 6px 30px rgba(0,0,0,.45),0 0 0 1px rgba(34,224,255,.14),0 0 34px rgba(34,224,255,.06)}
+.card:hover{border-color:var(--border2);box-shadow:0 6px 30px rgba(11,20,32,.14),0 0 0 1px rgba(14,116,144,.14),0 0 34px rgba(14,116,144,.06)}
 .card+.card{margin-top:14px}
 .card-head{
   display:flex;align-items:center;justify-content:space-between;
@@ -142,14 +143,14 @@ body{
 .cat-group-title{font-family:var(--tech);font-size:12px;font-weight:700;color:var(--violet2);text-transform:uppercase;letter-spacing:1.5px;margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
 .cat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
 .cat-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;cursor:pointer;transition:border-color .18s,box-shadow .18s,transform .18s}
-.cat-card:hover{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(34,224,255,.3),0 8px 24px rgba(34,224,255,.12);transform:translateY(-3px)}
+.cat-card:hover{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(14,116,144,.3),0 8px 24px rgba(14,116,144,.12);transform:translateY(-3px)}
 .cat-cv{width:100%;aspect-ratio:200/150;background:#EDF3FC;border:1px solid var(--border2);border-radius:6px;display:block}
 .cat-name{font-size:11px;font-weight:700;color:var(--text);text-align:center;margin-top:7px;line-height:1.3}
 .card-accent{border-left:3px solid var(--cyan);padding-left:22px}
 /* ── Galería de ladrillos ── */
 .brick-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;transition:border-color .18s,box-shadow .18s,transform .18s}
 .brick-card:hover{border-color:var(--amber);box-shadow:0 0 0 1px rgba(255,176,32,.3),0 8px 22px rgba(255,176,32,.12);transform:translateY(-3px)}
-.brick-img{background:radial-gradient(circle at 50% 38%,#12203C,#0A1120);border:1px solid var(--border2);border-radius:6px;padding:10px}
+.brick-img{background:radial-gradient(circle at 50% 38%,#12203C,var(--bg3));border:1px solid var(--border2);border-radius:6px;padding:10px}
 .brick-n{font-size:12px;font-weight:700;color:var(--text);margin-top:9px;line-height:1.25}
 .brick-d{font-family:var(--tech);font-size:11px;color:var(--cyan);margin-top:3px;letter-spacing:.5px}
 .brick-u{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.6px}
@@ -175,9 +176,9 @@ body{
   border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:14px 16px;
   position:relative;overflow:hidden;transition:transform .15s,box-shadow .2s;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+  box-shadow:inset 0 1px 0 rgba(11,20,32,.035);
 }
-.metric:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 1px rgba(34,224,255,.14)}
+.metric:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(11,20,32,.10),0 0 0 1px rgba(14,116,144,.14)}
 .metric::before{
   content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
   background:var(--violet);box-shadow:0 0 12px var(--violet);
@@ -200,10 +201,10 @@ input[type=number],input[type=text],select{
   color:var(--text);font-size:13px;font-family:inherit;outline:none;
   transition:border-color .2s,box-shadow .2s;
 }
-input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim),0 0 18px rgba(34,224,255,.12)}
+input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim),0 0 18px rgba(14,116,144,.12)}
 input::placeholder{color:var(--text3)}
 select{cursor:pointer}
-select option{background:#0B0F1C;color:var(--text)}
+select option{background:var(--bg2);color:var(--text)}
 .frow{margin-bottom:10px}
 .hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 
@@ -213,68 +214,68 @@ select option{background:#0B0F1C;color:var(--text)}
   padding:10px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;
   font-family:inherit;cursor:pointer;border:none;transition:all .2s;letter-spacing:.3px;
 }
-.btn-v{background:linear-gradient(120deg,#22E0FF 0%,#B45CFF 100%);color:#08111F;box-shadow:0 0 20px rgba(34,224,255,.3),0 4px 14px rgba(180,92,255,.25)}
-.btn-v:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(34,224,255,.5),0 6px 20px rgba(180,92,255,.4)}
+.btn-v{background:linear-gradient(120deg,var(--cyan) 0%,#1D4ED8 100%);color:#fff;box-shadow:0 2px 10px rgba(14,116,144,.30)}
+.btn-v:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(14,116,144,.5),0 6px 20px rgba(124,58,237,.4)}
 .btn-v:active{transform:translateY(0)}
-.btn-o{background:rgba(34,224,255,.05);color:var(--text2);border:1px solid var(--border2)}
-.btn-o:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(34,224,255,.18)}
+.btn-o{background:rgba(14,116,144,.05);color:var(--text2);border:1px solid var(--border2)}
+.btn-o:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(14,116,144,.18)}
 .btn-g{background:linear-gradient(120deg,#2BE8A0 0%,#12B37A 100%);color:#04120C;box-shadow:0 0 18px rgba(43,232,160,.28)}
-.btn-cy{background:linear-gradient(120deg,#22E0FF 0%,#1699C4 100%);color:#04121A;box-shadow:0 0 18px rgba(34,224,255,.3)}
-.btn-cy:hover{transform:translateY(-1px);box-shadow:0 0 26px rgba(34,224,255,.5)}
+.btn-cy{background:linear-gradient(120deg,var(--cyan) 0%,#1699C4 100%);color:#04121A;box-shadow:0 0 18px rgba(14,116,144,.3)}
+.btn-cy:hover{transform:translateY(-1px);box-shadow:0 0 26px rgba(14,116,144,.5)}
 .btn-fw{width:100%}
 .btn-sm{padding:7px 14px;font-size:12px}
 
 /* ── Table ─── */
 table{width:100%;border-collapse:separate;border-spacing:0}
 th{
-  background:linear-gradient(180deg,rgba(34,224,255,.08),rgba(34,224,255,.02));
+  background:linear-gradient(180deg,rgba(14,116,144,.08),rgba(14,116,144,.02));
   color:var(--cyan);padding:10px 14px;text-align:left;
   font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  border-bottom:1px solid rgba(34,224,255,.28);
+  border-bottom:1px solid rgba(14,116,144,.28);
 }
 th:first-child{border-radius:var(--radius-sm) 0 0 0}
 th:last-child{border-radius:0 var(--radius-sm) 0 0}
 td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2)}
-tr:hover td{background:rgba(34,224,255,.05)}
-tr:nth-child(even) td{background:rgba(255,255,255,.015)}
-tr:nth-child(even):hover td{background:rgba(34,224,255,.06)}
+tr:hover td{background:rgba(14,116,144,.05)}
+tr:nth-child(even) td{background:rgba(11,20,32,.02)}
+tr:nth-child(even):hover td{background:rgba(14,116,144,.06)}
 td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--text)}
 
 /* ── Hero total ─── */
 .hero{
   background:linear-gradient(120deg,#141B3A 0%,#3A1E7A 45%,#0E3A55 100%);
-  border:1px solid rgba(34,224,255,.25);
+  border:1px solid rgba(14,116,144,.25);
   border-radius:var(--radius);padding:22px 26px;color:#fff;
-  box-shadow:0 0 40px rgba(34,224,255,.12),0 8px 30px rgba(0,0,0,.4);
+  box-shadow:0 0 40px rgba(14,116,144,.12),0 8px 30px rgba(11,20,32,.12);
   position:relative;overflow:hidden;
 }
 .hero::before{
   content:'';position:absolute;inset:0;
   background:
-    linear-gradient(rgba(34,224,255,.05) 1px,transparent 1px) 0 0/22px 22px,
-    linear-gradient(90deg,rgba(34,224,255,.05) 1px,transparent 1px) 0 0/22px 22px;
+    linear-gradient(rgba(14,116,144,.05) 1px,transparent 1px) 0 0/22px 22px,
+    linear-gradient(90deg,rgba(14,116,144,.05) 1px,transparent 1px) 0 0/22px 22px;
   pointer-events:none;
 }
 .hero::after{
   content:'';position:absolute;top:-40%;right:-8%;width:200px;height:200px;
-  background:radial-gradient(circle,rgba(34,224,255,.22),transparent 60%);
+  background:radial-gradient(circle,rgba(14,116,144,.22),transparent 60%);
   border-radius:50%;
 }
 .hero-lbl{font-size:11px;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:1.2px}
-.hero-val{font-family:var(--tech);font-size:30px;font-weight:800;margin-top:6px;letter-spacing:.5px;text-shadow:0 0 20px rgba(34,224,255,.4)}
+.hero-val{font-family:var(--tech);font-size:30px;font-weight:800;margin-top:6px;letter-spacing:.5px;text-shadow:0 0 20px rgba(14,116,144,.4)}
 .hero-sub{font-size:12px;opacity:.7;margin-top:4px;font-weight:500}
 
 /* ── IFC ─── */
 #ifc-drop{
   border:2px dashed var(--border2);border-radius:var(--radius);
-  background:rgba(34,224,255,.03);text-align:center;padding:48px 24px;
+  background:rgba(14,116,144,.03);text-align:center;padding:48px 24px;
   cursor:pointer;transition:all .25s;color:var(--text3);
 }
-#ifc-drop:hover,#ifc-drop.drag-over{border-color:var(--cyan);background:var(--cyan-dim);color:var(--cyan);box-shadow:inset 0 0 30px rgba(34,224,255,.08)}
+#ifc-drop:hover,#ifc-drop.drag-over{border-color:var(--cyan);background:var(--cyan-dim);color:var(--cyan);box-shadow:inset 0 0 30px rgba(14,116,144,.08)}
 #ifc-drop input{display:none}
 #ifc-wrap{
-  position:relative;background:#0A1120;border-radius:var(--radius);overflow:hidden;
-  height:520px;display:none;border:1px solid var(--border2);box-shadow:inset 0 0 60px rgba(34,224,255,.05)}
+  position:relative;background:var(--bg3);border-radius:var(--radius);overflow:hidden;
+  height:520px;display:none;border:1px solid var(--border2);box-shadow:inset 0 0 60px rgba(14,116,144,.05)}
 #ifc-wrap canvas{width:100%!important;height:100%!important;display:block}
 #ifc-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--border)}
 #ifc-bar-fill{height:100%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);width:0;transition:width .3s}
@@ -287,8 +288,8 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 
 /* ── 3D Viewer ─── */
 #v3d{
-  position:relative;background:#0A1120;border-radius:var(--radius-sm);overflow:hidden;
-  height:280px;border:1px solid var(--border2);box-shadow:inset 0 0 50px rgba(34,224,255,.05);
+  position:relative;background:var(--bg3);border-radius:var(--radius-sm);overflow:hidden;
+  height:280px;border:1px solid var(--border2);box-shadow:inset 0 0 50px rgba(14,116,144,.05);
 }
 #v3d canvas{width:100%!important;height:100%!important;display:block}
 #v3d .v3d-msg{
@@ -303,10 +304,10 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 /* ── Toast ─── */
 #toasts{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
 .toast{
-  background:linear-gradient(180deg,rgba(19,29,51,.96),rgba(11,15,28,.98));
+  background:#FFFFFF;
   backdrop-filter:blur(12px);
   color:var(--text);border-radius:10px;padding:12px 18px;
-  font-size:12px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 1px rgba(34,224,255,.18);
+  font-size:12px;font-weight:600;box-shadow:0 10px 30px rgba(11,20,32,.14),0 0 0 1px var(--border);
   display:flex;align-items:center;gap:8px;min-width:220px;max-width:360px;
   border-left:3px solid var(--cyan);pointer-events:auto;
   animation:toastIn .3s cubic-bezier(.34,1.56,.64,1);
@@ -325,59 +326,72 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 .del-btn:hover{background:var(--red-dim)}
 
 /* ── PRO v3 ─────────────────────────────── */
-::selection{background:rgba(34,224,255,.35);color:#fff}
+::selection{background:rgba(14,116,144,.35);color:#fff}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:#0A0F1C}
 ::-webkit-scrollbar-thumb{background:#1E2A45;border-radius:6px;border:2px solid #0A0F1C}
 ::-webkit-scrollbar-thumb:hover{background:#2E4470}
 .top-right{display:flex;align-items:center;gap:10px}
-.proj-input{width:200px;background:rgba(34,224,255,.04)!important;border:1px solid var(--border)!important;font-weight:600;padding:8px 12px!important}
-.kbd-hint{background:rgba(34,224,255,.05);border:1px solid var(--border2);color:var(--text3);font-size:10px;font-weight:700;padding:7px 11px;border-radius:6px;cursor:pointer;letter-spacing:.5px;font-family:inherit;transition:all .15s}
-.kbd-hint:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 12px rgba(34,224,255,.2)}
+.proj-input{width:200px;background:rgba(14,116,144,.04)!important;border:1px solid var(--border)!important;font-weight:600;padding:8px 12px!important}
+.kbd-hint{background:rgba(14,116,144,.05);border:1px solid var(--border2);color:var(--text3);font-size:10px;font-weight:700;padding:7px 11px;border-radius:6px;cursor:pointer;letter-spacing:.5px;font-family:inherit;transition:all .15s}
+.kbd-hint:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 12px rgba(14,116,144,.2)}
 @media(max-width:860px){.proj-input,.kbd-hint{display:none}}
 .led{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green);margin-right:6px;animation:ledp 2.2s infinite}
 .nav-g{font-size:9px;font-weight:800;letter-spacing:2.2px;color:var(--text3);text-transform:uppercase;padding:13px 14px 5px;user-select:none}
 .nav-g:first-child{padding-top:4px}
 .ren-chips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
-.chip{padding:5px 12px;border-radius:99px;border:1px solid var(--border2);background:rgba(34,224,255,.04);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.chip{padding:5px 12px;border-radius:99px;border:1px solid var(--border2);background:rgba(14,116,144,.04);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
 .chip:hover{border-color:var(--cyan);color:var(--cyan)}
-.chip.on{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(34,224,255,.15)}
+.chip.on{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(14,116,144,.15)}
 .ace-tbl input,.ace-tbl select{padding:6px 8px!important;font-size:12px}
 .ace-tbl td{padding:5px 6px}
 @keyframes ledp{0%,100%{opacity:1}50%{opacity:.3}}
 .row-act{display:flex;gap:1px;justify-content:flex-end}
+/* ── Acero: planilla de despiece ── */
+.ace-tbl tr.ace-grp td{background:rgba(14,116,144,.07);border-top:2px solid rgba(14,116,144,.28);padding:8px 6px}
+.ace-tbl tr.ace-grp:hover td{background:rgba(14,116,144,.10)}
+.ace-tbl th{padding:8px 6px;letter-spacing:.4px}
+.ace-tbl td select{min-width:88px}
+.ace-tbl select.ace-part{width:auto;display:inline-block;font-weight:700;color:var(--cyan);margin-right:8px}
+.ace-tbl input.ace-rot{width:auto;display:inline-block;min-width:240px;margin-right:8px}
+.ace-oe{font-family:var(--tech);font-size:10px;color:var(--text3);letter-spacing:.5px;margin-right:8px}
+.ace-inc,.ace-exc,.ace-nd{font-size:9px;font-weight:800;letter-spacing:.6px;padding:3px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap}
+.ace-inc{color:var(--green);background:var(--green-dim);border:1px solid rgba(43,232,160,.35)}
+.ace-exc{color:var(--red);background:var(--red-dim);border:1px solid rgba(255,77,109,.35)}
+.ace-nd{color:var(--amber);background:var(--amber-dim);border:1px solid rgba(255,176,32,.35)}
+.ace-tbl tr.ace-regla td{background:transparent!important;font-size:10px;color:var(--text3);padding:0 8px 8px;border-bottom:none;line-height:1.5}
 .act-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--text3);padding:2px 6px;border-radius:5px;font-family:inherit}
 .act-btn:hover{color:var(--cyan);background:var(--cyan-dim)}
 .act-btn.danger:hover{color:var(--red);background:var(--red-dim)}
 .mixbar{display:flex;height:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);background:var(--bg2)}
-.mixbar>div{transition:width .9s cubic-bezier(.4,0,.2,1);box-shadow:inset 0 -6px 12px rgba(0,0,0,.25)}
+.mixbar>div{transition:width .9s cubic-bezier(.4,0,.2,1);box-shadow:inset 0 -6px 12px rgba(11,20,32,.08)}
 .mixleg{display:flex;gap:16px;margin-top:8px;font-size:10px;color:var(--text3);flex-wrap:wrap}
 .mixleg b{color:var(--text)}
 .mixleg .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 /* palette + modal */
 .pal-bg{display:none;position:fixed;inset:0;background:rgba(3,6,14,.68);backdrop-filter:blur(7px);z-index:1000}
 .pal-bg.open{display:block}
-.pal{width:min(560px,92vw);margin:13vh auto 0;background:linear-gradient(180deg,#101A30,#0B0F1C);border:1px solid rgba(34,224,255,.35);border-radius:14px;box-shadow:0 0 70px rgba(34,224,255,.2),0 30px 80px rgba(0,0,0,.65);overflow:hidden;animation:palIn .18s ease}
+.pal{width:min(560px,92vw);margin:13vh auto 0;background:linear-gradient(180deg,#101A30,var(--bg2));border:1px solid rgba(14,116,144,.35);border-radius:14px;box-shadow:0 0 70px rgba(14,116,144,.2),0 30px 80px rgba(11,20,32,.20);overflow:hidden;animation:palIn .18s ease}
 @keyframes palIn{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
 .pal input{border:none!important;background:transparent!important;padding:16px 18px!important;font-size:14px;box-shadow:none!important;border-bottom:1px solid var(--border)!important;border-radius:0!important}
 #pal-list{max-height:46vh;overflow-y:auto;padding:8px}
 .pal-it{display:flex;align-items:center;gap:11px;padding:9px 13px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2)}
 .pal-it .pi{width:20px;text-align:center;flex-shrink:0}
 .pal-it small{margin-left:auto;color:var(--text3);font-size:9px;text-transform:uppercase;letter-spacing:1px}
-.pal-it.sel,.pal-it:hover{background:rgba(34,224,255,.11);color:#fff}
-.modal-box{width:min(400px,90vw);margin:27vh auto 0;background:linear-gradient(180deg,#101A30,#0B0F1C);border:1px solid rgba(255,77,109,.4);border-radius:14px;padding:22px;box-shadow:0 0 50px rgba(255,77,109,.12),0 30px 80px rgba(0,0,0,.65);animation:palIn .18s ease}
+.pal-it.sel,.pal-it:hover{background:rgba(14,116,144,.11);color:#fff}
+.modal-box{width:min(400px,90vw);margin:27vh auto 0;background:#FFFFFF;border:1px solid rgba(220,38,38,.35);border-radius:14px;padding:22px;box-shadow:0 24px 60px rgba(11,20,32,.18);animation:palIn .18s ease}
 /* 3D fullscreen */
-#v3d.fs{position:fixed;inset:22px;z-index:990;height:auto!important;box-shadow:0 0 100px rgba(34,224,255,.28),0 0 0 100vmax rgba(3,6,14,.72)}
-#v3d-close{display:none;position:absolute;top:12px;right:12px;z-index:5;background:rgba(9,13,24,.88);border:1px solid var(--border2);color:var(--cyan);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:14px}
-#v3d-close:hover{border-color:var(--cyan);box-shadow:0 0 14px rgba(34,224,255,.3)}
+#v3d.fs{position:fixed;inset:22px;z-index:990;height:auto!important;box-shadow:0 0 100px rgba(14,116,144,.28),0 0 0 100vmax rgba(11,20,32,.40)}
+#v3d-close{display:none;position:absolute;top:12px;right:12px;z-index:5;background:rgba(255,255,255,.92);border:1px solid var(--border2);color:var(--cyan);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:14px}
+#v3d-close:hover{border-color:var(--cyan);box-shadow:0 0 14px rgba(14,116,144,.3)}
 #v3d.fs #v3d-close{display:block}
 /* slider vista explosionada */
 #v3d-expl{display:none;position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:5;
-  align-items:center;gap:10px;background:rgba(8,14,26,.88);border:1px solid rgba(34,224,255,.35);
-  border-radius:99px;padding:7px 16px;backdrop-filter:blur(8px);box-shadow:0 0 20px rgba(34,224,255,.12)}
+  align-items:center;gap:10px;background:rgba(8,14,26,.88);border:1px solid rgba(14,116,144,.35);
+  border-radius:99px;padding:7px 16px;backdrop-filter:blur(8px);box-shadow:0 0 20px rgba(14,116,144,.12)}
 #v3d.has-expl #v3d-expl{display:flex}
 #v3d-expl span{font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
-#v3d-expl input[type=range]{width:150px;accent-color:#22E0FF;padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important}
+#v3d-expl input[type=range]{width:150px;accent-color:var(--cyan);padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important}
 </style>
 </head>
 <body>
@@ -516,7 +530,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
         </div>
         <div>
           <div class="mini-lbl">Corte de sección</div>
-          <canvas id="met-2d" width="280" height="200" style="width:100%;aspect-ratio:340/250;background:#EDF3FC;border:1px solid var(--border2);border-radius:var(--radius-sm);box-shadow:0 0 16px rgba(34,224,255,.08)"></canvas>
+          <canvas id="met-2d" width="280" height="200" style="width:100%;aspect-ratio:340/250;background:#EDF3FC;border:1px solid var(--border2);border-radius:var(--radius-sm);box-shadow:0 0 16px rgba(14,116,144,.08)"></canvas>
         </div>
       </div>
     </div>
@@ -544,7 +558,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
         <div class="hero-lbl">Volumen total de concreto</div>
         <div class="hero-val" id="met-total-vol">0 m³</div>
         <div class="hero-sub" id="met-total-n">0 elementos</div>
-        <button class="btn mt" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)" onclick="metUsarVol()">Usar en dosificación →</button>
+        <button class="btn mt" style="background:rgba(11,20,32,.06);color:#fff;border:1px solid rgba(11,20,32,.12)" onclick="metUsarVol()">Usar en dosificación →</button>
       </div>
       <div class="card mt">
         <div class="card-title">Resumen de obra</div>
@@ -819,37 +833,120 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:va
 </div>
 </div>
 
-<!-- ═══ ACERO DESPIECE ═══ -->
+<!-- ═══ ACERO — PLANILLA DE DESPIECE ═══ -->
 <div class="panel" id="tab-ace">
-<div class="card">
-  <div class="card-head">
-    <div class="card-title">Despiece de acero — lista de barras</div>
-    <button class="btn btn-v btn-sm" onclick="aceAdd()">+ Agregar fila</button>
-  </div>
-  <div style="overflow-x:auto"><table class="ace-tbl">
-    <thead><tr><th>Descripción</th><th>Ø</th><th style="text-align:right">N° barras</th><th style="text-align:right">Long. c/u (m)</th><th style="text-align:right">Long. total</th><th style="text-align:right">Peso (kg)</th><th></th></tr></thead>
-    <tbody id="ace-tbl"></tbody>
-  </table></div>
-  <p class="note">Longitud c/u = longitud de corte incluyendo ganchos y empalmes. Peso = kg/m × longitud × N°.</p>
-</div>
-<div class="cols mt">
+<div class="cols">
   <div class="col-main">
+
     <div class="card">
-      <div class="card-title">Resumen por diámetro — varillas de 9 m a comprar</div>
+      <div class="card-head">
+        <div class="card-title">Planilla de despiece de acero</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-o btn-sm" onclick="aceEjemplo()">Ejemplo</button>
+          <button class="btn btn-v btn-sm" onclick="aceGrpAdd()">+ Elemento</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table class="ace-tbl">
+        <thead><tr>
+          <th>Elemento / descripción de la barra</th>
+          <th>Ø</th>
+          <th style="text-align:right">N° elem.</th>
+          <th style="text-align:right">N° barras</th>
+          <th style="text-align:right">Largo (m)</th>
+          <th style="text-align:right">Gancho (m)</th>
+          <th style="text-align:right">Empalme (m)</th>
+          <th style="text-align:right">L unit (m)</th>
+          <th style="text-align:right">L total (m)</th>
+          <th style="text-align:right">kg/m</th>
+          <th style="text-align:right">Peso (kg)</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="ace-tbl"></tbody>
+      </table></div>
+      <p id="ace-empty" class="note" style="text-align:center;padding:20px 0">
+        Sin elementos. Pulsa <b>+ Elemento</b> y copia el despiece de tus planos.
+      </p>
+      <p class="note">
+        <b>L unit = Largo + Gancho + Empalme</b> · <b>L total = L unit × N° elem. × N° barras</b> · <b>Peso = L total × kg/m</b>.<br>
+        Norma Técnica de Metrados (R.D. 073-2010-VIVIENDA/VMCS-DNC), OE.2.3, textual:
+        «El cálculo se hará determinando primero la longitud de cada elemento <b>incluyendo los ganchos, dobleces y traslapes</b> de varillas.
+        Luego se suman todas las longitudes agrupándose por diámetros iguales y se multiplican los resultados obtenidos por sus pesos unitarios
+        correspondientes, expresados en kilos por metro (kg/m)».<br>
+        Los <b>traslapes SÍ</b> entran en el metrado; el <b>desperdicio NO</b> (mismo artículo). Para descontar, escribe <b>N° elem. negativo</b>.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Sustento — resumen por diámetro</div>
       <div style="overflow-x:auto"><table>
-        <thead><tr><th>Diámetro</th><th style="text-align:right">kg/m</th><th style="text-align:right">Peso (kg)</th><th style="text-align:right">+ Desp. %</th><th style="text-align:right">Varillas 9 m</th></tr></thead>
+        <thead><tr><th>Diámetro</th><th style="text-align:right">Longitud total (m)</th>
+        <th style="text-align:right">kg/m</th><th style="text-align:right">Peso (kg)</th><th style="text-align:right">%</th></tr></thead>
         <tbody id="ace-res"></tbody>
       </table></div>
+      <p class="note">Éste es el agrupamiento que exige OE.2.3 («agrupándose por diámetros iguales»). Es el sustento del metrado, no una partida.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Partidas que emite a la planilla</div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Partida</th><th>Und</th><th style="text-align:right">Metrado</th><th>Código de la norma</th></tr></thead>
+        <tbody id="ace-part"></tbody>
+      </table></div>
+      <p class="note">
+        La unidad <b>kg</b> es de norma (OE.2.3.x «PARA LA ARMADURA DE ACERO — Kilogramo (kg)»). El código OE.x.y.z queda como referencia interna
+        y <b>no se imprime</b> en la hoja de metrados: en la hoja va el correlativo del presupuesto (01.02.05…). El texto «fy=4,200 kg/cm²» es
+        costumbre de obra, no norma: NTP 341.031 Grado 60 exige fy ≥ 420 MPa (4 280 kg/cm²).
+      </p>
     </div>
   </div>
+
   <div class="col-side">
-    <div class="card">
-      <div class="card-title">Totales</div>
-      <div class="frow mt"><label>Desperdicio / empalmes %</label><input type="number" id="ace-des" value="5" min="0" max="20" step="1" oninput="calcAcero()"></div>
-      <div class="g g2 mt">
-        <div class="metric rd"><div class="metric-lbl">Acero total</div><div class="metric-val" id="ace-kg">0</div><div class="metric-unit">kg</div></div>
-        <div class="metric am"><div class="metric-lbl">Alambre #16</div><div class="metric-val" id="ace-ala">0</div><div class="metric-unit">kg (2% del peso)</div></div>
+    <div class="hero">
+      <div class="hero-lbl">Acero metrado · neto</div>
+      <div class="hero-val" id="ace-kg">0 kg</div>
+      <div class="hero-sub" id="ace-sub">0 barras · 0 elementos</div>
+    </div>
+
+    <div class="card mt">
+      <div class="card-head">
+        <div class="card-title">Ganchos y empalmes · E.060</div>
+        <select id="ace-ref-modo" onchange="aceRef()" style="width:auto;padding:5px 8px;font-size:11px">
+          <option value="ext">Extensión (norma)</option>
+          <option value="des">Extensión + arco</option>
+        </select>
       </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Ø</th><th style="text-align:right">db mm</th><th style="text-align:right">90°</th>
+        <th style="text-align:right">180°</th><th style="text-align:right">135° s.</th><th style="text-align:right">Empalme</th></tr></thead>
+        <tbody id="ace-ref"></tbody>
+      </table></div>
+      <p class="note">
+        Valores en metros, <b>por gancho</b>. E.060 7.1.2: doblez 90° + extensión <b>12 db</b>. E.060 7.1.1: doblez 180° + extensión <b>4 db</b>, no menor de 65 mm.
+        E.060 cap. 21, «gancho sísmico»: doblez 135° + extensión <b>8 db</b>, no menor de 75 mm. Empalme = traslape en <b>compresión</b>,
+        E.060 12.16.1: <b>0,071·fy·db</b> con fy ≤ 420 MPa, no menor de 300 mm.<br>
+        En tracción el traslape es 1,0·ld (Clase A) o 1,3·ld (Clase B), no menor de 300 mm (E.060 12.15.1): <b>ld depende del proyecto, no se calcula aquí</b>.<br>
+        «Extensión» = sólo el tramo recto del extremo. «Extensión + arco» añade el desarrollo del doblez con los diámetros de doblado de la
+        Tabla 7.1 (6 db interior en barras, 4 db en estribos). Cuál de los dos corresponde depende de dónde midas el Largo: <b>la norma no lo resuelve</b>.
+        Esta tabla es referencia; en el metrado va lo que dicen los planos.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:var(--amber)">Compra en obra · NO es metrado</div>
+      <div class="g g2">
+        <div class="frow"><label>Merma %</label><input type="number" id="ace-merma" value="5" min="0" max="30" step="1" oninput="aceCalc()"></div>
+        <div class="frow"><label>Varilla</label><select id="ace-vlargo" onchange="aceCalc()"><option value="9">9 m</option><option value="12">12 m</option></select></div>
+      </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Ø</th><th style="text-align:right">kg metrado</th><th style="text-align:right">kg + merma</th><th style="text-align:right">Varillas</th></tr></thead>
+        <tbody id="ace-compra"></tbody>
+      </table></div>
+      <p class="note">
+        OE.2.3, textual: «El cómputo de la armadura de acero; <b>no incluye</b> los sobrantes de las barras (desperdicios), alambres, espaciadores,
+        accesorios de apoyo ni desperdicios, los mismos que irán como parte integrante de los análisis de precios».
+        Por eso esta merma <b>no toca</b> el metrado ni las partidas de arriba: sólo sirve para pedir fierro. Aceros Arequipa produce las barras
+        corrugadas A615 G60 en <b>9 m y 12 m</b>.
+      </p>
     </div>
   </div>
 </div>
@@ -1188,17 +1285,8 @@ function toast(msg,ok=true){
 function F(n,d){return Number(n).toLocaleString('es-PE',{minimumFractionDigits:d,maximumFractionDigits:d})}
 
 /* ─── Opciones ─── */
-let _tipos=[],_ladrillos_raw=[];
+let _tipos=[];
 fetch('/api/opciones').then(r=>r.json()).then(d=>{
-  _ladrillos_raw=d.ladrillos;
-  const mL=document.getElementById('m-lad');
-  d.ladrillos.forEach(l=>{const o=document.createElement('option');o.value=l.idx;o.textContent=l.nombre+' ('+l.largo+'×'+l.ancho+'×'+l.alto+')';mL.appendChild(o)});
-  const mA=document.getElementById('m-ap');
-  d.aparejos.forEach(a=>{const o=document.createElement('option');o.textContent=a;mA.appendChild(o)});
-  [document.getElementById('m-prop'),document.getElementById('t-prop')].forEach(s=>{
-    d.proporciones.forEach(p=>{const o=document.createElement('option');o.textContent=p;s.appendChild(o)});
-  });
-  document.getElementById('m-prop').value='1:4';document.getElementById('t-prop').value='1:5';
   const eD=document.getElementById('es-de');
   d.diams_estribo.forEach(e=>{const o=document.createElement('option');o.value=e.mm;o.textContent=e.nombre;eD.appendChild(o)});eD.selectedIndex=1;
   const eB=document.getElementById('es-db');
@@ -1213,7 +1301,11 @@ fetch('/api/opciones').then(r=>r.json()).then(d=>{
     rt.innerHTML=d.tabla_baldes.map(r=>'<tr><td class="n" style="color:var(--text);font-weight:700">'+r.fc+'</td><td>'+r.proporcion+'</td><td class="n">'+F(r.b18_arena,2)+'</td><td class="n">'+F(r.b18_piedra,2)+'</td><td class="n" style="color:var(--cyan)">'+F(r.b20_arena,2)+'</td><td class="n" style="color:var(--cyan)">'+F(r.b20_piedra,2)+'</td></tr>').join('');
   }
   loadState();initMetradosPro();muLoad();plaLoad();
-}).catch(()=>toast('Error cargando opciones',false));
+}).catch(err=>{
+  // Antes esto tragaba el error y la app quedaba a medias sin decir por que.
+  console.error('Fallo cargando /api/opciones:', err);
+  toast('Error cargando opciones: '+(err&&err.message?err.message:'ver consola'),false);
+});
 
 /* ═══ DOSIFICACIÓN ═══ */
 function dosificar(){
@@ -1228,7 +1320,7 @@ function dosificar(){
   });
 }
 function renderMix(d){
-  const parts=[['Cemento',d.cemento_bolsas*0.0283,'#B45CFF'],['Arena',d.arena_m3,'#FFB020'],['Piedra',d.piedra_m3,'#4DA6FF'],['Agua',d.agua_m3,'#22E0FF']];
+  const parts=[['Cemento',d.cemento_bolsas*0.0283,'#B45CFF'],['Arena',d.arena_m3,'#FFB020'],['Piedra',d.piedra_m3,'#4DA6FF'],['Agua',d.agua_m3,'var(--cyan)']];
   const tot=parts.reduce((s,p)=>s+p[1],0)||1;
   $('mixbar').innerHTML=parts.map(p=>'<div style="width:'+(p[1]/tot*100).toFixed(1)+'%;background:'+p[2]+'" title="'+p[0]+'"></div>').join('');
   $('mixleg').innerHTML=parts.map(p=>'<span><span class="sw" style="background:'+p[2]+'"></span>'+p[0]+' <b>'+(p[1]/tot*100).toFixed(0)+'%</b></span>').join('');
@@ -1319,19 +1411,17 @@ const DOSI_IDS=['fc','vol','desp','bolsa','resp'];
 function saveState(){
   try{
     const dosi={};DOSI_IDS.forEach(id=>{const el=$(id);if(el)dosi[id]=el.value});
-    localStorage.setItem(STORE,JSON.stringify({v:2,proj:$('proj-name')?.value||'',metItems,
-      aceRows,ace_des:$('ace-des')?.value||'5',dosi,ts:Date.now()}));
+    localStorage.setItem(STORE,JSON.stringify({v:3,proj:$('proj-name')?.value||'',metItems,
+      aceGrupos,ace_merma:$('ace-merma')?.value||'',dosi,ts:Date.now()}));
   }catch(e){}
 }
 function loadState(){
   try{
     const d=JSON.parse(localStorage.getItem(STORE)||'null');if(!d)return;
     if(d.proj&&$('proj-name'))$('proj-name').value=d.proj;
-    if(d.precios){if($('pr-conc'))$('pr-conc').value=d.precios.conc||380;if($('pr-acero'))$('pr-acero').value=d.precios.acero||5.5;
-      if($('pr-encof'))$('pr-encof').value=d.precios.encof||45;if($('pr-exc'))$('pr-exc').value=d.precios.exc||35;}
     if(d.dosi){DOSI_IDS.forEach(id=>{const el=$(id);if(el&&d.dosi[id]!=null&&d.dosi[id]!=='')el.value=d.dosi[id]});
-      if($('ace-des')&&d.ace_des)$('ace-des').value=d.ace_des;dosificar();}
-    if(Array.isArray(d.aceRows)&&d.aceRows.length)aceRows=d.aceRows;
+      if($('ace-merma')&&d.ace_merma)$('ace-merma').value=d.ace_merma;dosificar();}
+    if(Array.isArray(d.aceGrupos)&&d.aceGrupos.length)aceGrupos=d.aceGrupos;
     if(Array.isArray(d.metItems)&&d.metItems.length){metItems=d.metItems;metRender();
       toast('Proyecto restaurado · '+metItems.length+' elementos');}
   }catch(e){}
@@ -1352,7 +1442,6 @@ function importProyecto(inp){
     const d=JSON.parse(rd.result);
     if(!Array.isArray(d.metItems))throw new Error('formato');
     const apply=()=>{metItems=d.metItems;if(d.proyecto&&$('proj-name'))$('proj-name').value=d.proyecto;
-      if(d.precios){$('pr-conc').value=d.precios.conc||380;$('pr-acero').value=d.precios.acero||5.5;$('pr-encof').value=d.precios.encof||45;$('pr-exc').value=d.precios.exc||35;}
       metRender();saveState();toast('Proyecto abierto · '+metItems.length+' elementos');};
     if(metItems.length)ask('Abrir "'+(d.proyecto||f.name)+'" reemplazará el metrado actual ('+metItems.length+' elementos). ¿Continuar?',apply);
     else apply();
@@ -1363,14 +1452,6 @@ function importProyecto(inp){
 /* Agrupa el despiece por diametro. Es la unica fuente valida de acero:
    la norma manda longitud (con ganchos, dobleces y traslapes) x kg/m, por
    diametro. Devuelve [] si el usuario aun no ha metrado acero. */
-function despiecePorDiametro(){
-  if(!aceRows.length||!_varillas.length)return [];
-  const por={};
-  aceRows.forEach(r=>{const v=_varillas[r.dia]||_varillas[0];
-    if(!por[r.dia])por[r.dia]={nombre:v.nombre,kg_m:v.kg_m,kg_varilla:v.kg_varilla,kg:0};
-    por[r.dia].kg+=r.n*r.L*v.kg_m;});
-  return Object.values(por);
-}
 async function exportMetradoExcel(){
   if(!metItems.length){toast('Agrega elementos primero',false);return;}
   try{
@@ -1440,7 +1521,7 @@ function plaSetFila(i,j,campo,v){
   const p=document.getElementById('pla-p-'+i+'-'+j);
   if(p){ const val=plaParcial(planilla[i].filas[j]);
          p.textContent=F(val,2);
-         p.style.color=val<0?'#f87171':'var(--text)'; }
+         p.style.color=val<0?'var(--red)':'var(--text)'; }
   const t=document.getElementById('pla-t-'+i);
   if(t) t.textContent=F(plaTotal(planilla[i]),2);
   plaSave(); plaResumen();
@@ -1467,7 +1548,7 @@ function plaRender(){
             'letter-spacing:.4px;font-size:11px;text-transform:uppercase;padding:8px 10px">'+
             esc(p.grupo)+' · '+esc(PLA_GRUPOS[p.grupo]||'')+'</td></tr>';
     }
-    html+='<tr style="background:rgba(255,255,255,.03)">'+
+    html+='<tr style="background:rgba(11,20,32,.035)">'+
       '<td><input type="text" value="'+esc(p.codigo)+'" placeholder="02.01.01" '+
       'oninput="plaSet('+i+',\'codigo\',this.value)" style="width:100%;padding:4px 6px;font-size:12px"></td>'+
       '<td><input type="text" value="'+esc(p.partida)+'" placeholder="Nombre de la partida" '+
@@ -1489,7 +1570,7 @@ function plaRender(){
         '<td></td>'+
         num(i,j,'cant',f.cant)+num(i,j,'veces',f.veces)+num(i,j,'largo',f.largo)+
         num(i,j,'ancho',f.ancho)+num(i,j,'alto',f.alto)+
-        '<td class="n" id="pla-p-'+i+'-'+j+'" style="color:'+(val<0?'#f87171':'var(--text)')+'">'+F(val,2)+'</td>'+
+        '<td class="n" id="pla-p-'+i+'-'+j+'" style="color:'+(val<0?'var(--red)':'var(--text)')+'">'+F(val,2)+'</td>'+
         '<td></td>'+
         '<td><button class="act-btn danger" title="Quitar medición" onclick="plaDelFila('+i+','+j+')">✕</button></td>'+
         '</tr>';
@@ -1671,7 +1752,7 @@ function muRender(){
     txt('muSetVano',i,'Puerta P-1, Ventana V-2…',v.desc)+
     inp('muSetVano',i,'cant',v.cant,'1')+inp('muSetVano',i,'ancho',v.ancho,'0.01')+
     inp('muSetVano',i,'alto',v.alto,'0.01')+
-    '<td class="n" style="color:#f87171;font-weight:700">−'+F(muAreaVano(v),2)+'</td>'+
+    '<td class="n" style="color:var(--red);font-weight:700">−'+F(muAreaVano(v),2)+'</td>'+
     '<td><button class="act-btn danger" onclick="muDelVano('+i+')">✕</button></td></tr>').join('');
 
   muCalc();
@@ -1757,6 +1838,254 @@ function muLoad(){
     }
   }catch(e){}
   muRender();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACERO — PLANILLA DE DESPIECE
+   Norma Tecnica de Metrados (R.D. 073-2010-VIVIENDA/VMCS-DNC), OE.2.3:
+   "El calculo se hara determinando primero la longitud de cada elemento
+    incluyendo los ganchos, dobleces y traslapes de varillas. Luego se suman
+    todas las longitudes agrupandose por diametros iguales y se multiplican
+    los resultados obtenidos por sus pesos unitarios correspondientes,
+    expresados en kilos por metro (kg/m)."
+   "El computo de la armadura de acero; no incluye los sobrantes de las barras
+    (desperdicios), alambres, espaciadores, accesorios de apoyo ni desperdicios."
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Catalogo de partidas de armadura. SOLO codigos leidos literalmente en la
+   norma. `inc`: 1 = la norma manda INCLUIR los arranques/empotramientos,
+   0 = manda EXCLUIRLOS, null = la norma no lo dice para esa partida. */
+const ACE_PARTIDAS=[
+ {k:'zapata',  n:'Zapatas',                             oe:'OE.2.3.2.3',  inc:0,
+  r:'No incluye los arranques o anclajes de las columnas.'},
+ {k:'cim_ref', n:'Cimientos reforzados',                oe:'OE.2.3.1.3',  inc:0,
+  r:'No incluye vastagos ni arranques para las columnas u otros elementos empotrados.'},
+ {k:'viga_cim',n:'Vigas de cimentación',                oe:'OE.2.3.3.3',  inc:0,
+  r:'No incluye los vástagos de las columnas ni de cualquier otro elemento empotrado.'},
+ {k:'losa_cim',n:'Losas de cimentación',                oe:'OE.2.3.4.3',  inc:0,
+  r:'No incluye los vástagos de las columnas ni de cualquier otro elemento empotrado.'},
+ {k:'sobrecim',n:'Sobrecimientos reforzados',           oe:'OE.2.3.5.3',  inc:0,
+  r:'No incluye la armadura de cualquier otro elemento que vaya empotrado.'},
+ {k:'columna', n:'Columnas',                            oe:'OE.2.3.7.3',  inc:1,
+  r:'Incluye las longitudes de las barras que van empotradas en otros elementos (zapatas, vigas, etc.).'},
+ {k:'viga',    n:'Vigas',                               oe:'OE.2.3.8.3',  inc:1,
+  r:'Incluye la longitud de las barras que van empotradas en los apoyos de cada viga.'},
+ {k:'losa_mac',n:'Losas macizas',                       oe:'OE.2.3.9.1.3',inc:1,
+  r:'Incluye la longitud de las barras que van empotradas en los apoyos.'},
+ {k:'losa_ali',n:'Losas aligeradas convencionales',     oe:'OE.2.3.9.2.3',inc:1,
+  r:'Incluye la longitud de las barras que van empotradas en los apoyos.'},
+ {k:'muro_con',n:'Muros de contención',                 oe:'OE.2.3.6.1.3',inc:1,
+  r:'Debe incluir las barras que van empotradas en otros elementos.'},
+ {k:'pantalla',n:'Pantallas, barandas y similares',     oe:'OE.2.3.6.3',  inc:1,
+  r:'Incluye la parte empotrada en los apoyos. (La norma numera OE.2.3.6.3 las tres partidas de este elemento: errata de la norma.)'},
+ {k:'escalera',n:'Escaleras',                           oe:'OE.2.3.10.3', inc:1,
+  r:'Comprende la armadura de tramos y descansos y los anclajes necesarios en otras estructuras.'},
+ {k:'placa',   n:'Muros de concreto, tabiques y placas',oe:'OE.2.3.6.2.3',inc:null,
+  r:'La norma no fija regla de arranques para esta partida: la forma de medición sólo habla de concreto y encofrado. Decide y déjalo escrito en el sustento.'},
+];
+const ACE_P=k=>ACE_PARTIDAS.find(p=>p.k===k)||ACE_PARTIDAS[0];
+
+/* Modelo: grupos (elemento estructural) -> filas (barras) */
+let aceGrupos=[];
+let _aceUID=1;
+
+function aceGrpAdd(part,rot,filas){
+  aceGrupos.push({id:_aceUID++,part:part||'columna',rot:rot||'',filas:filas||[aceFilaNueva()]});
+  aceRender();saveState();
+}
+function aceFilaNueva(){return{desc:'',dia:3,ne:1,nb:4,largo:0,gancho:0,emp:0}}
+function aceGrpDel(g){aceGrupos.splice(g,1);aceRender();saveState()}
+function aceGrpDup(g){
+  aceGrupos.splice(g+1,0,JSON.parse(JSON.stringify(Object.assign({},aceGrupos[g],{id:_aceUID++}))));
+  aceRender();saveState();
+}
+function aceFilaAdd(g){aceGrupos[g].filas.push(aceFilaNueva());aceRender();saveState()}
+function aceFilaDel(g,r){
+  aceGrupos[g].filas.splice(r,1);
+  if(!aceGrupos[g].filas.length)aceGrupos.splice(g,1);
+  aceRender();saveState();
+}
+function aceSet(g,r,k,v){aceGrupos[g].filas[r][k]=v;aceCalc();saveState()}
+function aceGrpSet(g,k,v){aceGrupos[g][k]=v;if(k==='part')aceRender();else aceCalc();saveState()}
+
+/* Longitud unitaria = largo + gancho + empalme   (OE.2.3: la longitud de cada
+   elemento se determina "incluyendo los ganchos, dobleces y traslapes")       */
+const aceLu=f=>(+f.largo||0)+(+f.gancho||0)+(+f.emp||0);
+const aceLt=f=>aceLu(f)*(+f.ne||0)*(+f.nb||0);
+const aceKgm=f=>((_varillas[f.dia]||_varillas[0]||{}).kg_m)||0;
+
+function aceRender(){
+  const tb=$('ace-tbl');if(!tb||!_varillas.length)return;
+  const opts=d=>_varillas.map((v,j)=>'<option value="'+j+'"'+(j===d?' selected':'')+'>'+v.nombre+'</option>').join('');
+  const pOpts=k=>ACE_PARTIDAS.map(p=>'<option value="'+p.k+'"'+(p.k===k?' selected':'')+'>'+p.n+'</option>').join('');
+  let h='';
+  aceGrupos.forEach((G,g)=>{
+    const P=ACE_P(G.part);
+    const badge=P.inc===1?'<span class="ace-inc">INCLUYE arranques</span>'
+              :P.inc===0?'<span class="ace-exc">EXCLUYE arranques</span>'
+                        :'<span class="ace-nd">la norma no lo define</span>';
+    h+='<tr class="ace-grp"><td colspan="7">'+
+       '<select class="ace-part" onchange="aceGrpSet('+g+',\'part\',this.value)">'+pOpts(G.part)+'</select>'+
+       '<input class="ace-rot" type="text" value="'+String(G.rot).replace(/"/g,'&quot;')+'" placeholder="rótulo del elemento — p. ej. C-1 (0,25×0,40) ejes A-2" oninput="aceGrpSet('+g+',\'rot\',this.value)">'+
+       '<span class="ace-oe">'+P.oe+'</span>'+badge+
+       '</td><td colspan="3" class="n" id="ace-gm-'+g+'">0 m</td>'+
+       '<td class="n" id="ace-gk-'+g+'">0</td>'+
+       '<td><div class="row-act"><button class="act-btn" title="Agregar barra" onclick="aceFilaAdd('+g+')">+</button>'+
+       '<button class="act-btn" title="Duplicar elemento" onclick="aceGrpDup('+g+')">⧉</button>'+
+       '<button class="act-btn danger" title="Eliminar elemento" onclick="aceGrpDel('+g+')">✕</button></div></td></tr>';
+    h+='<tr class="ace-regla"><td colspan="12">'+P.r+'</td></tr>';
+    G.filas.forEach((f,r)=>{
+      h+='<tr>'+
+      '<td><input type="text" value="'+String(f.desc).replace(/"/g,'&quot;')+'" placeholder="descripción de la barra" oninput="aceSet('+g+','+r+',\'desc\',this.value)" style="min-width:150px"></td>'+
+      '<td><select onchange="aceSet('+g+','+r+',\'dia\',+this.value)">'+opts(f.dia)+'</select></td>'+
+      '<td><input type="number" step="1"    value="'+f.ne+'"     style="width:58px;text-align:right" oninput="aceSet('+g+','+r+',\'ne\',+this.value||0)"></td>'+
+      '<td><input type="number" step="1"    value="'+f.nb+'"     style="width:58px;text-align:right" oninput="aceSet('+g+','+r+',\'nb\',+this.value||0)"></td>'+
+      '<td><input type="number" step="0.01" value="'+f.largo+'"  style="width:70px;text-align:right" oninput="aceSet('+g+','+r+',\'largo\',+this.value||0)"></td>'+
+      '<td><input type="number" step="0.01" value="'+f.gancho+'" style="width:70px;text-align:right" oninput="aceSet('+g+','+r+',\'gancho\',+this.value||0)"></td>'+
+      '<td><input type="number" step="0.01" value="'+f.emp+'"    style="width:70px;text-align:right" oninput="aceSet('+g+','+r+',\'emp\',+this.value||0)"></td>'+
+      '<td class="n" id="ace-lu-'+g+'-'+r+'">0.00</td>'+
+      '<td class="n" id="ace-lt-'+g+'-'+r+'">0.00</td>'+
+      '<td class="n" id="ace-km-'+g+'-'+r+'" style="color:var(--text3)">0.000</td>'+
+      '<td class="n" id="ace-pe-'+g+'-'+r+'" style="color:var(--amber)">0.00</td>'+
+      '<td><button class="act-btn danger" title="Eliminar barra" onclick="aceFilaDel('+g+','+r+')">✕</button></td></tr>';
+    });
+  });
+  tb.innerHTML=h;
+  $('ace-empty').style.display=aceGrupos.length?'none':'block';
+  aceCalc();
+}
+
+/* Recalcula sin reconstruir el DOM (no se pierde el foco al escribir). */
+function aceCalc(){
+  if(!_varillas.length)return;
+  const porDia={},porPart={};let tot=0,nb=0;
+  aceGrupos.forEach((G,g)=>{
+    let gk=0,gm=0;
+    G.filas.forEach((f,r)=>{
+      const lu=aceLu(f),lt=aceLt(f),km=aceKgm(f),pe=lt*km;
+      gk+=pe;gm+=lt;nb+=Math.abs((+f.ne||0)*(+f.nb||0));
+      const e=id=>document.getElementById(id);
+      const a=e('ace-lu-'+g+'-'+r);if(a)a.textContent=F(lu,2);
+      const b=e('ace-lt-'+g+'-'+r);if(b)b.textContent=F(lt,2);
+      const c=e('ace-km-'+g+'-'+r);if(c)c.textContent=F(km,3);
+      const d=e('ace-pe-'+g+'-'+r);if(d)d.textContent=F(pe,2);
+      const v=_varillas[f.dia]||_varillas[0];
+      if(!porDia[f.dia])porDia[f.dia]={nombre:v.nombre,kg_m:v.kg_m,mm:v.mm,largo_m:v.largo_m,m:0,kg:0};
+      porDia[f.dia].m+=lt;porDia[f.dia].kg+=pe;
+    });
+    const gke=document.getElementById('ace-gk-'+g);if(gke)gke.textContent=F(gk,2)+' kg';
+    const gme=document.getElementById('ace-gm-'+g);if(gme)gme.textContent=F(gm,2)+' m';
+    porPart[G.part]=(porPart[G.part]||0)+gk;
+    tot+=gk;
+  });
+
+  /* Sustento: resumen por diámetro (OE.2.3, "agrupándose por diámetros iguales") */
+  const ds=Object.keys(porDia);
+  $('ace-res').innerHTML=ds.map(k=>{const x=porDia[k];
+    return '<tr><td style="font-weight:700;color:var(--text)">'+x.nombre+'</td>'+
+      '<td class="n">'+F(x.m,2)+'</td><td class="n" style="color:var(--text3)">'+F(x.kg_m,3)+'</td>'+
+      '<td class="n" style="color:var(--amber)">'+F(x.kg,2)+'</td>'+
+      '<td class="n" style="color:var(--text3)">'+(tot?F(x.kg/tot*100,1):'0.0')+' %</td></tr>';
+  }).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--text3)">Sin barras metradas</td></tr>';
+  if(ds.length)$('ace-res').innerHTML+='<tr><td style="font-weight:800;color:var(--cyan)">TOTAL</td><td class="n"></td><td class="n"></td><td class="n" style="color:var(--cyan);font-weight:800">'+F(tot,2)+'</td><td class="n"></td></tr>';
+
+  /* Partidas que emite hacia la planilla general */
+  const pk=Object.keys(porPart).filter(k=>Math.abs(porPart[k])>1e-9);
+  $('ace-part').innerHTML=pk.map(k=>{const P=ACE_P(k);
+    return '<tr><td style="font-weight:600;color:var(--text)">ACERO CORRUGADO fy=4,200 kg/cm² EN '+P.n.toUpperCase()+
+      '<div style="font-size:10px;color:var(--text3);margin-top:2px">'+P.r+'</div></td>'+
+      '<td style="color:var(--text3)">kg</td>'+
+      '<td class="n" style="color:var(--cyan);font-weight:800">'+F(porPart[k],2)+'</td>'+
+      '<td style="font-size:11px;color:var(--text3)">'+P.oe+'</td></tr>';
+  }).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--text3)">Sin partidas: agrega elementos arriba</td></tr>';
+
+  tween($('ace-kg'),tot,2,' kg');
+  $('ace-sub').textContent=nb+(nb===1?' barra · ':' barras · ')+aceGrupos.length+(aceGrupos.length===1?' elemento':' elementos');
+
+  aceCompra(porDia);
+}
+
+/* ── Compra en obra. NO es metrado: la norma manda el desperdicio al análisis
+      de precios unitarios. Se muestra aparte y nunca entra en las partidas. ── */
+function aceCompra(porDia){
+  const m=1+(+($('ace-merma')?.value)||0)/100, LV=+($('ace-vlargo')?.value)||9;
+  const ks=Object.keys(porDia||{});
+  $('ace-compra').innerHTML=ks.map(k=>{const x=porDia[k],kc=x.kg*m,kv=x.kg_m*LV;
+    return '<tr><td style="font-weight:700;color:var(--text)">'+x.nombre+'</td>'+
+      '<td class="n">'+F(x.kg,1)+'</td><td class="n" style="color:var(--amber)">'+F(kc,1)+'</td>'+
+      '<td class="n" style="color:var(--cyan);font-weight:800">'+(kv>0?Math.ceil(kc/kv):0)+'</td></tr>';
+  }).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--text3)">—</td></tr>';
+}
+
+/* ── Referencia E.060: ganchos y empalmes. Es referencia, no cálculo: en el
+      metrado va lo que dicen los planos (OE.2.3, "indicado en los planos"). ── */
+function aceRef(){
+  if(!_varillas.length)return;
+  const modo=$('ace-ref-modo').value;              // 'ext' | 'des'
+  const arc=(gra,rmult,db)=>Math.PI*(gra/180)*rmult*db;   // desarrollo del doblez
+  $('ace-ref').innerHTML=_varillas.map(v=>{
+    const db=v.mm;
+    let g90=12*db, g180=Math.max(4*db,65), g135=Math.max(8*db,75);
+    if(modo==='des'){                              // + arco del doblez
+      g90 +=arc(90,3.5,db);  g180+=arc(180,3.5,db); g135+=arc(135,2.5,db);
+    }
+    const emp=Math.max(0.071*420*db,300);
+    return '<tr><td style="font-weight:700;color:var(--text)">'+v.nombre+'</td>'+
+      '<td class="n" style="color:var(--text3)">'+F(db,1)+'</td>'+
+      '<td class="n">'+F(g90/1000,2)+'</td><td class="n">'+F(g180/1000,2)+'</td>'+
+      '<td class="n">'+F(g135/1000,2)+'</td>'+
+      '<td class="n" style="color:var(--amber)">'+F(emp/1000,2)+'</td></tr>';
+  }).join('');
+}
+
+/* Ejemplo cargable: columna de 2 niveles sobre zapata. Números del usuario,
+   no del programa: se cargan para que vea el formato y los reemplace. */
+function aceEjemplo(){
+  const d38=_varillas.findIndex(v=>/3\/8/.test(v.nombre)),
+        d58=_varillas.findIndex(v=>/5\/8/.test(v.nombre));
+  aceGrupos=[
+   {id:_aceUID++,part:'columna',rot:'C-1 (0,25×0,40) — ejes A-2',filas:[
+     {desc:'Longitudinal Ø5/8" (incluye arranque en zapata)',dia:d58<0?3:d58,ne:1,nb:6,largo:7.39,gancho:0.70,emp:0.00},
+     {desc:'Estribo Ø3/8" 1@0,05 · 5@0,10 · rto@0,25',        dia:d38<0?2:d38,ne:58,nb:1,largo:1.30,gancho:0.00,emp:0.00}]},
+   {id:_aceUID++,part:'zapata',rot:'Z-1 (1,60×1,85×0,50)',filas:[
+     {desc:'Malla inferior Ø5/8" @0,20 — dirección X',dia:d58<0?3:d58,ne:1,nb:10,largo:1.45,gancho:0.00,emp:0.00},
+     {desc:'Malla inferior Ø5/8" @0,20 — dirección Y',dia:d58<0?3:d58,ne:1,nb:9, largo:1.70,gancho:0.00,emp:0.00}]}
+  ];
+  aceRender();saveState();
+  toast('Ejemplo cargado — reemplaza los datos con los de tus planos');
+}
+
+/* Sustento por diámetro para el Excel (mismo nombre que usaba la versión
+   anterior, para no tocar exportMetradoExcel). */
+function despiecePorDiametro(){
+  if(!aceGrupos.length||!_varillas.length)return [];
+  const por={};
+  aceGrupos.forEach(G=>G.filas.forEach(f=>{
+    const v=_varillas[f.dia]||_varillas[0];
+    if(!por[f.dia])por[f.dia]={nombre:v.nombre,kg_m:v.kg_m,largo_m:v.largo_m,m:0,kg:0};
+    por[f.dia].m+=aceLt(f);por[f.dia].kg+=aceLt(f)*v.kg_m;
+  }));
+  return Object.values(por);
+}
+/* Filas planas de la planilla, para el Excel. */
+function aceroPlanilla(){
+  const out=[];
+  aceGrupos.forEach(G=>{const P=ACE_P(G.part);
+    G.filas.forEach(f=>{const v=_varillas[f.dia]||_varillas[0];
+      out.push({partida:P.n,oe:P.oe,rotulo:G.rot,desc:f.desc,dia:v.nombre,
+        ne:+f.ne||0,nb:+f.nb||0,largo:+f.largo||0,gancho:+f.gancho||0,emp:+f.emp||0,
+        lu:aceLu(f),lt:aceLt(f),kg_m:v.kg_m,kg:aceLt(f)*v.kg_m});});
+  });
+  return out;
+}
+/* Partidas de acero hacia la planilla general. */
+function aceroPartidas(){
+  const t={};aceGrupos.forEach(G=>{
+    let k=0;G.filas.forEach(f=>k+=aceLt(f)*aceKgm(f));
+    t[G.part]=(t[G.part]||0)+k;});
+  return Object.keys(t).filter(k=>Math.abs(t[k])>1e-9).map(k=>{const P=ACE_P(k);
+    return{nombre:'ACERO CORRUGADO fy=4,200 kg/cm² EN '+P.n.toUpperCase(),
+           unidad:'kg',metrado:+t[k].toFixed(2),oe:P.oe,regla:P.r};});
 }
 
 /* ── Modal de confirmación ── */
@@ -1891,47 +2220,6 @@ function calcPisos(){
   tween($('pis-fra'),A*rfra,1);
 }
 /* Acero — despiece por barras */
-let aceRows=[];
-function aceAdd(desc,dia,n,L){
-  aceRows.push({desc:desc||'',dia:dia??2,n:n||4,L:L||6});
-  aceRender();
-}
-function aceDel(i){aceRows.splice(i,1);aceRender()}
-function aceRender(){
-  const tb=$('ace-tbl');if(!tb||!_varillas.length)return;
-  tb.innerHTML=aceRows.map((r,i)=>{
-    const v=_varillas[r.dia]||_varillas[0],lt=r.n*r.L,kg=lt*v.kg_m;
-    const opts=_varillas.map((vv,j)=>'<option value="'+j+'"'+(j===r.dia?' selected':'')+'>'+vv.nombre+'</option>').join('');
-    return '<tr>'+
-      '<td><input type="text" value="'+r.desc.replace(/"/g,'&quot;')+'" placeholder="p. ej. Columna C-1 long." oninput="aceRows['+i+'].desc=this.value;saveState()" style="min-width:150px"></td>'+
-      '<td><select onchange="aceRows['+i+'].dia=+this.value;aceRender()">'+opts+'</select></td>'+
-      '<td><input type="number" value="'+r.n+'" min="1" step="1" style="width:64px;text-align:right" oninput="aceRows['+i+'].n=+this.value||0;calcAcero(1,'+i+')"></td>'+
-      '<td><input type="number" value="'+r.L+'" min="0" step="0.1" style="width:72px;text-align:right" oninput="aceRows['+i+'].L=+this.value||0;calcAcero(1,'+i+')"></td>'+
-      '<td class="n" id="ace-lt-'+i+'">'+F(lt,1)+' m</td>'+
-      '<td class="n" id="ace-kg-'+i+'" style="color:var(--amber)">'+F(kg,1)+'</td>'+
-      '<td><button class="act-btn danger" onclick="aceDel('+i+')">✕</button></td></tr>';
-  }).join('');
-  calcAcero();
-}
-function calcAcero(inline,idx){
-  if(!_varillas.length)return;
-  if(inline!=null&&idx!=null){
-    const r=aceRows[idx],v=_varillas[r.dia]||_varillas[0];
-    const lt=r.n*r.L;$('ace-lt-'+idx).textContent=F(lt,1)+' m';
-    $('ace-kg-'+idx).textContent=F(lt*v.kg_m,1);
-  }
-  const des=1+(+$('ace-des').value||0)/100;
-  const por={};let tot=0;
-  aceRows.forEach(r=>{const v=_varillas[r.dia]||_varillas[0];const kg=r.n*r.L*v.kg_m;tot+=kg;
-    por[r.dia]=(por[r.dia]||0)+kg;});
-  $('ace-res').innerHTML=Object.keys(por).map(d=>{
-    const v=_varillas[d],kg=por[d],kgd=kg*des;
-    return '<tr><td style="font-weight:700;color:var(--text)">'+v.nombre+'</td><td class="n">'+F(v.kg_m,3)+'</td><td class="n">'+F(kg,1)+'</td><td class="n" style="color:var(--amber)">'+F(kgd,1)+'</td><td class="n" style="color:var(--cyan);font-weight:800">'+Math.ceil(kgd/v.kg_varilla)+'</td></tr>';
-  }).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--text3)">Agrega filas de barras arriba</td></tr>';
-  const totD=tot*des;
-  tween($('ace-kg'),totD,1);tween($('ace-ala'),totD*0.02,1);
-  saveState();
-}
 /* Instalaciones sanitarias */
 function calcSan(){
   const af=+$('san-af').value||0,ac=+$('san-ac').value||0,d2=+$('san-d2').value||0,d4=+$('san-d4').value||0;
@@ -2707,7 +2995,7 @@ function v3dLabel(txt){
   x.beginPath();x.moveTo(r,1);x.arcTo(W-1,1,W-1,H-1,r);x.arcTo(W-1,H-1,1,H-1,r);
   x.arcTo(1,H-1,1,1,r);x.arcTo(1,1,W-1,1,r);x.closePath();
   x.fillStyle='rgba(8,14,26,.92)';x.fill();
-  x.strokeStyle='rgba(34,224,255,.75)';x.lineWidth=2.5;x.stroke();
+  x.strokeStyle='rgba(14,116,144,.75)';x.lineWidth=2.5;x.stroke();
   x.font='700 '+fs+'px Rajdhani,Inter,sans-serif';x.textBaseline='middle';x.textAlign='center';
   x.fillStyle='#9FE9FF';x.fillText(txt,W/2,H/2+2);
   const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;t.encoding=THREE.sRGBEncoding;
@@ -2798,7 +3086,7 @@ function finishV3d(){
     const gc=document.createElement('canvas');gc.width=gc.height=512;
     const gx=gc.getContext('2d');
     const gg=gx.createRadialGradient(256,256,20,256,256,254);
-    gg.addColorStop(0,'rgba(34,224,255,0.14)');gg.addColorStop(0.55,'rgba(34,224,255,0.045)');gg.addColorStop(1,'rgba(34,224,255,0)');
+    gg.addColorStop(0,'rgba(14,116,144,0.14)');gg.addColorStop(0.55,'rgba(14,116,144,0.045)');gg.addColorStop(1,'rgba(14,116,144,0)');
     gx.fillStyle=gg;gx.fillRect(0,0,512,512);
     window._glowTex=new THREE.CanvasTexture(gc);
   }
